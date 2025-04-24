@@ -1,6 +1,5 @@
 // ignore_for_file: deprecated_member_use
 
-
 import 'package:bot_toast/bot_toast.dart';
 import 'package:child_tracker/index.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,7 +9,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 class SnackBarSerive {
   static const Duration duration = Duration(seconds: 6);
 
-  static showSuccessSnackBar(BuildContext context, String title) {
+  static showSuccessSnackBar(String title) {
     BotToast.showCustomNotification(
       duration: duration,
       toastBuilder: (cancelFunc) {
@@ -47,7 +46,7 @@ class SnackBarSerive {
     );
   }
 
-  static showErrorSnackBar(BuildContext context, String title) {
+  static showErrorSnackBar(String title) {
     BotToast.showCustomNotification(
       duration: duration,
       toastBuilder: (cancelFunc) {
@@ -83,17 +82,15 @@ class SnackBarSerive {
     );
   }
 
-  static showBottomSnackBar(BuildContext context, String title) {
+  static showBottomSnackBar(String title) {
     BotToast.showText(
       text: title,
       align: Alignment.bottomCenter,
       contentColor: primaryText,
-      textStyle: Theme.of(context).textTheme.titleLarge!.copyWith(color: secondary),
     );
   }
 
   static showSnackBarOnReceivePushNotification(
-    BuildContext context,
     String title,
     String? body,
     VoidCallback? onTap,

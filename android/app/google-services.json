@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "789154945970",
+    "project_id": "allhandsdemo-98fc7",
+    "storage_bucket": "allhandsdemo-98fc7.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:789154945970:android:2e89fba408988e6107a2ab",
+        "android_client_info": {
+          "package_name": "com.example.child_tracker"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyByxwafmok7GTdjOjZT1OGH5r2KGlpQb9I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

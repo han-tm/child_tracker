@@ -13,6 +13,10 @@ class StorageService {
     return prefs.getBool(ONBOARDSHOW) ?? false;
   }
 
+  Future<void> setOnboardStatus(bool status) async {
+    await prefs.setBool(ONBOARDSHOW, status);
+  }
+
   Future<bool> clearAllStorage() async {
     return await prefs.clear();
   }

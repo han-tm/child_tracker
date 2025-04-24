@@ -24,6 +24,12 @@ class App extends StatelessWidget {
           GlobalCupertinoLocalizations.delegate,
         ],
         supportedLocales: const [Locale('ru', 'RU')],
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: primary),
+          useMaterial3: true,
+          scaffoldBackgroundColor: primaryBackground,
+          progressIndicatorTheme: const ProgressIndicatorThemeData(color: primary),
+        ),
         builder: (context, child) {
           child = botToastBuilder(context, child);
           final mediaQueryData = MediaQuery.of(context);

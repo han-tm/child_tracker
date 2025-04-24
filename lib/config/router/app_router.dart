@@ -60,8 +60,14 @@ Future<void> redirectFunc(BuildContext context) async {
     FlutterNativeSplash.remove();
     initialRoute.value = getRouteForStatus(userStatus);
   } else {
+    final storageService = sl<StorageService>();
+    bool showed = storageService.isOnboardShowed();
     FlutterNativeSplash.remove();
-    initialRoute.value = null;
+    if (!showed) {
+      initialRoute.value = '/onboarding';
+    } else {
+      initialRoute.value = null;
+    }
   }
 
   isCheckingAuth.value = false;
@@ -77,9 +83,9 @@ String? getRouteForStatus(UserInitialStatus status) {
     case UserInitialStatus.fillProfileMentor:
       return '/auth/mentor/info';
     case UserInitialStatus.successKid:
-      return '/kid/search';
+      return '/kid/bonus';
     case UserInitialStatus.successMentor:
-      return '/mentor/search';
+      return '/mentor/bonus';
     case UserInitialStatus.banned:
       return '/banned';
     default:
