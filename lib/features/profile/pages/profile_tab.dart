@@ -1,4 +1,5 @@
 
+import 'package:child_tracker/index.dart';
 import 'package:flutter/material.dart';
 
 class ProfileTabScreen extends StatelessWidget {
@@ -6,6 +7,10 @@ class ProfileTabScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      appBar: AppBar(
+        title: const RobotoText(text: 'Profile'),
+      ),
+    );
   }
 }

@@ -177,7 +177,15 @@ final GoRouter router = GoRouter(
           routes: [
             GoRoute(
               path: '/kid/bonus',
-              builder: (context, state) => const KidBonusScreen(),
+              builder: (context, state) => const BonusTabScreen(),
+            ),
+          ],
+        ),
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: '/kid/task',
+              builder: (context, state) => const TaskTabScreen(),
             ),
           ],
         ),
@@ -186,6 +194,14 @@ final GoRouter router = GoRouter(
             GoRoute(
               path: '/kid/chat',
               builder: (context, state) => const ChatTabScreen(),
+            ),
+          ],
+        ),
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: '/kid/calendar',
+              builder: (context, state) => const CalendarTabScreen(),
             ),
           ],
         ),
@@ -207,7 +223,15 @@ final GoRouter router = GoRouter(
           routes: [
             GoRoute(
               path: '/mentor/bonus',
-              builder: (context, state) => const MentorBonusScreen(),
+              builder: (context, state) => const BonusTabScreen(),
+            ),
+          ],
+        ),
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: '/mentor/task',
+              builder: (context, state) => const TaskTabScreen(),
             ),
           ],
         ),
@@ -216,6 +240,14 @@ final GoRouter router = GoRouter(
             GoRoute(
               path: '/mentor/chat',
               builder: (context, state) => const ChatTabScreen(),
+            ),
+          ],
+        ),
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: '/mentor/calendar',
+              builder: (context, state) => const CalendarTabScreen(),
             ),
           ],
         ),

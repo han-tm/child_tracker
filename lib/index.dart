@@ -12,3 +12,7 @@ export './features/chat/chat.dart';
 export './features/kid/kid.dart';
 export './features/mentor/mentor.dart';
 export './features/profile/profile.dart';
+export './features/bonus/bonus.dart';
+export './features/calendar/calendar.dart';
+export './features/games/games.dart';
+export './features/task/task.dart';
