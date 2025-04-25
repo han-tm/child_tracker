@@ -15,6 +15,8 @@ class App extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => sl<UserCubit>()),
+        BlocProvider(create: (context) => sl<NewChatCubit>()),
+        BlocProvider(create: (context) => sl<CurrentChatCubit>()),
       ],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,

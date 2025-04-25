@@ -169,9 +169,9 @@ final GoRouter router = GoRouter(
       ],
     ),
 
-    // Маршруты заказчика
+    // Маршруты ребенка
     StatefulShellRoute.indexedStack(
-      builder: (context, state, navigationShell) => KidMainScreen(navigationShell: navigationShell),
+      builder: (context, state, navigationShell) => KidMainScreen(navigationShell: navigationShell, state: state),
       branches: [
         StatefulShellBranch(
           routes: [
@@ -194,6 +194,12 @@ final GoRouter router = GoRouter(
             GoRoute(
               path: '/kid/chat',
               builder: (context, state) => const ChatTabScreen(),
+              routes: [
+                GoRoute(
+                  path: 'room/:chatId',
+                  builder: (context, state) => ChatRoomScreen(chatId: state.pathParameters['chatId'] ?? ''),
+                ),
+              ],
             ),
           ],
         ),

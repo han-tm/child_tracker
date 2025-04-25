@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class KidMainScreen extends StatefulWidget {
+  final GoRouterState state;
   final StatefulNavigationShell navigationShell;
-  const KidMainScreen({super.key, required this.navigationShell});
+  const KidMainScreen({super.key, required this.navigationShell, required this.state});
 
   @override
   State<KidMainScreen> createState() => _KidMainScreenState();
@@ -13,9 +14,11 @@ class KidMainScreen extends StatefulWidget {
 class _KidMainScreenState extends State<KidMainScreen> {
   @override
   Widget build(BuildContext context) {
+    
+    bool show = showNavBar(widget.state.fullPath);
     return Scaffold(
       body: widget.navigationShell,
-      bottomNavigationBar: BottomNavigationBar(
+      bottomNavigationBar: !show ? null : BottomNavigationBar(
         elevation: 0,
         type: BottomNavigationBarType.fixed,
         currentIndex: widget.navigationShell.currentIndex,
@@ -51,5 +54,13 @@ class _KidMainScreenState extends State<KidMainScreen> {
         ],
       ),
     );
+  }
+
+  bool showNavBar(String? path) {
+    if (path == null) return true;
+    if (path.startsWith('/kid/chat/room')) {
+      return false;
+    }
+    return true;
   }
 }
