@@ -24,4 +24,19 @@ class UserCubit extends Cubit<UserModel?> {
 
     setUser(userModel);
   }
+
+  Future<void> onDeleteFcmToken() async {
+    await state?.ref.update({'fcm_token': null});
+  }
+
+  Future<void> markAsDeleted() async {
+    await state?.ref.update({
+      'deleted': true,
+      'banned': null,
+      'photo': null,
+      'type': null,
+      'email': null,
+      'phone': null,
+    });
+  }
 }

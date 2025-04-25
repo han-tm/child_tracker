@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserModel {
   final String id;
-  final String fio;
+  final String name;
   final String? photo;
   final UserType? userType;
   final bool profileFilled;
@@ -11,9 +11,12 @@ class UserModel {
   final DateTime? createdAt;
   final String? phone;
   final String? fcmToken;
+  final String? city;
+  final int? age;
+
 
   UserModel({
-    required this.fio,
+    required this.name,
     required this.id,
     this.photo,
     this.userType,
@@ -22,13 +25,15 @@ class UserModel {
     this.createdAt,
     this.phone,
     this.fcmToken,
+    this.city,
+    this.age,
   });
 
   factory UserModel.fromFirestore(DocumentSnapshot doc) {
     Map data = doc.data() as Map<String, dynamic>;
     return UserModel(
       id: doc.id,
-      fio: data['name'] ?? '',
+      name: data['name'] ?? '',
       photo: data['photo'],
       userType: data['type'] != null ? UserType.values.byName(data['type']) : null,
       profileFilled: data['profile_filled'] ?? false,
@@ -36,30 +41,40 @@ class UserModel {
       createdAt: data['created_at'] != null ? (data['created_at'] as Timestamp).toDate() : null,
       phone: data['phone'],
       fcmToken: data['fcm_token'],
+      city: data['city'],
+      age: data['age'],
     );
   }
 
   bool get isKid => userType == UserType.kid;
 
+  DocumentReference get ref => FirebaseFirestore.instance.collection('users').doc(id);
+
   UserModel copyWith({
     String? id,
-    String? fio,
+    String? name,
     String? photo,
     UserType? userType,
     bool? profileFilled,
     String? phone,
     bool? banned,
     DateTime? createdAt,
+    String? fcmToken,
+    String? city,
+    int? age,
   }) {
     return UserModel(
       id: id ?? this.id,
-      fio: fio ?? this.fio,
+      name: name ?? this.name,
       photo: photo ?? this.photo,
       userType: userType ?? this.userType,
       profileFilled: profileFilled ?? this.profileFilled,
       banned: banned ?? this.banned,
       createdAt: createdAt ?? this.createdAt,
       phone: phone ?? this.phone,
+      fcmToken: fcmToken ?? this.fcmToken,
+      city: city ?? this.city,
+      age: age ?? this.age,
     );
   }
 }

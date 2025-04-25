@@ -26,8 +26,7 @@ class CachedClickableImage extends StatelessWidget {
     this.fit = BoxFit.cover,
     this.placeholder,
     this.errorWidget,
-  })  : assert(imageUrl != null || imageFile != null, 'Необходимо предоставить либо URL изображения, либо File.'),
-        assert(!(borderRadius != null && circularRadius != null),
+  }) : assert(!(borderRadius != null && circularRadius != null),
             'Нельзя одновременно указывать borderRadius и circularRadius.');
 
   @override
@@ -59,8 +58,12 @@ class CachedClickableImage extends StatelessWidget {
         ),
       );
     } else {
-      // Этого блока никогда не должно быть из-за assert
-      imageWidget = const SizedBox.shrink();
+      imageWidget = Container(
+        width: width,
+        height: height,
+        color: Colors.grey.shade300,
+        child: const Center(child: Icon(Icons.image_outlined)),
+      );
     }
 
     if (circularRadius != null) {
@@ -76,6 +79,8 @@ class CachedClickableImage extends StatelessWidget {
     }
 
     return InkWell(
+      radius: circularRadius,
+      borderRadius: circularRadius != null ? BorderRadius.circular(circularRadius!) : null,
       onTap: onTap,
       child: imageWidget,
     );

@@ -216,6 +216,12 @@ final GoRouter router = GoRouter(
             GoRoute(
               path: '/kid/profile',
               builder: (context, state) => const ProfileTabScreen(),
+              routes: [
+                GoRoute(
+                  path: 'edit',
+                  builder: (context, state) => const EditProfileScreen(),
+                ),
+              ],
             ),
           ],
         ),
