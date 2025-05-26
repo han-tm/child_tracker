@@ -14,7 +14,7 @@ class RoomInputWidget extends StatelessWidget {
       color: const Color(0xFFF8F8F8),
       child: TextFormField(
         controller: controller,
-        style: const TextStyle(fontSize: 16, color: primaryText, fontWeight: FontWeight.normal),
+        style: const TextStyle(fontSize: 16, color: greyscale900, fontWeight: FontWeight.normal),
         minLines: 1,
         maxLines: 5,
         maxLength: 500,
@@ -30,7 +30,7 @@ class RoomInputWidget extends StatelessWidget {
             fillColor: Colors.white,
             hintText: 'Сообщение',
             counterText: '',
-            hintStyle: const TextStyle(fontSize: 16, color: borderColor, fontWeight: FontWeight.normal),
+            hintStyle: const TextStyle(fontSize: 16, color: greyscale200, fontWeight: FontWeight.normal),
             contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             suffixIcon: ValueListenableBuilder<TextEditingValue>(
                 valueListenable: controller,
@@ -43,7 +43,7 @@ class RoomInputWidget extends StatelessWidget {
                     },
                     child: Padding(
                       padding: const EdgeInsets.only(right: 12),
-                      child: Icon(Icons.send, color: hasText ? primaryText : secondaryText),
+                      child: Icon(Icons.send, color: hasText ? greyscale900 : secondary900),
                     ),
                   );
                 }),

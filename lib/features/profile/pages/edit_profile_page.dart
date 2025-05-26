@@ -158,7 +158,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         builder: (context, formGroup, child) {
                           return FilledAppButton(
                             text: 'Сохранить',
-                            onPress: () =>  state.status == ProfileStateStatus.saving ? null : onSaveTap(context),
+                            onTap: () =>  state.status == ProfileStateStatus.saving ? null : onSaveTap(context),
                             isLoading: state.status == ProfileStateStatus.saving,
                             isActive: formGroup.valid,
                           );

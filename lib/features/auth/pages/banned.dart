@@ -10,14 +10,14 @@ class BannedScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      backgroundColor: primaryBackground,
+      backgroundColor: white,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(CupertinoIcons.clear_circled, size: 70, color: appRed),
+            Icon(CupertinoIcons.clear_circled, size: 70, color: red),
             SizedBox(height: 8),
-            RobotoText(text: 'Вы заблокированы', size: 17, fw: FontWeight.w500),
+            AppText(text: 'Вы заблокированы', size: 17, fw: FontWeight.w500),
           ],
         ),
       ),

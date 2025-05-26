@@ -36,6 +36,7 @@ dependencies:
   url_launcher: ^6.3.1
   image_picker: ^1.1.2
   shared_preferences: ^2.5.2
+  morphable_shape: ^2.0.0
 
   flutter_native_splash: 2.4.4
   collection: ^1.18.0
@@ -59,15 +60,27 @@ flutter:
 
   assets:
     - assets/images/
+    - assets/fonts/
+
+
+  fonts:
+    - family: 'Involve'
+      fonts:
+        - asset: assets/fonts/Involve-Regular.ttf
+          weight: 400        
+        - asset: assets/fonts/Involve-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Involve-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Involve-Bold.ttf
+          weight: 700
 
 flutter_native_splash:
-  color: "#EDC842"
-  # image: assets/images/logo-development.png
-  branding: assets/images/splash_logo.png
-
+  image: assets/images/android12splash.png
+  color: "#5464D9"
   android_12:
-    image: assets/images/android12_splash_logo.png
-    icon_background_color: "#EDC842"
-
+    image: assets/images/android12splash.png
+    color: "#5464D9"
+    icon_background_color: "#5464D9"
 
   web: false

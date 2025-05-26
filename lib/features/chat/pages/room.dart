@@ -38,7 +38,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
         builder: (context, state) {
           return Scaffold(
             appBar: AppBar(
-              title: const RobotoText(text: 'Room'),
+              title: const AppText(text: 'Room'),
             ),
             body: Column(
               children: [
@@ -51,14 +51,14 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                       }
                       if (snapshot.hasError) {
                         return const Center(
-                          child: RobotoText(text: defaultErrorText, color: secondaryText),
+                          child: AppText(text: defaultErrorText, color: secondary900),
                         );
                       }
                       if (!snapshot.hasData || snapshot.data!.isEmpty) {
                         return const Center(
-                          child: RobotoText(
+                          child: AppText(
                             text: 'Напишите первое сообщение',
-                            color: secondaryText,
+                            color: secondary900,
                           ),
                         );
                       }

@@ -14,7 +14,7 @@ class PhoneOtpInput extends StatelessWidget {
         String? errorText = state is PhoneAuthFailure ? state.errorMessage : null;
         return Column(
           children: [
-            const RobotoText(
+            const AppText(
               text: 'Проверка телефона',
               textAlign: TextAlign.center,
               size: 24,
@@ -24,11 +24,11 @@ class PhoneOtpInput extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const RobotoText(text: 'На номер '),
-                RobotoText(text: phone, color: primary),
+                const AppText(text: 'На номер '),
+                AppText(text: phone, color: primary900),
               ],
             ),
-            const RobotoText(text: 'был отправлен код'),
+            const AppText(text: 'был отправлен код'),
             const SizedBox(height: 16),
             Pinput(
               length: 6,
@@ -51,9 +51,9 @@ class PhoneOtpInput extends StatelessWidget {
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(top: 12),
-                        child: RobotoText(
+                        child: AppText(
                           text: errorText,
-                          color: appRed,
+                          color: red,
                           textAlign: TextAlign.center,
                         ),
                       ),
@@ -67,46 +67,46 @@ class PhoneOtpInput extends StatelessWidget {
               defaultPinTheme: PinTheme(
                 height: 54,
                 width: 74,
-                textStyle: const TextStyle(fontSize: 24, color: primaryText, fontWeight: FontWeight.normal),
+                textStyle: const TextStyle(fontSize: 24, color: greyscale900, fontWeight: FontWeight.normal),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(7),
-                  border: Border.all(color: borderColor),
+                  border: Border.all(color: greyscale200),
                 ),
               ),
               focusedPinTheme: PinTheme(
                 height: 54,
                 width: 74,
-                textStyle: const TextStyle(fontSize: 24, color: primaryText, fontWeight: FontWeight.normal),
+                textStyle: const TextStyle(fontSize: 24, color: greyscale900, fontWeight: FontWeight.normal),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(7),
-                  border: Border.all(color: primary),
+                  border: Border.all(color: primary900),
                 ),
               ),
               followingPinTheme: PinTheme(
                 height: 54,
                 width: 74,
-                textStyle: const TextStyle(fontSize: 24, color: primaryText, fontWeight: FontWeight.normal),
+                textStyle: const TextStyle(fontSize: 24, color: greyscale900, fontWeight: FontWeight.normal),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(7),
-                  border: Border.all(color: borderColor),
+                  border: Border.all(color: greyscale200),
                 ),
               ),
               submittedPinTheme: PinTheme(
                 height: 54,
                 width: 74,
-                textStyle: const TextStyle(fontSize: 24, color: primaryText, fontWeight: FontWeight.normal),
+                textStyle: const TextStyle(fontSize: 24, color: greyscale900, fontWeight: FontWeight.normal),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(7),
-                  border: Border.all(color: borderColor),
+                  border: Border.all(color: greyscale200),
                 ),
               ),
               errorPinTheme: PinTheme(
                 height: 54,
                 width: 74,
-                textStyle: const TextStyle(fontSize: 24, color: primaryText, fontWeight: FontWeight.normal),
+                textStyle: const TextStyle(fontSize: 24, color: greyscale900, fontWeight: FontWeight.normal),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(7),
-                  border: Border.all(color: appRed),
+                  border: Border.all(color: red),
                 ),
               ),
             ),

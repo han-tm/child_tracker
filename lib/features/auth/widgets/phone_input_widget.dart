@@ -58,14 +58,14 @@ class _PhoneInputWidgetState extends State<PhoneInputWidget> {
                 if (state is PhoneAuthFailure)
                   Padding(
                     padding: const EdgeInsets.only(top: 12),
-                    child: RobotoText(text: state.errorMessage, color: appRed),
+                    child: AppText(text: state.errorMessage, color: red),
                   ),
                 const SizedBox(height: 30),
                 ReactiveFormConsumer(
                   builder: (context, formGroup, child) {
                     final valid = formGroup.valid && phoneFormatter.isFill();
                     return FilledAppButton(
-                      onPress: valid ? onTap : null,
+                      onTap: valid ? onTap : null,
                       isActive: valid,
                       text: 'Отправить код',
                       isLoading: state is PhoneAuthLoading,

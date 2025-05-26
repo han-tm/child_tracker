@@ -3,24 +3,26 @@
 import 'package:child_tracker/index.dart';
 import 'package:flutter/material.dart';
 
-class RobotoText extends StatelessWidget {
+
+
+class AppText extends StatelessWidget {
   final String text;
   final double size;
-   final double? height;
+  final double? height;
   final Color color;
   final FontWeight fw;
   final int maxLine;
   final TextAlign? textAlign;
   final TextDecoration? decoration;
 
-  const RobotoText({
+  const AppText({
     super.key,
     required this.text,
-    this.size = 16,
-    this.color = primaryText,
-    this.fw = FontWeight.w400,
-    this.maxLine = 10,
-    this.height,
+    this.size = 18,
+    this.color = greyscale900,
+    this.fw = FontWeight.w600,
+    this.maxLine = 1,
+    this.height = 1.6,
     this.textAlign,
     this.decoration,
   });
@@ -36,6 +38,7 @@ class RobotoText extends StatelessWidget {
         decoration: decoration,
         decorationColor: color,
         decorationThickness: 1,
+        fontFamily: Involve,
         height: height,
       ),
       textAlign: textAlign,

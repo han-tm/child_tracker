@@ -11,34 +11,42 @@ class OnboardScreen extends StatefulWidget {
 
 class _OnboardScreenState extends State<OnboardScreen> {
   final _controller = PageController();
-  final List<Widget> _pages = [
-    _OnboardingPage(
-      title: 'Добро пожаловать!',
-      description: 'Узнайте о нашем замечательном приложении и его возможностях.',
-      color: Colors.blue.shade100,
-    ),
-    _OnboardingPage(
-      title: 'Исследуйте функции',
-      description: 'Откройте для себя множество полезных инструментов.',
-      color: Colors.green.shade100,
-    ),
-    _OnboardingPage(
-      title: 'Начните прямо сейчас!',
-      description: 'Всего несколько шагов, и вы готовы к работе.',
-      color: Colors.orange.shade100,
-    ),
-  ];
+  late List<Widget> pages;
 
   int _currentPage = 0;
 
   @override
   void initState() {
+    initOnboard();
     super.initState();
     redirectFunc(context);
   }
 
+  void initOnboard() {
+    pages = [
+      const _OnboardingPage(
+        title: 'Добро пожаловать!',
+        description:
+            'Это не просто приложение — это ваш помощник в воспитании, мотивации и общении с ребёнком.\nСоздавайте задания, следите за прогрессом и поощряйте успехи!',
+        icon: 'mascot_1',
+      ),
+      const _OnboardingPage(
+        title: 'Задачи и награды',
+        description:
+            'Ставьте цели: от домашних дел до школьных успехов.\nЗа выполнение заданий ребёнок получает баллы, которые можно обменять на приятные бонусы',
+        icon: 'mascot_1',
+      ),
+      const _OnboardingPage(
+        title: 'Волшебный помощник',
+        description:
+            'Наш $MASCOTNAME всегда рядом — подскажет, поддержит и поздравит.\nОн сделает обучение и мотивацию весёлой и понятной для ребёнка!',
+        icon: 'mascot_1',
+      ),
+    ];
+  }
+
   void onTap() async {
-    if (_currentPage < _pages.length - 1) {
+    if (_currentPage < pages.length - 1) {
       _controller.nextPage(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
@@ -53,34 +61,40 @@ class _OnboardScreenState extends State<OnboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: primaryBackground,
+      backgroundColor: white,
       body: Stack(
         children: [
-          PageView(
-            controller: _controller,
-            children: _pages,
-            onPageChanged: (index) {
-              setState(() {
-                _currentPage = index;
-              });
-            },
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 50.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _buildPageIndicator(),
-                  const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: onTap,
-                    child: Text(_currentPage < _pages.length - 1 ? 'Далее' : 'Начать'),
-                  ),
-                ],
+          const _OnboardBg(),
+          Column(
+            children: [
+              Expanded(
+                child: Stack(
+                  children: [
+                    PageView(
+                      controller: _controller,
+                      children: pages,
+                      onPageChanged: (index) {
+                        setState(() {
+                          _currentPage = index;
+                        });
+                      },
+                    ),
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 36.0),
+                        child: _buildPageIndicator(),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
+              Container(
+                padding: const EdgeInsets.all(24),
+                decoration: const BoxDecoration(border: Border(top: BorderSide(color: greyscale100))),
+                child: FilledAppButton(text: 'Далее', onTap: onTap),
+              ),
+            ],
           ),
         ],
       ),
@@ -89,15 +103,17 @@ class _OnboardScreenState extends State<OnboardScreen> {
 
   Widget _buildPageIndicator() {
     List<Widget> indicators = [];
-    for (int i = 0; i < _pages.length; i++) {
+    for (int i = 0; i < pages.length; i++) {
+      bool isActive = i == _currentPage;
       indicators.add(
-        Container(
-          width: 10.0,
-          height: 10.0,
-          margin: const EdgeInsets.symmetric(horizontal: 5.0),
+        AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          width: isActive ? 32 : 8.0,
+          height: 8.0,
+          margin: const EdgeInsets.symmetric(horizontal: 4.0),
           decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: _currentPage == i ? Theme.of(context).primaryColor : Colors.grey,
+            borderRadius: BorderRadius.circular(100.0),
+            color: isActive ? primary900 : greyscale200,
           ),
         ),
       );
@@ -112,37 +128,106 @@ class _OnboardScreenState extends State<OnboardScreen> {
 class _OnboardingPage extends StatelessWidget {
   final String title;
   final String description;
-  final Color color;
+  final String icon;
 
   const _OnboardingPage({
     required this.title,
     required this.description,
-    required this.color,
+    required this.icon,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: color,
-      child: Padding(
-        padding: const EdgeInsets.all(40.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              title,
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
+    return Column(
+      children: [
+        Expanded(
+          flex: 7,
+          child: Center(
+            child: Container(
+              alignment: Alignment.bottomCenter,
+              child: Image.asset(
+                'assets/images/$icon.png',
+                fit: BoxFit.contain,
+              ),
             ),
-            const SizedBox(height: 20),
-            Text(
-              description,
-              style: const TextStyle(fontSize: 16),
-              textAlign: TextAlign.center,
-            ),
-          ],
+          ),
         ),
-      ),
+        Expanded(
+          flex: 5,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                AppText(
+                  text: title,
+                  size: 30,
+                  fw: FontWeight.w700,
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 12),
+                AppText(
+                  text: description,
+                  fw: FontWeight.normal,
+                  color: greyscale700,
+                  textAlign: TextAlign.center,
+                  maxLine: 10,
+                ),
+                const SizedBox(height: 70),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
+}
+
+class _OnboardBg extends StatelessWidget {
+  const _OnboardBg();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Expanded(
+          flex: 6,
+          child: ClipPath(
+            clipper: CurveClipper(),
+            child: Container(
+              height: double.infinity,
+              color: primary300,
+            ),
+          ),
+        ),
+        Expanded(
+          flex: 5,
+          child: Container(
+            height: double.infinity,
+            color: white,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class CurveClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    int curveHeight = 50;
+    Offset controlPoint = Offset(size.width / 2, size.height + curveHeight);
+    Offset endPoint = Offset(size.width, size.height - curveHeight);
+
+    Path path = Path()
+      ..lineTo(0, size.height - curveHeight)
+      ..quadraticBezierTo(controlPoint.dx, controlPoint.dy, endPoint.dx, endPoint.dy)
+      ..lineTo(size.width, 0)
+      ..close();
+
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }

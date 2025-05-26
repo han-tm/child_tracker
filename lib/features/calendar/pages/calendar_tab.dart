@@ -8,7 +8,7 @@ class CalendarTabScreen extends StatelessWidget {
   Widget build(BuildContext context) {
      return Scaffold(
       appBar: AppBar(
-        title: const RobotoText(text: 'Calendar'),
+        title: const AppText(text: 'Calendar'),
       ),
     );
   }

@@ -19,7 +19,7 @@ class SnackBarSerive {
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: primary),
+            border: Border.all(color: greyscale200),
             boxShadow: [
               BoxShadow(
                 blurRadius: 32,
@@ -32,11 +32,11 @@ class SnackBarSerive {
               const Icon(CupertinoIcons.check_mark, color: Colors.green),
               const SizedBox(width: 10),
               Expanded(
-                child: RobotoText(
+                child: AppText(
                   text: title,
                   size: 16,
                   fw: FontWeight.w600,
-                  color: primaryText,
+                  color: greyscale900,
                 ),
               ),
             ],
@@ -65,14 +65,14 @@ class SnackBarSerive {
           ),
           child: Row(
             children: [
-              const Icon(CupertinoIcons.clear_circled, color: appRed),
+              const Icon(CupertinoIcons.clear_circled, color: red),
               const SizedBox(width: 10),
               Expanded(
-                child: RobotoText(
+                child: AppText(
                   text: title,
                   size: 16,
                   fw: FontWeight.w600,
-                  color: secondary,
+                  color: secondary900,
                 ),
               ),
             ],
@@ -86,7 +86,7 @@ class SnackBarSerive {
     BotToast.showText(
       text: title,
       align: Alignment.bottomCenter,
-      contentColor: primaryText,
+      contentColor: greyscale900,
     );
   }
 
@@ -111,7 +111,7 @@ class SnackBarSerive {
             margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
             decoration: BoxDecoration(
-              color: primaryText,
+              color: greyscale900,
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
@@ -130,7 +130,7 @@ class SnackBarSerive {
                       'assets/images/bell.svg',
                       width: 24,
                       height: 24,
-                      color: primary,
+                      color: primary900,
                       fit: BoxFit.contain,
                     ),
                     const SizedBox(width: 14),
@@ -138,18 +138,18 @@ class SnackBarSerive {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          RobotoText(
+                          AppText(
                             text: title,
                             size: 18,
                             fw: FontWeight.w600,
-                            color: primary,
+                            color: primary900,
                           ),
                           if (body != null)
-                            RobotoText(
+                            AppText(
                               text: body,
                               size: 16,
                               fw: FontWeight.w500,
-                              color: primary,
+                              color: primary900,
                             ),
                         ],
                       ),

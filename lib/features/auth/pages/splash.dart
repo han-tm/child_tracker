@@ -1,5 +1,3 @@
-
-
 import 'package:child_tracker/index.dart';
 import 'package:flutter/material.dart';
 
@@ -20,16 +18,25 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: primary,
-      body: Center(
-          child: Padding(
-        padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
-        child: Image.asset(
-          'assets/images/android12_splash_logo.png',
-          width: 200,
-          fit: BoxFit.contain,
-        ),
-      )),
+      backgroundColor: primary900,
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Image.asset(
+            'assets/images/android12splash.png',
+            width: 200,
+            fit: BoxFit.contain,
+          ),
+          const SizedBox(height: 32),
+          const AppText(
+            text: APPNAME,
+            size: 40,
+            fw: FontWeight.w700,
+            color: white,
+          ),
+        ],
+      ),
     );
   }
 }

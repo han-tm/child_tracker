@@ -15,17 +15,17 @@ class ErrorScreen extends StatelessWidget {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const RobotoText(
+          const AppText(
             text: "Произошла ошибка",
             size: 17,
             fw: FontWeight.w500,
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 24),
-          RobotoText(
+          AppText(
             text: error,
             textAlign: TextAlign.center,
-            color: secondaryText,
+            color: secondary900,
           ),
         ],
       ),

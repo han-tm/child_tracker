@@ -21,8 +21,8 @@ class _LoginScreenState extends State<LoginScreen> {
       create: (context) => PhoneAuthCubit(userCubit: sl()),
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: primaryText,
-          title: const RobotoText(text: 'Вход', color: primaryBackground),
+          backgroundColor: white,
+          title: const AppText(text: 'Вход', color: greyscale900),
           centerTitle: true,
         ),
         body: BlocConsumer<PhoneAuthCubit, PhoneAuthState>(

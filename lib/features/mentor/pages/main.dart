@@ -21,10 +21,10 @@ class _MentorMainScreenState extends State<MentorMainScreen> {
         currentIndex: widget.navigationShell.currentIndex,
         onTap: (index) => {widget.navigationShell.goBranch(index)},
         enableFeedback: true,
-        backgroundColor: primaryBackground,
+        backgroundColor: white,
         selectedItemColor: Colors.black,
-        unselectedItemColor: secondaryText,
-        selectedLabelStyle: const TextStyle(fontSize: 12, color: primaryText),
+        unselectedItemColor: secondary900,
+        selectedLabelStyle: const TextStyle(fontSize: 12, color: greyscale900),
         unselectedLabelStyle: const TextStyle(fontSize: 12, color: Color(0xFF818181)),
         showUnselectedLabels: true,
         items: const [

@@ -20,14 +20,14 @@ class ChatCard extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const CircleAvatar(radius: 20, backgroundColor: appRed),
+            const CircleAvatar(radius: 20, backgroundColor: red),
             const SizedBox(width: 12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  RobotoText(text: '${chat.lastMessage?.senderId}', fw: FontWeight.w500, maxLine: 1),
-                  RobotoText(
+                  AppText(text: '${chat.lastMessage?.senderId}', fw: FontWeight.w500, maxLine: 1),
+                  AppText(
                     text: '${chat.lastMessage?.text}',
                     size: 14,
                   ),
@@ -38,17 +38,17 @@ class ChatCard extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                RobotoText(
+                AppText(
                   text: dateToStringDDMMYYYY(chat.updatedAt),
-                  color: secondaryText,
+                  color: secondary900,
                   size: 12,
                 ),
                 if (unreads > 0)
                   CircleAvatar(
                     radius: 6,
-                    backgroundColor: appRed,
+                    backgroundColor: red,
                     child: Center(
-                      child: RobotoText(text: '$unreads', size: 8, color: Colors.white),
+                      child: AppText(text: '$unreads', size: 8, color: Colors.white),
                     ),
                   ),
               ],

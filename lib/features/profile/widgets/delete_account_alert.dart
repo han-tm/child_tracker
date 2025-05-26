@@ -22,7 +22,7 @@ class _DeleteAccountAlertDialog extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            const RobotoText(
+            const AppText(
               text: 'Вы действительно хотите удалить аккаунт?',
               textAlign: TextAlign.center,
               size: 20,
@@ -31,14 +31,14 @@ class _DeleteAccountAlertDialog extends StatelessWidget {
             const SizedBox(height: 24),
             FilledAppButton(
               text: 'Удалить',
-              onPress: () => Navigator.of(context).pop(true),
+              onTap: () => Navigator.of(context).pop(true),
               fontSize: 17,
               fw: FontWeight.w500,
             ),
             const SizedBox(height: 16),
             FilledAppButton(
               text: 'Отменить',
-              onPress: () => Navigator.of(context).pop(false),
+              onTap: () => Navigator.of(context).pop(false),
               fontSize: 17,
               fw: FontWeight.w500,
             )
@@ -171,11 +171,11 @@ class _AccountDeletionDialogState extends State<AccountDeletionDialog> {
     const ph = 45.0;
     const pw = 45.0;
     return AlertDialog(
-      title: const RobotoText(text: 'Удаление аккаунта', fw: FontWeight.w500),
+      title: const AppText(text: 'Удаление аккаунта', fw: FontWeight.w500),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const RobotoText(
+          const AppText(
             text: 'Для безопасного удаления аккаунта '
                 'требуется повторная аутентификация',
           ),
@@ -189,46 +189,46 @@ class _AccountDeletionDialogState extends State<AccountDeletionDialog> {
               defaultPinTheme: PinTheme(
                 height: ph,
                 width: pw,
-                textStyle: const TextStyle(fontSize: 24, color: primaryText, fontWeight: FontWeight.normal),
+                textStyle: const TextStyle(fontSize: 24, color: greyscale900, fontWeight: FontWeight.normal),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(7),
-                  border: Border.all(color: borderColor),
+                  border: Border.all(color: greyscale200),
                 ),
               ),
               focusedPinTheme: PinTheme(
                 height: ph,
                 width: pw,
-                textStyle: const TextStyle(fontSize: 24, color: primaryText, fontWeight: FontWeight.normal),
+                textStyle: const TextStyle(fontSize: 24, color: greyscale900, fontWeight: FontWeight.normal),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(7),
-                  border: Border.all(color: primary),
+                  border: Border.all(color: primary900),
                 ),
               ),
               followingPinTheme: PinTheme(
                 height: ph,
                 width: pw,
-                textStyle: const TextStyle(fontSize: 24, color: primaryText, fontWeight: FontWeight.normal),
+                textStyle: const TextStyle(fontSize: 24, color: greyscale900, fontWeight: FontWeight.normal),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(7),
-                  border: Border.all(color: borderColor),
+                  border: Border.all(color: greyscale200),
                 ),
               ),
               submittedPinTheme: PinTheme(
                 height: ph,
                 width: pw,
-                textStyle: const TextStyle(fontSize: 24, color: primaryText, fontWeight: FontWeight.normal),
+                textStyle: const TextStyle(fontSize: 24, color: greyscale900, fontWeight: FontWeight.normal),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(7),
-                  border: Border.all(color: borderColor),
+                  border: Border.all(color: greyscale200),
                 ),
               ),
               errorPinTheme: PinTheme(
                 height: ph,
                 width: pw,
-                textStyle: const TextStyle(fontSize: 24, color: primaryText, fontWeight: FontWeight.normal),
+                textStyle: const TextStyle(fontSize: 24, color: greyscale900, fontWeight: FontWeight.normal),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(7),
-                  border: Border.all(color: appRed),
+                  border: Border.all(color: red),
                 ),
               ),
             ),

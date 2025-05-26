@@ -7,6 +7,6 @@ class EmptyChatsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(child: RobotoText(text: 'Нет чатов', size: 17, fw: FontWeight.w500));
+    return const Center(child: AppText(text: 'Нет чатов', size: 17, fw: FontWeight.w500));
   }
 }

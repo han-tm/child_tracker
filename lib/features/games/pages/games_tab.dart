@@ -8,7 +8,7 @@ class GamesTabScreen extends StatelessWidget {
   Widget build(BuildContext context) {
      return Scaffold(
       appBar: AppBar(
-        title: const RobotoText(text: 'Games'),
+        title: const AppText(text: 'Games'),
       ),
     );
   }

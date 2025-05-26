@@ -17,9 +17,9 @@ class MessageBubble extends StatelessWidget {
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
-              color: message.senderId == sl<UserCubit>().state?.id ? primary : secondaryText,
+              color: message.senderId == sl<UserCubit>().state?.id ? primary900 : secondary900,
             ),
-            child: RobotoText(text: message.text),
+            child: AppText(text: message.text),
           ),
         ),
       ],

@@ -8,7 +8,7 @@ class BonusTabScreen extends StatelessWidget {
   Widget build(BuildContext context) {
      return Scaffold(
       appBar: AppBar(
-        title: const RobotoText(text: 'Bonus'),
+        title: const AppText(text: 'Bonus'),
       ),
     );
   }

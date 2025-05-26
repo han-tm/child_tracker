@@ -10,7 +10,7 @@ class KidProfileWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        RobotoText(text: user.name),
+        AppText(text: user.name),
         const Divider(),
         const LogoutWidget(),
       ],

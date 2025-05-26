@@ -27,10 +27,16 @@ class App extends StatelessWidget {
         ],
         supportedLocales: const [Locale('ru', 'RU')],
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: primary),
+          colorScheme: ColorScheme.fromSeed(seedColor: primary900),
           useMaterial3: true,
-          scaffoldBackgroundColor: primaryBackground,
-          progressIndicatorTheme: const ProgressIndicatorThemeData(color: primary),
+          scaffoldBackgroundColor: white,
+          appBarTheme: const AppBarTheme(
+            backgroundColor: white,
+            scrolledUnderElevation: 0.0,
+          ),
+          fontFamily: Involve,
+          unselectedWidgetColor: primary900,
+          progressIndicatorTheme: const ProgressIndicatorThemeData(color: primary900),
         ),
         builder: (context, child) {
           child = botToastBuilder(context, child);

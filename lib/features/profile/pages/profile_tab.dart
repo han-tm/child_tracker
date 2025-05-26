@@ -10,7 +10,7 @@ class ProfileTabScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const RobotoText(text: 'Profile'),
+        title: const AppText(text: 'Profile'),
         actions: [
           IconButton(
             onPressed: () {

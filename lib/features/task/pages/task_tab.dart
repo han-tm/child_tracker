@@ -8,7 +8,7 @@ class TaskTabScreen extends StatelessWidget {
   Widget build(BuildContext context) {
      return Scaffold(
       appBar: AppBar(
-        title: const RobotoText(text: 'Task'),
+        title: const AppText(text: 'Task'),
       ),
     );
   }

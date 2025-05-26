@@ -49,7 +49,7 @@ class ReactiveCustomInput extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (label.isNotEmpty) RobotoText(text: label),
+        if (label.isNotEmpty) AppText(text: label),
         if (label.isNotEmpty) const SizedBox(height: 8),
         ReactiveTextField(
           onSubmitted: onSubmitted,
@@ -65,7 +65,7 @@ class ReactiveCustomInput extends StatelessWidget {
           textInputAction: textInputAction,
           inputFormatters: inputFormatters,
           obscureText: obscure,
-          style: const TextStyle(fontSize: 16, color: primaryText, fontWeight: FontWeight.normal),
+          style: const TextStyle(fontSize: 16, color: greyscale900, fontWeight: FontWeight.normal),
           maxLength: maxLenght,
           decoration: InputDecoration(
             enabled: enabled,
@@ -76,27 +76,27 @@ class ReactiveCustomInput extends StatelessWidget {
             hintText: hint,
             errorMaxLines: 4,
             counterText: '',
-            errorStyle: const TextStyle(fontSize: 14, color: appRed, fontWeight: FontWeight.normal),
-            hintStyle: const TextStyle(fontSize: 16, color: borderColor, fontWeight: FontWeight.normal),
+            errorStyle: const TextStyle(fontSize: 14, color: red, fontWeight: FontWeight.normal),
+            hintStyle: const TextStyle(fontSize: 16, color: greyscale200, fontWeight: FontWeight.normal),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(7),
-              borderSide: const BorderSide(color: borderColor),
+              borderSide: const BorderSide(color: greyscale200),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(7),
-              borderSide: const BorderSide(color: borderColor),
+              borderSide: const BorderSide(color: greyscale200),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(7),
-              borderSide: const BorderSide(color: primary),
+              borderSide: const BorderSide(color: primary900),
             ),
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(7),
-              borderSide: const BorderSide(color: appRed),
+              borderSide: const BorderSide(color: red),
             ),
             focusedErrorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(7),
-              borderSide: const BorderSide(color: appRed),
+              borderSide: const BorderSide(color: red),
             ),
             suffix: ReactiveFormConsumer(builder: (context, form, child) {
               return hasAsyncValidator && form.control(formName).pending
@@ -105,7 +105,7 @@ class ReactiveCustomInput extends StatelessWidget {
                       height: 15,
                       child: CircularProgressIndicator(
                         strokeWidth: 2,
-                        color: primary,
+                        color: primary900,
                       ))
                   : const SizedBox();
             }),

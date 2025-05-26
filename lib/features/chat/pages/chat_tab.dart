@@ -10,14 +10,14 @@ class ChatTabScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const RobotoText(text: 'Chat'),
+        title: const AppText(text: 'Chat'),
         actions: [
           IconButton(
             onPressed: () {
               sl<NewChatCubit>()
                   .createOrReturnPrivateChat('R6rWquLQSLgpkHIB203iYEgalHE3', 'R6rWquLQSLgpkHIB203iYEgalHE3');
             },
-            icon: const Icon(Icons.add, color: primaryText),
+            icon: const Icon(Icons.add, color: greyscale900),
           )
         ],
       ),
@@ -30,7 +30,7 @@ class ChatTabScreen extends StatelessWidget {
               if (snapshot.connectionState == ConnectionState.waiting || snapshot.data == null) {
                 return const Center(child: CircularProgressIndicator());
               }
-              if (snapshot.hasError) return Center(child: RobotoText(text: snapshot.error.toString(), color: appRed));
+              if (snapshot.hasError) return Center(child: AppText(text: snapshot.error.toString(), color: red));
               final chats = snapshot.data!;
               if (chats.isEmpty) return const EmptyChatsWidget();
               return ListView.builder(

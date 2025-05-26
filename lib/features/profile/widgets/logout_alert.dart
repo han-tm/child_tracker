@@ -21,7 +21,7 @@ class _LogoutAlertDialog extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            const RobotoText(
+            const AppText(
               text: 'Вы действительно хотите выйти из аккаунта?',
               textAlign: TextAlign.center,
               size: 20,
@@ -30,14 +30,14 @@ class _LogoutAlertDialog extends StatelessWidget {
             const SizedBox(height: 24),
             FilledAppButton(
               text: 'Выйти',
-              onPress: () => Navigator.of(context).pop(true),
+              onTap: () => Navigator.of(context).pop(true),
               fontSize: 17,
               fw: FontWeight.w500,
             ),
             const SizedBox(height: 16),
             FilledAppButton(
               text: 'Отменить',
-              onPress: () => Navigator.of(context).pop(false),
+              onTap: () => Navigator.of(context).pop(false),
               fontSize: 17,
               fw: FontWeight.w500,
             )
