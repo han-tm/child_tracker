@@ -10,6 +10,8 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'package:reactive_forms/reactive_forms.dart';
 
+import 'features/auth/widgets/otp_timer.dart';
+
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
@@ -50,17 +52,11 @@ class _MyWidgetState extends State<MyWidget> {
   FormGroup form = FormGroup({
     "phone": FormControl<String>(validators: [Validators.required]),
   });
-
-  List<File> files = [];
-
-  void onAdd(File file) => setState(() => files.add(file));
-
-  void onDelete(File file) => setState(() => files.remove(file));
-
+  String? error;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: greyscale50,
+      backgroundColor: greyscale100,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -69,6 +65,12 @@ class _MyWidgetState extends State<MyWidget> {
           // FilledAppButton(text: 'Continue', onTap: (){
           //    _showIconModalBottomSheet(context);
           // }),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 24),
+            child: BonusCard(
+              bonus: BonusModel(title: 'Новый велосипед', status: BonusStatus.received),
+            ),
+          ),
 
           const SizedBox(height: 100),
           ElevatedButton(
