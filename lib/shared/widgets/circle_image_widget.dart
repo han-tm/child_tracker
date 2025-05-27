@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:child_tracker/index.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
@@ -13,6 +14,7 @@ class CachedClickableImage extends StatelessWidget {
   final BoxFit fit;
   final Widget? placeholder;
   final Widget? errorWidget;
+  final Widget? noImageWidget;
 
   const CachedClickableImage({
     super.key,
@@ -26,6 +28,7 @@ class CachedClickableImage extends StatelessWidget {
     this.fit = BoxFit.cover,
     this.placeholder,
     this.errorWidget,
+    this.noImageWidget,
   }) : assert(!(borderRadius != null && circularRadius != null),
             'Нельзя одновременно указывать borderRadius и circularRadius.');
 
@@ -58,11 +61,10 @@ class CachedClickableImage extends StatelessWidget {
         ),
       );
     } else {
-      imageWidget = Container(
+      imageWidget = SizedBox(
         width: width,
         height: height,
-        color: Colors.grey.shade300,
-        child: const Center(child: Icon(Icons.image_outlined)),
+        child: noImageWidgetPlaceholder(),
       );
     }
 
@@ -84,5 +86,19 @@ class CachedClickableImage extends StatelessWidget {
       onTap: onTap,
       child: imageWidget,
     );
+  }
+
+  Widget noImageWidgetPlaceholder() {
+    return noImageWidget ??
+        Container(
+          width: width,
+          height: height,
+          color: greyscale100,
+          child: Center(
+            child: Image.asset(
+              'assets/images/no_image.png',
+            ),
+          ),
+        );
   }
 }

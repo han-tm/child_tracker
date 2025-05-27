@@ -1,4 +1,5 @@
 import 'package:child_tracker/index.dart';
+import 'package:flutter/material.dart';
 
 import 'package:image_picker/image_picker.dart';
 import 'package:mime/mime.dart';
@@ -35,8 +36,12 @@ class CustomImagePicker {
   static final _picker = ImagePicker();
 
   /// Показывает галерею и возвращает XFile только если это изображение.
-  static Future<XFile?> pickAvatarFromGallery() async {
-    final XFile? xfile = await _picker.pickImage(source: ImageSource.gallery);
+  static Future<XFile?> pickAvatarFromGallery(BuildContext context, {ImageSource? source}) async {
+    source ??= await showImageSourceSelectModalBottomSheet(context);
+
+    if(source == null) return null;
+
+    final XFile? xfile = await _picker.pickImage(source: source);
 
     if (xfile == null) return null; // пользователь ничего не выбрал
 

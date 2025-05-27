@@ -1,4 +1,3 @@
-
 import 'package:child_tracker/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -41,7 +40,7 @@ class ReactiveCustomInput extends StatelessWidget {
     this.onSubmitted,
     this.color,
     this.hasAsyncValidator = false,
-    this.maxLenght = 500,
+    this.maxLenght = 200,
   });
 
   @override
@@ -65,39 +64,29 @@ class ReactiveCustomInput extends StatelessWidget {
           textInputAction: textInputAction,
           inputFormatters: inputFormatters,
           obscureText: obscure,
-          style: const TextStyle(fontSize: 16, color: greyscale900, fontWeight: FontWeight.normal),
+          style: const TextStyle(fontSize: 18, color: greyscale900, fontWeight: FontWeight.w600, fontFamily: Involve),
           maxLength: maxLenght,
           decoration: InputDecoration(
             enabled: enabled,
-            contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-            filled: color != null ? true : !enabled,
-            fillColor: color ?? (enabled ? null : const Color(0xFFF8F8F8)),
-            isDense: true,
+            contentPadding: const EdgeInsets.symmetric(vertical: 19, horizontal: 20),
+            filled: true,
+            fillColor: enabled ? greyscale50 : greyscale400,
+            hoverColor: primary900.withOpacity(0.08),
             hintText: hint,
             errorMaxLines: 4,
-            counterText: '',
-            errorStyle: const TextStyle(fontSize: 14, color: red, fontWeight: FontWeight.normal),
-            hintStyle: const TextStyle(fontSize: 16, color: greyscale200, fontWeight: FontWeight.normal),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(7),
-              borderSide: const BorderSide(color: greyscale200),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(7),
-              borderSide: const BorderSide(color: greyscale200),
-            ),
+            errorStyle: const TextStyle(fontSize: 16, color: error, fontWeight: FontWeight.normal, fontFamily: Involve),
+            hintStyle: const TextStyle(fontSize: 18, color: greyscale500, fontWeight: FontWeight.normal, fontFamily: Involve),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide.none),
+            enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide.none),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(7),
-              borderSide: const BorderSide(color: primary900),
-            ),
-            errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(7),
-              borderSide: const BorderSide(color: red),
+              borderRadius: BorderRadius.circular(10),
+              borderSide: const BorderSide(width: 2, color: primary900),
             ),
             focusedErrorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(7),
-              borderSide: const BorderSide(color: red),
+              borderRadius: BorderRadius.circular(10),
+              borderSide: const BorderSide(width: 2, color: error),
             ),
+            counterText: '',
             suffix: ReactiveFormConsumer(builder: (context, form, child) {
               return hasAsyncValidator && form.control(formName).pending
                   ? const SizedBox(

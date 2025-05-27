@@ -52,7 +52,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   void onPick() async {
-    final XFile? xfile = await CustomImagePicker.pickAvatarFromGallery();
+    final XFile? xfile = await CustomImagePicker.pickAvatarFromGallery(context);
 
     if (xfile == null) return;
 
