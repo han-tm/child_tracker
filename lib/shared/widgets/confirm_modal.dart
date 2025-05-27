@@ -1,14 +1,13 @@
 import 'package:child_tracker/index.dart';
 import 'package:flutter/material.dart';
 
-Future<bool?> showConfirmModalBottomSheet(
-  BuildContext context, {
-  String title = 'Подтвердите действие',
-  bool isDestructive = false,
-  String confirmText = 'Подтвердить',
-  String cancelText = 'Отмена',
-  String message = '?',
-}) async {
+Future<bool?> showConfirmModalBottomSheet(BuildContext context,
+    {String title = 'Подтвердите действие',
+    bool isDestructive = false,
+    String confirmText = 'Подтвердить',
+    String cancelText = 'Отмена',
+    String message = '?',
+    String defaultmascot = '2179-min'}) async {
   return showModalBottomSheet<bool?>(
     context: context,
     backgroundColor: white,
@@ -17,6 +16,7 @@ Future<bool?> showConfirmModalBottomSheet(
       borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
     ),
     builder: (BuildContext context) {
+      final mascot = isDestructive ? 'assets/images/2186-min.png' : 'assets/images/$defaultmascot.png';
       return Container(
         decoration: const BoxDecoration(
           color: Colors.white,
@@ -51,13 +51,32 @@ Future<bool?> showConfirmModalBottomSheet(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Expanded(
-                  child: Image.asset(
-                    'assets/images/mascot_1.png',
-                    height: 160,
-                    fit: BoxFit.contain,
+                  flex: 2,
+                  child: isDestructive
+                      ? Transform.flip(
+                        flipX: true,
+                        child: Image.asset(
+                            mascot,
+                            fit: BoxFit.contain,
+                          ),
+                      )
+                      : Image.asset(
+                          mascot,
+                          fit: BoxFit.contain,
+                        ),
+                ),
+                const SizedBox(width: 6),
+                Expanded(
+                  flex: 3,
+                  child: LeftArrowBubleShape(
+                    child: AppText(
+                      text: message,
+                      size: 20,
+                      maxLine: 10,
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                 ),
-                Expanded(child: LeftArrowBubleShape(child: AppText(text: message, size: 20))),
               ],
             ),
             const Divider(height: 48, thickness: 1, color: greyscale200),

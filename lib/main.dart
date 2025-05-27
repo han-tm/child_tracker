@@ -10,7 +10,6 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'package:reactive_forms/reactive_forms.dart';
 
-
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
@@ -74,9 +73,8 @@ class _MyWidgetState extends State<MyWidget> {
           const SizedBox(height: 100),
           ElevatedButton(
             onPressed: () async {
-              final r = await  showConfirmModalBottomSheet(context);
+              final r = await showMentorSelectorModalBottomSheet(context);
               print(r);
-              
             },
             child: const Text('Показать модальное окно'),
           ),

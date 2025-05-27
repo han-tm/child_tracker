@@ -14,3 +14,5 @@ export './custom_time_picker_modal.dart';
 export './custom_calendar.dart';
 export './multi_file_picker_widget.dart';
 export './confirm_modal.dart';
+export './select_mentor.dart';
+export './select_kid_modal.dart';
