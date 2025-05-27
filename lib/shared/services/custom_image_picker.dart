@@ -1,8 +1,11 @@
+import 'dart:typed_data';
+
 import 'package:child_tracker/index.dart';
 import 'package:flutter/material.dart';
 
 import 'package:image_picker/image_picker.dart';
 import 'package:mime/mime.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
 
 class CustomImagePicker {
   static const allowedMimeTypes = [
@@ -16,11 +19,11 @@ class CustomImagePicker {
 
   static const allowedVideoMimeTypes = [
     'video/mp4',
-    'video/quicktime', // .mov
-    'video/x-matroska', // .mkv
+    'video/quicktime',
+    'video/x-matroska',
     'video/webm',
     'video/3gpp',
-    'video/avi', // может быть 'video/x-msvideo'
+    'video/avi',
   ];
 
   static const allowedPhotoOrPdfMimeTypes = [
@@ -33,17 +36,32 @@ class CustomImagePicker {
     'application/pdf',
   ];
 
+  static const allowedPhotoOrVideoTypes = [
+    'image/jpeg',
+    'image/png',
+    'image/gif',
+    'image/webp',
+    'image/heic',
+    'image/heif',
+    'video/mp4',
+    'video/quicktime',
+    'video/x-matroska',
+    'video/webm',
+    'video/3gpp',
+    'video/avi',
+  ];
+
   static final _picker = ImagePicker();
 
   /// Показывает галерею и возвращает XFile только если это изображение.
   static Future<XFile?> pickAvatarFromGallery(BuildContext context, {ImageSource? source}) async {
     source ??= await showImageSourceSelectModalBottomSheet(context);
 
-    if(source == null) return null;
+    if (source == null) return null;
 
     final XFile? xfile = await _picker.pickImage(source: source);
 
-    if (xfile == null) return null; // пользователь ничего не выбрал
+    if (xfile == null) return null;
 
     final mimeType = lookupMimeType(xfile.path);
 
@@ -68,5 +86,40 @@ class CustomImagePicker {
     }
 
     return xfile;
+  }
+
+  static Future<XFile?> pickPhotoOrVideo(BuildContext context) async {
+    final XFile? xfile = await _picker.pickMedia();
+
+    if (xfile == null) return null;
+
+    final mimeType = lookupMimeType(xfile.path);
+
+    if (mimeType == null || !allowedPhotoOrVideoTypes.contains(mimeType)) {
+      SnackBarSerive.showErrorSnackBar('Можно выбрать только фото или видео');
+      return null;
+    }
+
+    return xfile;
+  }
+
+  static bool isVideo(String path) {
+    final mimeType = lookupMimeType(path);
+    return allowedVideoMimeTypes.contains(mimeType);
+  }
+
+  static Future<Uint8List?> getFileVideoThumbnail(String path) async {
+    
+    final thumb = await VideoThumbnail.thumbnailData(
+      video: path,
+      imageFormat: ImageFormat.JPEG,
+      maxHeight: 120, 
+      maxWidth: 120, 
+      quality: 75,
+    ).onError((_, e){
+      print(e);
+      return null;
+    });
+    return thumb;
   }
 }

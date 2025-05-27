@@ -36,18 +36,20 @@ dependencies:
   url_launcher: ^6.3.1
   image_picker: ^1.1.2
   shared_preferences: ^2.5.2
-  morphable_shape: ^2.0.0
-  animated_emoji: 3.1.0
-
-
-
-  flutter_native_splash: 2.4.4
-  collection: ^1.18.0
+  table_calendar: 3.1.2
+  wheel_picker: ^0.2.1
+  dotted_border: 2.1.0
   mime: ^2.0.0
-  file_picker: ^10.1.2
-
+  collection: ^1.18.0
   cupertino_icons: ^1.0.8
   path: ^1.9.0
+  flutter_native_splash: 2.4.4
+  video_thumbnail: ^0.5.6
+
+
+
+  
+
 
 dev_dependencies:
   flutter_test:
