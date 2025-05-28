@@ -1,5 +1,6 @@
 import 'package:child_tracker/index.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class KidSignupSuccessScreen extends StatelessWidget {
@@ -62,6 +63,7 @@ class KidSignupSuccessScreen extends StatelessWidget {
                   child: FilledAppButton(
                     text: 'Начать',
                     onTap: () {
+                      context.read<FillDataCubit>().reset();
                       context.go('/kid_bonus');
                     },
                   ),

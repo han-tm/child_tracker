@@ -2,6 +2,7 @@
 
 import 'package:child_tracker/index.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -140,7 +141,7 @@ class TakeSubscriptionPlanScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                     const SizedBox(height: 24),
+                  const SizedBox(height: 24),
                 ],
               ),
             ),
@@ -156,7 +157,8 @@ class TakeSubscriptionPlanScreen extends StatelessWidget {
                   child: FilledAppButton(
                     text: 'Начать использование',
                     onTap: () {
-                       context.go('/mentor_bonus');
+                      context.read<FillDataCubit>().reset();
+                      context.go('/mentor_bonus');
                     },
                   ),
                 ),

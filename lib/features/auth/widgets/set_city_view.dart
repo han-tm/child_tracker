@@ -31,7 +31,10 @@ class SetCityView extends StatelessWidget {
                   const SizedBox(height: 8),
                   GestureDetector(
                     onTap: () {
-                      context.push('/auth/city_search');
+                      context.push(
+                        '/auth/city_search',
+                        extra: context.read<FillDataCubit>().onChangeCity as Function(String),
+                      );
                     },
                     child: Container(
                       width: double.infinity,

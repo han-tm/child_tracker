@@ -22,8 +22,8 @@ class ProfileCubit extends Cubit<ProfileState> {
     try {
       final Map<Object, Object?> newData = {
         'name': data['name'],
-        'city': data['city'],
-        'age': data['age'],
+        'city':  data['city'],
+        'age':  (data['age'] as String?) == null ? null : int.parse(data['age']),
       };
 
       if (file != null) {
@@ -37,7 +37,7 @@ class ProfileCubit extends Cubit<ProfileState> {
       _userCubit.setUser(user.copyWith(
         name: data['name'],
         city: data['city'],
-        age: data['age'],
+        age: (data['age'] as String?) == null ? null : int.parse(data['age']),
         photo: newData['photo'] as String?,
       ));
 

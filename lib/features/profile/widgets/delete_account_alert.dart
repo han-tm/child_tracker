@@ -1,4 +1,3 @@
-
 import 'package:child_tracker/index.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -6,70 +5,33 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pinput/pinput.dart';
 
-class _DeleteAccountAlertDialog extends StatelessWidget {
-  const _DeleteAccountAlertDialog();
-
-  @override
-  Widget build(BuildContext context) {
-    return Dialog(
-      backgroundColor: Colors.white,
-      insetPadding: const EdgeInsets.symmetric(horizontal: 20),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8.0),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            const AppText(
-              text: 'Вы действительно хотите удалить аккаунт?',
-              textAlign: TextAlign.center,
-              size: 20,
-              fw: FontWeight.w500,
-            ),
-            const SizedBox(height: 24),
-            FilledAppButton(
-              text: 'Удалить',
-              onTap: () => Navigator.of(context).pop(true),
-              fontSize: 17,
-              fw: FontWeight.w500,
-            ),
-            const SizedBox(height: 16),
-            FilledAppButton(
-              text: 'Отменить',
-              onTap: () => Navigator.of(context).pop(false),
-              fontSize: 17,
-              fw: FontWeight.w500,
-            )
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-void _showDeleteAccountDialog(BuildContext context) {
+void _showDeleteAccountDialog(BuildContext context, String phone) {
   showDialog(
     context: context,
-    builder: (context) => const AccountDeletionDialog(),
+    builder: (context) => AccountDeletionDialog(phone: phone),
   );
 }
 
-
 void showDeleteAccountDialog(BuildContext context) async {
-  final result = await showDialog(
-    context: context,
-    builder: (BuildContext context) => const _DeleteAccountAlertDialog(),
+  final result = await showConfirmModalBottomSheet(
+    context,
+    isDestructive: true,
+    confirmText: 'Да, удалить',
+    title: 'Удалить аккаунт',
+    message: 'Ох..., точно удалить?',
   );
 
   if (result == true && context.mounted) {
-    _showDeleteAccountDialog(context);
+    final phone = context.read<UserCubit>().state?.phone;
+    print(phone);
+    if (phone == null) return;
+    _showDeleteAccountDialog(context, phone);
   }
 }
 
 class AccountDeletionDialog extends StatefulWidget {
-  const AccountDeletionDialog({super.key});
+  final String phone;
+  const AccountDeletionDialog({super.key, required this.phone});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -92,12 +54,8 @@ class _AccountDeletionDialogState extends State<AccountDeletionDialog> {
       _isLoading = true;
     });
 
-    final phone = context.read<UserCubit>().state?.phone;
-
-    if (phone == null) return;
-
     await FirebaseAuth.instance.verifyPhoneNumber(
-      phoneNumber: phone,
+      phoneNumber: widget.phone,
       verificationCompleted: (PhoneAuthCredential credential) async {
         await _deleteAccount(credential);
       },
@@ -130,7 +88,7 @@ class _AccountDeletionDialogState extends State<AccountDeletionDialog> {
       if (mounted) await context.read<UserCubit>().markAsDeleted();
       final StorageService storageService = sl();
       await storageService.clearAllStorage();
-      if (mounted) context.go('/auth');
+      if (mounted) context.go('/logout_result');
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -156,9 +114,6 @@ class _AccountDeletionDialogState extends State<AccountDeletionDialog> {
       await _deleteAccount(credential);
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Ошибка верификации: $e')),
-        );
         setState(() {
           _isLoading = false;
         });
@@ -178,6 +133,10 @@ class _AccountDeletionDialogState extends State<AccountDeletionDialog> {
           const AppText(
             text: 'Для безопасного удаления аккаунта '
                 'требуется повторная аутентификация',
+            maxLine: 5,
+            size: 14,
+            fw: FontWeight.w500,
+            color: greyscale700,
           ),
           const SizedBox(height: 24),
           if (_isLoading) const CircularProgressIndicator(),

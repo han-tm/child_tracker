@@ -45,6 +45,7 @@ Future<UserInitialStatus> getUserStatus(BuildContext context) async {
     }
   } catch (e) {
     print('Произошла ошибка {getUserStatus}: $e');
+    SnackBarSerive.showErrorSnackBar(defaultErrorText);
     return UserInitialStatus.noFound;
   }
 }
@@ -139,7 +140,7 @@ final GoRouter router = GoRouter(
         ),
         GoRoute(
           path: 'city_search',
-          builder: (context, state) => const CitySearchScreen(),
+          builder: (context, state) => CitySearchScreen(onSelected: state.extra as Function(String)),
         ),
         GoRoute(
           path: 'take_subscription_plan',
@@ -252,14 +253,20 @@ final GoRouter router = GoRouter(
         GoRoute(
           path: '/mentor_profile',
           builder: (context, state) => const ProfileTabScreen(),
-          routes: [
-            GoRoute(
-              path: 'edit',
-              builder: (context, state) => const EditProfileScreen(),
-            ),
-          ],
         ),
       ],
+    ),
+    GoRoute(
+      path: '/edit_profile',
+      builder: (context, state) => const EditProfileScreen(),
+    ),
+    GoRoute(
+      path: '/city_search',
+      builder: (context, state) => CitySearchScreen(onSelected: state.extra as Function(String)),
+    ),
+    GoRoute(
+      path: '/logout_result',
+      builder: (context, state) => LogoutResultScreen(message: state.extra as String),
     ),
   ],
   errorBuilder: (context, state) => ErrorScreen(error: state.error.toString()),

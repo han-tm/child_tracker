@@ -60,11 +60,22 @@ class _KidMainScreenState extends State<KidMainScreen> {
         onTap: onTapTab,
         enableFeedback: true,
         backgroundColor: white,
-        selectedItemColor: Colors.black,
-        unselectedItemColor: secondary900,
-        selectedLabelStyle: const TextStyle(fontSize: 12, color: greyscale900),
-        unselectedLabelStyle: const TextStyle(fontSize: 12, color: Color(0xFF818181)),
+        selectedItemColor: secondary900,
+        unselectedItemColor: greyscale500,
+        selectedLabelStyle: const TextStyle(
+          fontSize: 10,
+          fontWeight: FontWeight.w700,
+          fontFamily: Involve,
+          height: 1.6,
+        ),
+        unselectedLabelStyle: const TextStyle(
+          fontSize: 10,
+          fontWeight: FontWeight.w500,
+          fontFamily: Involve,
+          height: 1.6,
+        ),
         showUnselectedLabels: true,
+        iconSize: 24,
         items: [
           BottomNavigationBarItem(
             activeIcon: SvgPicture.asset('assets/images/bonus_filled_tab.svg'),

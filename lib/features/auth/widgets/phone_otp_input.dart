@@ -20,7 +20,7 @@ class _PhoneOtpInputState extends State<PhoneOtpInput> {
         if (state is PhoneAuthSuccessRedirect) {
           context.go('/auth/role');
         } else if (state is PhoneAuthSuccess) {
-          context.go('/${state.type}/bonus');
+          context.go('/${state.type}_bonus');
         }
       },
       builder: (context, state) {

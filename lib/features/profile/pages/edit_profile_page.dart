@@ -1,10 +1,14 @@
+// ignore_for_file: deprecated_member_use
+
 import 'dart:io';
 
 import 'package:child_tracker/features/profile/controllers/profile/profile_cubit.dart';
 import 'package:child_tracker/index.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:reactive_forms/reactive_forms.dart';
@@ -23,31 +27,22 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         validators: [
           Validators.required,
           Validators.minLength(3),
-          Validators.maxLength(150),
-        ],
-      ),
-      'city': FormControl<String>(
-        validators: [
-          Validators.required,
-          Validators.minLength(3),
-          Validators.maxLength(150),
-        ],
-      ),
-      'age': FormControl<int>(
-        validators: [
-          Validators.required,
+          Validators.maxLength(60),
+          Validators.pattern(r'^[a-zA-Zа-яА-ЯёЁ\s]+$'),
         ],
       ),
     },
   );
-
+  String? city;
   XFile? selectedFile;
 
   void onSaveTap(BuildContext context) {
     form.markAllAsTouched();
 
     if (form.valid) {
-      context.read<ProfileCubit>().updateProfile(form.value, selectedFile);
+      Map<String, dynamic> newForm = form.value.map((key, value) => MapEntry(key, value.toString()));
+      newForm['city'] = city;
+      context.read<ProfileCubit>().updateProfile(newForm, selectedFile);
     }
   }
 
@@ -63,18 +58,31 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   void init() {
     final user = context.read<UserCubit>().state;
-    form.value = {
-      'name': user?.name,
-      'city': user?.city,
-      'age': user?.age,
-    };
+    if (user == null) return;
+    if (user.isKid) {
+      form.addAll({
+        'age': FormControl<int>(
+          validators: [
+            Validators.required,
+            Validators.min(5),
+            Validators.max(18),
+          ],
+        ),
+      });
+      form.value = {'name': user.name, 'age': user.age};
+      city = user.city;
+    } else {
+      form.value = {'name': user.name};
+    }
   }
 
   @override
   void initState() {
-    super.initState();
     init();
+    super.initState();
   }
+
+  void onSetCity(String city) => setState(() => this.city = city);
 
   @override
   Widget build(BuildContext context) {
@@ -92,82 +100,179 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         builder: (context, state) {
           return Scaffold(
             appBar: AppBar(
-              title: const Text('Edit Profile'),
+              leadingWidth: 70,
+              leading: IconButton(
+                icon: const Icon(CupertinoIcons.arrow_left),
+                onPressed: () => context.pop(),
+              ),
+              title: const AppText(text: 'Данные профиля', size: 24, fw: FontWeight.w700),
+              centerTitle: true,
             ),
             body: GestureDetector(
               behavior: HitTestBehavior.translucent,
               onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 18),
-                child: ReactiveForm(
-                  formGroup: form,
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 20),
-                      CachedClickableImage(
-                        circularRadius: 100,
-                        height: 100,
-                        width: 100,
-                        imageFile: selectedFile?.path != null ? File(selectedFile!.path) : null,
-                        imageUrl: context.read<UserCubit>().state?.photo,
-                        onTap: onPick,
+              child: LayoutBuilder(builder: (context, constraints) {
+                return SingleChildScrollView(
+                  padding: EdgeInsets.zero,
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        bottom: MediaQuery.of(context).viewInsets.bottom > 0
+                            ? MediaQuery.of(context).viewInsets.bottom + 0.0
+                            : 0.0,
                       ),
-                      const SizedBox(height: 20),
-                      ReactiveCustomInput(
-                        formName: 'name',
-                        label: 'Имя',
-                        hint: 'Введите имя',
-                        inputType: TextInputType.text,
-                        textCapitalization: TextCapitalization.sentences,
-                        textInputAction: TextInputAction.next,
-                        validationMessages: {
-                          'required': (error) => 'Заполните поле',
-                          'minLength': (error) => 'Минимум 3 символа',
-                          'maxLength': (error) => 'Максимум 150 символов',
-                        },
+                      child: IntrinsicHeight(
+                        child: ReactiveForm(
+                          formGroup: form,
+                          child: Column(
+                            children: [
+                              const SizedBox(height: 24),
+                              CachedClickableImage(
+                                circularRadius: 100,
+                                height: 120,
+                                width: 120,
+                                imageFile: selectedFile?.path != null ? File(selectedFile!.path) : null,
+                                imageUrl: context.read<UserCubit>().state?.photo,
+                                onTap: onPick,
+                              ),
+                              const SizedBox(height: 44),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 24),
+                                child: ReactiveCustomInput(
+                                  formName: 'name',
+                                  label: 'Имя',
+                                  hint: 'Введите имя',
+                                  inputType: TextInputType.text,
+                                  textCapitalization: TextCapitalization.sentences,
+                                  textInputAction: TextInputAction.next,
+                                  validationMessages: {
+                                    'required': (error) => 'Заполните поле',
+                                    'minLength': (error) => 'Минимум 3 символа',
+                                    'maxLength': (error) => 'Максимум 60 символов',
+                                    'pattern': (error) => 'Недопустимые символы',
+                                  },
+                                ),
+                              ),
+                              BlocBuilder<UserCubit, UserModel?>(
+                                builder: (context, user) {
+                                  if(user == null) return const SizedBox();
+                                  if (user.isKid) {
+                                    return Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          const SizedBox(height: 28),
+                                          ReactiveCustomInput(
+                                            formName: 'age',
+                                            label: 'Возраст',
+                                            hint: 'Введите возраст',
+                                            inputType: TextInputType.number,
+                                            textCapitalization: TextCapitalization.none,
+                                            textInputAction: TextInputAction.done,
+                                            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                                            validationMessages: {
+                                              'required': (error) => 'Заполните поле',
+                                              'min': (error) => 'Минимум 5 лет',
+                                              'max': (error) => 'Максимум 18 лет',
+                                            },
+                                          ),
+                                          const SizedBox(height: 28),
+                                          const AppText(text: 'Город'),
+                                          const SizedBox(height: 8),
+                                          GestureDetector(
+                                            onTap: () {
+                                              context.push('/city_search', extra: onSetCity as Function(String));
+                                            },
+                                            child: Container(
+                                              width: double.infinity,
+                                              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+                                              decoration: BoxDecoration(
+                                                color: greyscale50,
+                                                borderRadius: BorderRadius.circular(10),
+                                              ),
+                                              child: AppText(
+                                                text: city != null ? city! : 'Введите',
+                                                fw: city != null ? FontWeight.w600 : FontWeight.normal,
+                                                color: city != null ? greyscale900 : greyscale500,
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(height: 28),
+                                        ],
+                                      ),
+                                    );
+                                  }
+                                  return const SizedBox();
+                                },
+                              ),
+                              const Spacer(),
+                              Container(
+                                decoration: const BoxDecoration(border: Border(top: BorderSide(color: greyscale100))),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                                  child: Column(
+                                    children: [
+                                      const SizedBox(height: 20),
+                                      FilledDestructiveAppButton(
+                                        onTap: () => showLogoutDialog(context),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            SvgPicture.asset(
+                                              'assets/images/logout.svg',
+                                              width: 20,
+                                              height: 20,
+                                              color: error,
+                                            ),
+                                            const SizedBox(width: 20),
+                                            const AppText(text: 'Выйти из аккаунта', color: error, fw: FontWeight.w700),
+                                          ],
+                                        ),
+                                      ),
+                                      const SizedBox(height: 24),
+                                      FilledDestructiveAppButton(
+                                        onTap: () =>  showDeleteAccountDialog(context),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            SvgPicture.asset(
+                                              'assets/images/delete.svg',
+                                              width: 20,
+                                              height: 20,
+                                              color: error,
+                                            ),
+                                            const SizedBox(width: 20),
+                                            const AppText(text: 'Удалить аккаунт', color: error, fw: FontWeight.w700),
+                                          ],
+                                        ),
+                                      ),
+                                      const SizedBox(height: 24),
+                                      ReactiveFormConsumer(
+                                        builder: (context, formGroup, child) {
+                                          return FilledAppButton(
+                                            text: 'Применить',
+                                            onTap: () =>
+                                                state.status == ProfileStateStatus.saving ? null : onSaveTap(context),
+                                            isLoading: state.status == ProfileStateStatus.saving,
+                                            isActive: formGroup.valid,
+                                          );
+                                        },
+                                      ),
+                                      const SizedBox(height: 20),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
-                      const SizedBox(height: 20),
-                      ReactiveCustomInput(
-                        formName: 'city',
-                        label: 'Город',
-                        hint: 'Введите город',
-                        inputType: TextInputType.text,
-                        textCapitalization: TextCapitalization.sentences,
-                        textInputAction: TextInputAction.next,
-                        validationMessages: {
-                          'required': (error) => 'Заполните поле',
-                          'minLength': (error) => 'Минимум 3 символа',
-                          'maxLength': (error) => 'Максимум 150 символов',
-                        },
-                      ),
-                      const SizedBox(height: 20),
-                      ReactiveCustomInput(
-                        formName: 'age',
-                        label: 'Возраст',
-                        hint: 'Введите возраст',
-                        inputType: TextInputType.number,
-                        textCapitalization: TextCapitalization.none,
-                        textInputAction: TextInputAction.done,
-                        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                        validationMessages: {
-                          'required': (error) => 'Заполните поле',
-                        },
-                      ),
-                      const SizedBox(height: 20),
-                      ReactiveFormConsumer(
-                        builder: (context, formGroup, child) {
-                          return FilledAppButton(
-                            text: 'Сохранить',
-                            onTap: () =>  state.status == ProfileStateStatus.saving ? null : onSaveTap(context),
-                            isLoading: state.status == ProfileStateStatus.saving,
-                            isActive: formGroup.valid,
-                          );
-                        },
-                      ),
-                    ],
+                    ),
                   ),
-                ),
-              ),
+                );
+              }),
             ),
           );
         },

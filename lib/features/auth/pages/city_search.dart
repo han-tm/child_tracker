@@ -1,11 +1,11 @@
 import 'package:child_tracker/index.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class CitySearchScreen extends StatefulWidget {
-  const CitySearchScreen({super.key});
+  final Function (String city) onSelected;
+  const CitySearchScreen({super.key, required this.onSelected});
 
   @override
   State<CitySearchScreen> createState() => _CitySearchScreenState();
@@ -117,7 +117,8 @@ class _CitySearchScreenState extends State<CitySearchScreen> {
           final city = searchResults[index];
           return GestureDetector(
             onTap: () {
-              context.read<FillDataCubit>().onChangeCity(city);
+              // context.read<FillDataCubit>().onChangeCity(city);
+              widget.onSelected(city);
               context.pop();
             },
             child: Container(
