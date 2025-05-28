@@ -1,121 +1,107 @@
 import 'package:child_tracker/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pinput/pinput.dart';
+import 'package:go_router/go_router.dart';
 
-class PhoneOtpInput extends StatelessWidget {
+class PhoneOtpInput extends StatefulWidget {
   final String phone;
   const PhoneOtpInput({super.key, required this.phone});
 
   @override
+  State<PhoneOtpInput> createState() => _PhoneOtpInputState();
+}
+
+class _PhoneOtpInputState extends State<PhoneOtpInput> {
+  String? otp;
+  @override
   Widget build(BuildContext context) {
-    return BlocBuilder<PhoneAuthCubit, PhoneAuthState>(
+    return BlocConsumer<PhoneAuthCubit, PhoneAuthState>(
+      listener: (context, state) {
+        if (state is PhoneAuthSuccessRedirect) {
+          context.go('/auth/role');
+        } else if (state is PhoneAuthSuccess) {
+          context.go('/${state.type}/bonus');
+        }
+      },
       builder: (context, state) {
         String? errorText = state is PhoneAuthFailure ? state.errorMessage : null;
-        return Column(
-          children: [
-            const AppText(
-              text: 'Проверка телефона',
-              textAlign: TextAlign.center,
-              size: 24,
-              fw: FontWeight.w500,
-            ),
-            const SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const AppText(text: 'На номер '),
-                AppText(text: phone, color: primary900),
-              ],
-            ),
-            const AppText(text: 'был отправлен код'),
-            const SizedBox(height: 16),
-            Pinput(
-              length: 6,
-              // onCompleted: (v) => onComplete(v, method),
-              // onChanged: (value) {
-              //   if (value.length != 6 && errorText != null) {
-              //     setState(() {
-              //       errorText = null;
-              //     });
-              //   }
-              // },
-              separatorBuilder: (index) => const SizedBox(width: 12),
-              errorText: errorText,
-              forceErrorState: errorText != null,
-
-              errorBuilder: (errorText, pin) {
-                if (errorText != null) {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 12),
-                        child: AppText(
-                          text: errorText,
-                          color: red,
-                          textAlign: TextAlign.center,
+        bool isValid = ((otp ?? '').trim()).length == 6;
+        return GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+          child: LayoutBuilder(builder: (context, constraints) {
+            return SingleChildScrollView(
+              padding: EdgeInsets.zero,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: constraints.maxHeight,
+                ),
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom > 0
+                        ? MediaQuery.of(context).viewInsets.bottom + 16.0
+                        : 16.0,
+                  ),
+                  child: IntrinsicHeight(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 24),
+                          child: MaskotMessage(
+                            message: 'Проверь СМС и введи код. Мы почти у цели!',
+                            maskot: '2177-min',
+                            flip: true,
+                          ),
                         ),
-                      ),
-                    ],
-                  );
-                }
-                return const SizedBox();
-              },
-
-              enabled: state is! PhoneAuthLoading,
-              defaultPinTheme: PinTheme(
-                height: 54,
-                width: 74,
-                textStyle: const TextStyle(fontSize: 24, color: greyscale900, fontWeight: FontWeight.normal),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(7),
-                  border: Border.all(color: greyscale200),
+                        const SizedBox(height: 40),
+                        OtpInput(
+                          errorText: errorText,
+                          onCompleted: (v) {
+                            setState(() {
+                              otp = v;
+                            });
+                          },
+                        ),
+                        const SizedBox(height: 24),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 24),
+                          child: OtpTimer(
+                            onResend: () {
+                              context.read<PhoneAuthCubit>().resendOTP();
+                            },
+                          ),
+                        ),
+                        const Spacer(),
+                        Container(
+                          decoration: const BoxDecoration(border: Border(top: BorderSide(color: greyscale100))),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(height: 20),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 24),
+                                child: FilledAppButton(
+                                  text: 'Далее',
+                                  isActive: ((otp ?? '').trim()).length == 6,
+                                  onTap: (!isValid || state is PhoneAuthLoading)
+                                      ? null
+                                      : () => context.read<PhoneAuthCubit>().verifyOTP(otp!),
+                                  isLoading: state is PhoneAuthLoading,
+                                ),
+                              ),
+                              const SizedBox(height: 20),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
-              focusedPinTheme: PinTheme(
-                height: 54,
-                width: 74,
-                textStyle: const TextStyle(fontSize: 24, color: greyscale900, fontWeight: FontWeight.normal),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(7),
-                  border: Border.all(color: primary900),
-                ),
-              ),
-              followingPinTheme: PinTheme(
-                height: 54,
-                width: 74,
-                textStyle: const TextStyle(fontSize: 24, color: greyscale900, fontWeight: FontWeight.normal),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(7),
-                  border: Border.all(color: greyscale200),
-                ),
-              ),
-              submittedPinTheme: PinTheme(
-                height: 54,
-                width: 74,
-                textStyle: const TextStyle(fontSize: 24, color: greyscale900, fontWeight: FontWeight.normal),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(7),
-                  border: Border.all(color: greyscale200),
-                ),
-              ),
-              errorPinTheme: PinTheme(
-                height: 54,
-                width: 74,
-                textStyle: const TextStyle(fontSize: 24, color: greyscale900, fontWeight: FontWeight.normal),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(7),
-                  border: Border.all(color: red),
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-            // OtpTimer(onResend: () {
-            //   context.read<AuthCubit>().setResendStatus(true);
-            //   context.read<AuthCubit>().sendCode(phone, method);
-            // }),
-          ],
+            );
+          }),
         );
       },
     );

@@ -79,9 +79,9 @@ String? getRouteForStatus(UserInitialStatus status) {
     case UserInitialStatus.noFound:
       return '/auth';
     case UserInitialStatus.fillProfileKid:
-      return '/auth/kid/info';
+      return '/auth/role';
     case UserInitialStatus.fillProfileMentor:
-      return '/auth/mentor/info';
+      return '/auth/role';
     case UserInitialStatus.successKid:
       return '/kid/bonus';
     case UserInitialStatus.successMentor:
@@ -126,8 +126,28 @@ final GoRouter router = GoRouter(
       builder: (context, state) => const LoginScreen(),
       routes: [
         GoRoute(
+          path: 'verify',
+          builder: (context, state) => LoginOtpScreen(phone: state.extra as String),
+        ),
+        GoRoute(
           path: 'role',
           builder: (context, state) => const RoleSelectionScreen(),
+        ),
+        GoRoute(
+          path: 'fill_data',
+          builder: (context, state) => const FillDataScreen(),
+        ),
+          GoRoute(
+          path: 'city_search',
+          builder: (context, state) => const CitySearchScreen(),
+        ),
+        GoRoute(
+          path: 'take_subscription_plan',
+          builder: (context, state) => const TakeSubscriptionPlanScreen(),
+        ),
+        GoRoute(
+          path: 'kid_signup_success',
+          builder: (context, state) => const KidSignupSuccessScreen(),
         ),
         // GoRoute(
         //   path: 'login_phone',

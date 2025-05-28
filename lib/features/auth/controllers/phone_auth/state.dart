@@ -9,15 +9,17 @@ class PhoneAuthLoading extends PhoneAuthState {}
 
 class PhoneAuthCodeSentSuccess extends PhoneAuthState {}
 
-class PhoneAuthCodeAutoRetrievalTimeout extends PhoneAuthState {}
+// class PhoneAuthCodeAutoRetrievalTimeout extends PhoneAuthState {}
 
 class PhoneAuthResendOTPSuccess extends PhoneAuthState {}
 
 class PhoneAuthSuccess extends PhoneAuthState {
-  final User user;
+  final String type;
 
-  PhoneAuthSuccess({required this.user});
+  PhoneAuthSuccess({required this.type});
 }
+
+class PhoneAuthSuccessRedirect extends PhoneAuthState {}
 
 class PhoneAuthFailure extends PhoneAuthState {
   final String errorMessage;

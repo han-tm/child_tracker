@@ -28,7 +28,7 @@ class CustomReactiveCheckbox extends StatelessWidget {
             text: TextSpan(
               text: 'Я прочитал и согласен ',
               style: const TextStyle(
-                fontSize: 18,
+                fontSize: 17,
                 color: greyscale900,
                 fontWeight: FontWeight.w500,
                 fontFamily: Involve,
@@ -39,7 +39,7 @@ class CustomReactiveCheckbox extends StatelessWidget {
                   recognizer: TapGestureRecognizer()..onTap = () => launchUrl(Uri.parse(termsOfUse)),
                   text: 'Правилами обработки персональных данных',
                   style: const TextStyle(
-                    fontSize: 18,
+                    fontSize: 17,
                     color: primary900,
                     fontWeight: FontWeight.w500,
                     fontFamily: Involve,
@@ -49,7 +49,7 @@ class CustomReactiveCheckbox extends StatelessWidget {
                 const TextSpan(
                   text: ' и ',
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 17,
                     color: greyscale900,
                     fontWeight: FontWeight.w500,
                     fontFamily: Involve,
@@ -60,7 +60,7 @@ class CustomReactiveCheckbox extends StatelessWidget {
                   recognizer: TapGestureRecognizer()..onTap = () => launchUrl(Uri.parse(privacyPolicy)),
                   text: ' Пользовательским соглашением',
                   style: const TextStyle(
-                    fontSize: 18,
+                    fontSize: 17,
                     color: primary900,
                     fontWeight: FontWeight.w500,
                     fontFamily: Involve,

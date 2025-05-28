@@ -18,3 +18,5 @@ export './select_mentor.dart';
 export './select_kid_modal.dart';
 export './generate_qr_card.dart';
 export './bonus_card.dart';
+export './maskot_message_widget.dart';
+export './error_widget.dart';

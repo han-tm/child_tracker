@@ -18,115 +18,98 @@ class OtpInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Pinput(
-      length: 6,
-      onCompleted: onCompleted,
-      onChanged: onChanged,
-      separatorBuilder: (index) => const SizedBox(width: 12),
-      errorText: errorText,
-      forceErrorState: errorText != null,
-      errorBuilder: (errorText, pin) {
-        if (errorText != null) {
-          return Container(
-            margin: const EdgeInsets.only(top: 8),
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(6),
-              color: const Color(0xFFFE3323).withOpacity(0.08),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                const Icon(Icons.info_rounded, color: error, size: 18),
-                const SizedBox(width: 8),
-                AppText(
-                  text: errorText,
-                  color: error,
-                  size: 14,
-                  fw: FontWeight.normal,
-                ),
-              ],
-            ),
-          );
-        }
-        return const SizedBox();
-      },
-      enabled: enabled,
-      defaultPinTheme: PinTheme(
-        height: 70,
-        width: 50,
-        textStyle: const TextStyle(
-          fontSize: 24,
-          color: greyscale900,
-          fontWeight: FontWeight.w700,
-          fontFamily: Involve,
-          height: 1.6,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: Pinput(
+        length: 6,
+        onCompleted: onCompleted,
+        onChanged: onChanged,
+        separatorBuilder: (index) => const SizedBox(width: 16),
+        errorText: errorText,
+        forceErrorState: errorText != null,
+        errorBuilder: (errorText, pin) {
+          if (errorText != null) {
+            return CustomErrorWidget(errorText: errorText);
+          }
+          return const SizedBox();
+        },
+        enabled: enabled,
+        defaultPinTheme: PinTheme(
+          height: 70,
+          width: 50,
+          textStyle: const TextStyle(
+            fontSize: 24,
+            color: greyscale900,
+            fontWeight: FontWeight.w700,
+            fontFamily: Involve,
+            height: 1.6,
+          ),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            color: greyscale50,
+          ),
         ),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          color: greyscale50,
+        focusedPinTheme: PinTheme(
+          height: 70,
+          width: 50,
+          textStyle: const TextStyle(
+            fontSize: 24,
+            color: greyscale900,
+            fontWeight: FontWeight.w700,
+            fontFamily: Involve,
+            height: 1.6,
+          ),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: primary900, width: 2),
+            color: greyscale50,
+          ),
         ),
-      ),
-      focusedPinTheme: PinTheme(
-        height: 70,
-        width: 50,
-        textStyle: const TextStyle(
-          fontSize: 24,
-          color: greyscale900,
-          fontWeight: FontWeight.w700,
-          fontFamily: Involve,
-          height: 1.6,
+        followingPinTheme: PinTheme(
+          height: 70,
+          width: 50,
+          textStyle: const TextStyle(
+            fontSize: 24,
+            color: greyscale900,
+            fontWeight: FontWeight.w700,
+            fontFamily: Involve,
+            height: 1.6,
+          ),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            color: greyscale50,
+          ),
         ),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: primary900, width: 2),
-          color: greyscale50,
+        submittedPinTheme: PinTheme(
+          height: 70,
+          width: 50,
+          textStyle: const TextStyle(
+            fontSize: 24,
+            color: greyscale900,
+            fontWeight: FontWeight.w700,
+            fontFamily: Involve,
+            height: 1.6,
+          ),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            color: greyscale50,
+          ),
         ),
-      ),
-      followingPinTheme: PinTheme(
-        height: 70,
-        width: 50,
-        textStyle: const TextStyle(
-          fontSize: 24,
-          color: greyscale900,
-          fontWeight: FontWeight.w700,
-          fontFamily: Involve,
-          height: 1.6,
-        ),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          color: greyscale50,
-        ),
-      ),
-      submittedPinTheme: PinTheme(
-        height: 70,
-        width: 50,
-        textStyle: const TextStyle(
-          fontSize: 24,
-          color: greyscale900,
-          fontWeight: FontWeight.w700,
-          fontFamily: Involve,
-          height: 1.6,
-        ),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          color: greyscale50,
-        ),
-      ),
-      errorPinTheme: PinTheme(
-        height: 70,
-        width: 50,
-        textStyle: const TextStyle(
-          fontSize: 24,
-          color: greyscale900,
-          fontWeight: FontWeight.w700,
-          fontFamily: Involve,
-          height: 1.6,
-        ),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          color: greyscale50,
-          border: Border.all(color: error),
+        errorPinTheme: PinTheme(
+          height: 70,
+          width: 50,
+          textStyle: const TextStyle(
+            fontSize: 24,
+            color: greyscale900,
+            fontWeight: FontWeight.w700,
+            fontFamily: Involve,
+            height: 1.6,
+          ),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            color: greyscale50,
+            border: Border.all(color: error),
+          ),
         ),
       ),
     );

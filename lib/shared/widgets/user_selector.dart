@@ -29,14 +29,7 @@ class UserSelector extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
-          border: isSelected
-              ? Border.all(color: primary900, width: 3)
-              : const Border(
-                  bottom: BorderSide(color: greyscale200, width: 3),
-                  top: BorderSide(color: greyscale200, width: 2),
-                  left: BorderSide(color: greyscale200, width: 2),
-                  right: BorderSide(color: greyscale200, width: 2),
-                ),
+          border: Border.all(color: isSelected ? primary900 : greyscale200, width: 3),
         ),
         child: Row(
           children: [

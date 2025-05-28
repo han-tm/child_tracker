@@ -36,7 +36,7 @@ class _GenerateQrCardState extends State<GenerateQrCard> {
               },
               child: Container(
                 width: width,
-                height: width,
+                height: double.infinity,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20.0),
                   color: greyscale50,
@@ -55,19 +55,26 @@ class _GenerateQrCardState extends State<GenerateQrCard> {
             ),
           );
         } else {
-          return Container(
-            width: width,
-            height: width,
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(6.0),
-              border: Border.all(color: greyscale200),
-            ),
-            child: QrImageView(
-              data: widget.id,
-              version: QrVersions.auto,
-              size: width,
-            ),
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Flexible(
+                child: Container(
+                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(6.0),
+                    border: Border.all(color: greyscale200),
+                  ),
+                  child: QrImageView(
+                    data: widget.id,
+                    padding: EdgeInsets.zero,
+                    version: QrVersions.auto,
+                    size: 270,
+                  ),
+                ),
+              ),
+            ],
           );
         }
       }),

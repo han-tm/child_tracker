@@ -82,7 +82,7 @@ class _OnboardScreenState extends State<OnboardScreen> {
                     Align(
                       alignment: Alignment.bottomCenter,
                       child: Padding(
-                        padding: const EdgeInsets.only(bottom: 36.0),
+                        padding: const EdgeInsets.only(bottom: 20.0),
                         child: _buildPageIndicator(),
                       ),
                     ),
@@ -90,7 +90,7 @@ class _OnboardScreenState extends State<OnboardScreen> {
                 ),
               ),
               Container(
-                padding: const EdgeInsets.all(24),
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
                 decoration: const BoxDecoration(border: Border(top: BorderSide(color: greyscale100))),
                 child: FilledAppButton(text: 'Далее', onTap: onTap),
               ),
@@ -138,16 +138,18 @@ class _OnboardingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size= MediaQuery.of(context).size;
     return Column(
       children: [
         Expanded(
-          flex: 7,
+          flex: 6,
           child: Center(
             child: Container(
               alignment: Alignment.bottomCenter,
               child: Image.asset(
                 'assets/images/$icon.png',
                 fit: BoxFit.contain,
+                width: size.width * 0.75,
               ),
             ),
           ),
@@ -165,7 +167,7 @@ class _OnboardingPage extends StatelessWidget {
                   fw: FontWeight.w700,
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 10),
                 AppText(
                   text: description,
                   fw: FontWeight.normal,
@@ -173,7 +175,7 @@ class _OnboardingPage extends StatelessWidget {
                   textAlign: TextAlign.center,
                   maxLine: 10,
                 ),
-                const SizedBox(height: 70),
+                const SizedBox(height: 50),
               ],
             ),
           ),

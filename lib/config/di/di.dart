@@ -21,12 +21,14 @@ Future<void> initializeDependencies() async {
 
   print('$fa, $ff, $fcm');
 
-  // //services
+  //services
   // sl.registerLazySingleton(() => PhoneValidatorService(firestore: fs));
   // sl.registerLazySingleton(() => FirebaseStorageService());
 
   // Cubits
   sl.registerLazySingleton(() => UserCubit(fs: fs));
+  sl.registerLazySingleton(() => PhoneAuthCubit(userCubit: sl(), fs: fs, auth: fa));
+  sl.registerLazySingleton(() => FillDataCubit(userCubit: sl(), fs: fs, auth: fa));
   sl.registerLazySingleton(() => NewChatCubit(fs: fs));
   sl.registerLazySingleton(() => CurrentChatCubit());
 }

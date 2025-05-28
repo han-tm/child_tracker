@@ -16,7 +16,7 @@ class StepProgressWidget extends StatelessWidget {
       children: [
         Expanded(
           child: LinearProgressIndicator(
-            value: (currentStep) / totalSteps,
+            value: (currentStep +1 ) / totalSteps,
             backgroundColor: greyscale200,
             color: primary900,
             minHeight: 12,

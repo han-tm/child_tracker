@@ -29,11 +29,16 @@ class _SplashScreenState extends State<SplashScreen> {
             fit: BoxFit.contain,
           ),
           const SizedBox(height: 32),
-          const AppText(
-            text: APPNAME,
-            size: 40,
-            fw: FontWeight.w700,
-            color: white,
+          const Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              AppText(
+                text: APPNAME,
+                size: 30,
+                fw: FontWeight.w700,
+                color: white,
+              ),
+            ],
           ),
         ],
       ),

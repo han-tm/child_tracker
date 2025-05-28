@@ -40,6 +40,7 @@ class AppText extends StatelessWidget {
         decorationThickness: 1,
         fontFamily: Involve,
         height: height,
+        letterSpacing: 0.1,
       ),
       textAlign: textAlign,
       maxLines: maxLine,

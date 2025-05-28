@@ -18,11 +18,13 @@ class UserCubit extends Cubit<UserModel?> {
   }
 
   Future<void> getAndSet(User user) async {
-    final doc = await _fs.collection('users').doc(user.uid).get();
-
-    final userModel = UserModel.fromFirestore(doc);
-
-    setUser(userModel);
+    try {
+      final doc = await _fs.collection('users').doc(user.uid).get();
+      final userModel = UserModel.fromFirestore(doc);
+      setUser(userModel);
+    } catch (e) {
+      rethrow;
+    }
   }
 
   Future<void> onDeleteFcmToken() async {

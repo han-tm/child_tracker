@@ -4,7 +4,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class AgeSelector extends StatefulWidget {
   final Function(int age) onSelect;
-  const AgeSelector({super.key, required this.onSelect});
+  final int? selectedAge;
+  const AgeSelector({super.key, required this.onSelect, this.selectedAge});
 
   @override
   State<AgeSelector> createState() => _AgeSelectorState();
@@ -23,7 +24,7 @@ class _AgeSelectorState extends State<AgeSelector> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(24, 20, 24, 70),
+      padding: const EdgeInsets.fromLTRB(24, 20, 24, 0),
       child: Column(
         children: [
           for (var age in ages)
@@ -37,7 +38,7 @@ class _AgeSelectorState extends State<AgeSelector> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
-                    color: age == selectedAge ? primary900 : greyscale200,
+                    color: age == (widget.selectedAge ?? selectedAge) ? primary900 : greyscale200,
                     width: 3,
                   ),
                 ),
@@ -45,8 +46,7 @@ class _AgeSelectorState extends State<AgeSelector> {
                   children: [
                     Expanded(child: AppText(text: '$age лет', size: 20, fw: FontWeight.w700)),
                     const SizedBox(width: 10),
-                    if(age == selectedAge)
-                    SvgPicture.asset('assets/images/checkmark.svg', width: 24, height: 24),
+                    if ( age == (widget.selectedAge ?? selectedAge)) SvgPicture.asset('assets/images/checkmark.svg', width: 24, height: 24),
                   ],
                 ),
               ),
