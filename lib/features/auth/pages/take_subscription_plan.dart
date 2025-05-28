@@ -156,7 +156,7 @@ class TakeSubscriptionPlanScreen extends StatelessWidget {
                   child: FilledAppButton(
                     text: 'Начать использование',
                     onTap: () {
-                       context.go('/mentor/bonus');
+                       context.go('/mentor_bonus');
                     },
                   ),
                 ),

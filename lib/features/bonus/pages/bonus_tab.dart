@@ -7,6 +7,7 @@ class BonusTabScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
      return Scaffold(
+      backgroundColor: greyscale100,
       appBar: AppBar(
         title: const AppText(text: 'Bonus'),
       ),

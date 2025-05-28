@@ -1,54 +1,111 @@
 import 'package:child_tracker/index.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
 class MentorMainScreen extends StatefulWidget {
-  final StatefulNavigationShell navigationShell;
-  const MentorMainScreen({super.key, required this.navigationShell});
+  final GoRouterState state;
+  final Widget child;
+  const MentorMainScreen({super.key, required this.child, required this.state});
 
   @override
   State<MentorMainScreen> createState() => _MentorMainScreenState();
 }
 
 class _MentorMainScreenState extends State<MentorMainScreen> {
+  void onTapTab(int index) async {
+    switch (index) {
+      case 0:
+        GoRouter.of(context).go('/mentor_bonus');
+      case 1:
+        GoRouter.of(context).go('/mentor_task');
+      case 2:
+        GoRouter.of(context).go('/mentor_chat');
+      case 3:
+        GoRouter.of(context).go('/mentor_profile');
+    }
+  }
+
+  static int _calculateSelectedIndex(BuildContext context) {
+    final String location = GoRouterState.of(context).uri.path;
+    if (location.startsWith('/mentor_bonus')) {
+      return 0;
+    }
+    if (location.startsWith('/mentor_task')) {
+      return 1;
+    }
+    if (location.startsWith('/mentor_chat')) {
+      return 2;
+    }
+    if (location.startsWith('/mentor_profile')) {
+      return 3;
+    }
+    return 0;
+  }
+
   @override
- Widget build(BuildContext context) {
+  Widget build(BuildContext context) {
     return Scaffold(
-      body: widget.navigationShell,
-      bottomNavigationBar: BottomNavigationBar(
-        elevation: 0,
-        type: BottomNavigationBarType.fixed,
-        currentIndex: widget.navigationShell.currentIndex,
-        onTap: (index) => {widget.navigationShell.goBranch(index)},
-        enableFeedback: true,
-        backgroundColor: white,
-        selectedItemColor: Colors.black,
-        unselectedItemColor: secondary900,
-        selectedLabelStyle: const TextStyle(fontSize: 12, color: greyscale900),
-        unselectedLabelStyle: const TextStyle(fontSize: 12, color: Color(0xFF818181)),
-        showUnselectedLabels: true,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.lens),
-            label: 'Бонусы',
+      body: widget.child,
+      backgroundColor: greyscale100,
+      bottomNavigationBar: Container(
+        height: 56,
+        decoration: BoxDecoration(
+          color: white,
+          boxShadow: [
+            BoxShadow(
+              blurRadius: 60,
+              offset: const Offset(0, 4),
+              color: const Color(0xFF04060F).withOpacity(0.08),
+            ),
+          ],
+        ),
+        child: BottomNavigationBar(
+          elevation: 0,
+          type: BottomNavigationBarType.fixed,
+          currentIndex: _calculateSelectedIndex(context),
+          onTap: onTapTab,
+          enableFeedback: true,
+          backgroundColor: white,
+          selectedItemColor: secondary900,
+          unselectedItemColor: greyscale500,
+          selectedLabelStyle: const TextStyle(
+            fontSize: 10,
+            fontWeight: FontWeight.w700,
+            fontFamily: Involve,
+            height: 1.6,
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.task),
-            label: 'Задачи',
+          unselectedLabelStyle: const TextStyle(
+            fontSize: 10,
+            fontWeight: FontWeight.w500,
+            fontFamily: Involve,
+            height: 1.6,
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.chat_bubble),
-            label: 'Чаты',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_view_day),
-            label: 'Расписание',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Профиль',
-          ),
-        ],
+          showUnselectedLabels: true,
+          iconSize: 24,
+          items: [
+            BottomNavigationBarItem(
+              activeIcon: SvgPicture.asset('assets/images/bonus_filled_tab.svg'),
+              icon: SvgPicture.asset('assets/images/bonus_tab.svg'),
+              label: 'Бонусы',
+            ),
+            BottomNavigationBarItem(
+              activeIcon: SvgPicture.asset('assets/images/tracker_filled_tab.svg'),
+              icon: SvgPicture.asset('assets/images/tracker_tab.svg'),
+              label: 'Задания',
+            ),
+            BottomNavigationBarItem(
+              activeIcon: SvgPicture.asset('assets/images/chat_filled_tab.svg'),
+              icon: SvgPicture.asset('assets/images/chat_tab.svg'),
+              label: 'Чаты',
+            ),
+            BottomNavigationBarItem(
+              activeIcon: SvgPicture.asset('assets/images/profile_filled_tab.svg'),
+              icon: SvgPicture.asset('assets/images/profile_tab.svg'),
+              label: 'Профиль',
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -30,7 +30,6 @@ class _PhoneInputWidgetState extends State<PhoneInputWidget> {
     if (form.valid) {
       FocusManager.instance.primaryFocus?.unfocus();
       final phone = '+${phoneFormatter.getUnmaskedText()}';
-      print('phone $phone');
       context.read<PhoneAuthCubit>().sendOTP(phone);
     }
   }
@@ -39,14 +38,6 @@ class _PhoneInputWidgetState extends State<PhoneInputWidget> {
   Widget build(BuildContext context) {
     return BlocConsumer<PhoneAuthCubit, PhoneAuthState>(
       listener: (context, state) {
-        // if (state is PhoneAuthFailure) {
-        //   SnackBarSerive.showErrorSnackBar('Ошибка: ${state.errorMessage}');
-        // } else if (state is PhoneAuthCodeAutoRetrievalTimeout) {
-        //   SnackBarSerive.showErrorSnackBar('Время ожидания OTP истекло. Пожалуйста, запросите код заново.');
-        // } else if (state is PhoneAuthSuccess) {
-        //   context.go('/kid/bonus');
-        // }
-
         if (state is PhoneAuthCodeSentSuccess) {
           final phone = '+${phoneFormatter.getUnmaskedText()}';
           context.push('/auth/verify', extra: phone);

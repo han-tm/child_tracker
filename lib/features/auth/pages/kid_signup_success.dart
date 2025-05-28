@@ -62,7 +62,7 @@ class KidSignupSuccessScreen extends StatelessWidget {
                   child: FilledAppButton(
                     text: 'Начать',
                     onTap: () {
-                      context.go('/kid/bonus');
+                      context.go('/kid_bonus');
                     },
                   ),
                 ),

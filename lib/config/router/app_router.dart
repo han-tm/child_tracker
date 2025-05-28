@@ -83,9 +83,9 @@ String? getRouteForStatus(UserInitialStatus status) {
     case UserInitialStatus.fillProfileMentor:
       return '/auth/role';
     case UserInitialStatus.successKid:
-      return '/kid/bonus';
+      return '/kid_bonus';
     case UserInitialStatus.successMentor:
-      return '/mentor/bonus';
+      return '/mentor_bonus';
     case UserInitialStatus.banned:
       return '/banned';
     default:
@@ -137,7 +137,7 @@ final GoRouter router = GoRouter(
           path: 'fill_data',
           builder: (context, state) => const FillDataScreen(),
         ),
-          GoRoute(
+        GoRoute(
           path: 'city_search',
           builder: (context, state) => const CitySearchScreen(),
         ),
@@ -190,104 +190,72 @@ final GoRouter router = GoRouter(
     ),
 
     // Маршруты ребенка
-    StatefulShellRoute.indexedStack(
-      builder: (context, state, navigationShell) => KidMainScreen(navigationShell: navigationShell, state: state),
-      branches: [
-        StatefulShellBranch(
+    ShellRoute(
+      builder: (context, state, child) => KidMainScreen(state: state, child: child),
+      routes: [
+        GoRoute(
+          path: '/kid_bonus',
+          builder: (context, state) => const BonusTabScreen(),
+        ),
+        GoRoute(
+          path: '/kid_task',
+          builder: (context, state) => const TaskTabScreen(),
+        ),
+        GoRoute(
+          path: '/kid_games',
+          builder: (context, state) => const GamesTabScreen(),
+        ),
+        GoRoute(
+          path: '/kid_chat',
+          builder: (context, state) => const ChatTabScreen(),
           routes: [
             GoRoute(
-              path: '/kid/bonus',
-              builder: (context, state) => const BonusTabScreen(),
+              path: 'room/:chatId',
+              builder: (context, state) => ChatRoomScreen(chatId: state.pathParameters['chatId'] ?? ''),
             ),
           ],
         ),
-        StatefulShellBranch(
+        GoRoute(
+          path: '/kid_profile',
+          builder: (context, state) => const ProfileTabScreen(),
           routes: [
             GoRoute(
-              path: '/kid/task',
-              builder: (context, state) => const TaskTabScreen(),
-            ),
-          ],
-        ),
-        StatefulShellBranch(
-          routes: [
-            GoRoute(
-              path: '/kid/chat',
-              builder: (context, state) => const ChatTabScreen(),
-              routes: [
-                GoRoute(
-                  path: 'room/:chatId',
-                  builder: (context, state) => ChatRoomScreen(chatId: state.pathParameters['chatId'] ?? ''),
-                ),
-              ],
-            ),
-          ],
-        ),
-        StatefulShellBranch(
-          routes: [
-            GoRoute(
-              path: '/kid/calendar',
-              builder: (context, state) => const CalendarTabScreen(),
-            ),
-          ],
-        ),
-        StatefulShellBranch(
-          routes: [
-            GoRoute(
-              path: '/kid/profile',
-              builder: (context, state) => const ProfileTabScreen(),
-              routes: [
-                GoRoute(
-                  path: 'edit',
-                  builder: (context, state) => const EditProfileScreen(),
-                ),
-              ],
+              path: 'edit',
+              builder: (context, state) => const EditProfileScreen(),
             ),
           ],
         ),
       ],
     ),
 
-    StatefulShellRoute.indexedStack(
-      builder: (context, state, navigationShell) => MentorMainScreen(navigationShell: navigationShell),
-      branches: [
-        StatefulShellBranch(
+    ShellRoute(
+      builder: (context, state, child) => MentorMainScreen(state: state, child: child),
+      routes: [
+        GoRoute(
+          path: '/mentor_bonus',
+          builder: (context, state) => const BonusTabScreen(),
+        ),
+        GoRoute(
+          path: '/mentor_task',
+          builder: (context, state) => const TaskTabScreen(),
+        ),
+        GoRoute(
+          path: '/mentor_chat',
+          builder: (context, state) => const ChatTabScreen(),
           routes: [
             GoRoute(
-              path: '/mentor/bonus',
-              builder: (context, state) => const BonusTabScreen(),
+              path: 'room/:chatId',
+              builder: (context, state) => ChatRoomScreen(chatId: state.pathParameters['chatId'] ?? ''),
             ),
           ],
         ),
-        StatefulShellBranch(
+        GoRoute(
+          path: '/mentor_profile',
+          builder: (context, state) => const ProfileTabScreen(),
           routes: [
             GoRoute(
-              path: '/mentor/task',
-              builder: (context, state) => const TaskTabScreen(),
-            ),
-          ],
-        ),
-        StatefulShellBranch(
-          routes: [
-            GoRoute(
-              path: '/mentor/chat',
-              builder: (context, state) => const ChatTabScreen(),
-            ),
-          ],
-        ),
-        StatefulShellBranch(
-          routes: [
-            GoRoute(
-              path: '/mentor/calendar',
-              builder: (context, state) => const CalendarTabScreen(),
-            ),
-          ],
-        ),
-        StatefulShellBranch(
-          routes: [
-            GoRoute(
-              path: '/mentor/profile',
-              builder: (context, state) => const ProfileTabScreen(),
+              path: 'edit',
+              builder: (context, state) => const EditProfileScreen(),
             ),
           ],
         ),
