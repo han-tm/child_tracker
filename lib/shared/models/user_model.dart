@@ -13,6 +13,7 @@ class UserModel {
   final String? fcmToken;
   final String? city;
   final int? age;
+  final bool notification;
 
 
   UserModel({
@@ -27,6 +28,7 @@ class UserModel {
     this.fcmToken,
     this.city,
     this.age,
+    this.notification = true,
   });
 
   factory UserModel.fromFirestore(DocumentSnapshot doc) {
@@ -43,6 +45,7 @@ class UserModel {
       fcmToken: data['fcm_token'],
       city: data['city'],
       age: data['age'],
+      notification: data['notification'] ?? true
     );
   }
 
@@ -62,6 +65,7 @@ class UserModel {
     String? fcmToken,
     String? city,
     int? age,
+    bool? notification
   }) {
     return UserModel(
       id: id ?? this.id,
@@ -75,6 +79,7 @@ class UserModel {
       fcmToken: fcmToken ?? this.fcmToken,
       city: city ?? this.city,
       age: age ?? this.age,
+      notification: notification ?? this.notification
     );
   }
 }

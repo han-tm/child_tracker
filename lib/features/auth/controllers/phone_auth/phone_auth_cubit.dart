@@ -154,6 +154,7 @@ class PhoneAuthCubit extends Cubit<PhoneAuthState> {
         'profile_filled': false,
         'banned': false,
         'deleted': false,
+        'notification': true,
         'created_at': FieldValue.serverTimestamp(),
       };
       final docRef = userCollection.doc(user.uid);

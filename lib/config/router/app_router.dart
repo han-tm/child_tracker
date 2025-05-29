@@ -261,6 +261,10 @@ final GoRouter router = GoRouter(
       builder: (context, state) => const EditProfileScreen(),
     ),
     GoRoute(
+      path: '/notification',
+      builder: (context, state) => const NotificationScreen(),
+    ),
+    GoRoute(
       path: '/city_search',
       builder: (context, state) => CitySearchScreen(onSelected: state.extra as Function(String)),
     ),

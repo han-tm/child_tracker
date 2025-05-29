@@ -11,14 +11,14 @@ class ProfileMenuCard extends StatelessWidget {
   final String icon;
   final VoidCallback onTap;
   final Color color;
-  final Color iconColor;
+  final Color? iconColor;
   const ProfileMenuCard({
     super.key,
     required this.title,
     this.description,
     required this.icon,
     required this.onTap,
-    this.iconColor = primary900,
+    this.iconColor,
     this.color = const Color.fromRGBO(36, 107, 253, 0.08),
   });
 

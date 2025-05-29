@@ -1,5 +1,3 @@
-
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,6 +25,11 @@ class UserCubit extends Cubit<UserModel?> {
     } catch (e) {
       rethrow;
     }
+  }
+
+  void setNotification(bool value) async {
+    await state?.ref.update({'notification': value});
+    emit(state?.copyWith(notification: value));
   }
 
   Future<void> onDeleteFcmToken() async {

@@ -3,8 +3,7 @@ import 'package:intl/intl.dart';
 String dateToStringDDMMYYYY(DateTime? date) =>
     date == null ? 'Неизвестно' : DateFormat('dd.MM.yyyy', 'ru').format(date);
 
-
-
+String dateToHHmm(DateTime? date) => date == null ? 'Неизвестно' : DateFormat('HH:mm', 'ru').format(date);
 
 const Map<int, String> _russianMonthsNominative = {
   1: 'Январь',

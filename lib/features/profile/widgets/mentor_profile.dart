@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-
 class MentorProfileWidget extends StatelessWidget {
   final UserModel user;
   const MentorProfileWidget({super.key, required this.user});
@@ -59,13 +58,12 @@ class MentorProfileWidget extends StatelessWidget {
           ),
           const SizedBox(height: 24),
           ProfileMenuCard(
-            onTap: () => {},
+            onTap: () => context.push('/notification'),
             icon: 'bell_fill',
             title: 'Уведомления',
             iconColor: red,
             color: const Color(0xFFFF5A5F).withOpacity(0.08),
           ),
-          
         ],
       ),
     );
