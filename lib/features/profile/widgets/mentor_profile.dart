@@ -51,7 +51,7 @@ class MentorProfileWidget extends StatelessWidget {
           ),
           const SizedBox(height: 24),
           ProfileMenuCard(
-            onTap: () => {},
+            onTap: () => context.push('/connections'),
             icon: '3user',
             title: 'Мои дети',
             iconColor: blue,

@@ -4,9 +4,19 @@ import 'package:child_tracker/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 
 class ProfileTabScreen extends StatelessWidget {
   const ProfileTabScreen({super.key});
+
+  void onScanQr(BuildContext context) async {
+    final UserModel? kid = await context.push('/scan_qr');
+    print(kid?.id);
+  }
+
+  void onShowQr(BuildContext context, String id) {
+    showQRModalBottomSheet(context, id);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +49,11 @@ class ProfileTabScreen extends StatelessWidget {
                 padding: const EdgeInsets.only(right: 12),
                 child: IconButton(
                   onPressed: () {
-                    // context.push('/kid/profile/edit');
+                    if (user.isKid) {
+                      onShowQr(context, user.id);
+                    } else {
+                      onScanQr(context);
+                    }
                   },
                   icon: SvgPicture.asset(
                     'assets/images/${user.isKid ? 'qr' : 'scan_q'}.svg',

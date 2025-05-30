@@ -73,7 +73,7 @@ class KidProfileWidget extends StatelessWidget {
           ),
           const Divider(height: 48, thickness: 1, color: greyscale200),
           ProfileMenuCard(
-            onTap: () => {},
+           onTap: () => context.push('/connections'),
             icon: '3user',
             title: 'Мои наставники',
             iconColor: blue,

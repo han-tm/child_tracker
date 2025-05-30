@@ -265,6 +265,18 @@ final GoRouter router = GoRouter(
       builder: (context, state) => const NotificationScreen(),
     ),
     GoRoute(
+      path: '/connections',
+      builder: (context, state) => const MyConnectionsScreen(),
+    ),
+    GoRoute(
+      path: '/add_connection',
+      builder: (context, state) => const AddConnectionScreen(),
+    ),
+    GoRoute(
+      path: '/scan_qr',
+      builder: (context, state) => const ScanQRScreen(),
+    ),
+    GoRoute(
       path: '/city_search',
       builder: (context, state) => CitySearchScreen(onSelected: state.extra as Function(String)),
     ),

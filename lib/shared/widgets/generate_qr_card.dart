@@ -67,6 +67,7 @@ class _GenerateQrCardState extends State<GenerateQrCard> {
                     border: Border.all(color: greyscale200),
                   ),
                   child: QrImageView(
+                    key: ValueKey(widget.id),
                     data: widget.id,
                     padding: EdgeInsets.zero,
                     version: QrVersions.auto,

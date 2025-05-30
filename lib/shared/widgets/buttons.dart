@@ -55,6 +55,7 @@ class FilledSecondaryAppButton extends StatelessWidget {
   final bool isActive;
   final double fontSize;
   final FontWeight fw;
+  final Widget? icon;
   const FilledSecondaryAppButton({
     super.key,
     this.height = 58,
@@ -64,6 +65,7 @@ class FilledSecondaryAppButton extends StatelessWidget {
     this.isActive = true,
     this.fontSize = 16,
     this.fw = FontWeight.w700,
+    this.icon,
   });
 
   @override
@@ -80,12 +82,21 @@ class FilledSecondaryAppButton extends StatelessWidget {
         child: Center(
           child: isLoading
               ? const CircularProgressIndicator(color: Colors.white)
-              : AppText(
-                  text: text,
-                  size: fontSize,
-                  fw: fw,
-                  color: primary900,
-                ),
+              : Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if(icon != null) icon!,
+                  Flexible(
+                    child: AppText(
+                        text: text,
+                        size: fontSize,
+                        fw: fw,
+                        color: primary900,
+                        textAlign: TextAlign.center,
+                      ),
+                  ),
+                ],
+              ),
         ),
       ),
     );
