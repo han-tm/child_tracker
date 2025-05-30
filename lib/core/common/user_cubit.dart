@@ -37,6 +37,11 @@ class UserCubit extends Cubit<UserModel?> {
     emit(null);
   }
 
+  Future<UserModel> getUserByRef(DocumentReference ref) async {
+    final doc = await ref.get();
+    return UserModel.fromFirestore(doc);
+  }
+
   Future<void> markAsDeleted() async {
     await state?.ref.update({
       'deleted': true,

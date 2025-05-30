@@ -1,11 +1,12 @@
 import 'package:child_tracker/index.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ChatRoomScreen extends StatefulWidget {
-  final String chatId;
-  const ChatRoomScreen({super.key, required this.chatId});
+  final DocumentReference chatRef;
+  const ChatRoomScreen({super.key, required this.chatRef});
 
   @override
   State<ChatRoomScreen> createState() => _ChatRoomScreenState();
@@ -13,18 +14,19 @@ class ChatRoomScreen extends StatefulWidget {
 
 class _ChatRoomScreenState extends State<ChatRoomScreen> {
   final TextEditingController controller = TextEditingController();
-  late String senderId;
+  late DocumentReference? senderRef;
 
   @override
   void initState() {
-    senderId = sl<UserCubit>().state?.id ?? '';
+    senderRef = sl<UserCubit>().state?.ref;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    if(senderRef == null) return const Center(child: CircularProgressIndicator());
     return BlocProvider(
-      create: (_) => ChatCubit(chatId: widget.chatId, senderId: senderId)..getCurrentChat(),
+      create: (_) => ChatCubit(chatId: widget.chatRef.id, sender: senderRef!)..getCurrentChat(),
       child: BlocConsumer<ChatCubit, ChatRoomState>(
         listener: (context, state) {
           if (state.status == ChatRoomStatus.messageSentError || state.status == ChatRoomStatus.error) {

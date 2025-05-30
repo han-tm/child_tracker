@@ -1,4 +1,3 @@
-
 import 'package:child_tracker/index.dart';
 import 'package:flutter/material.dart';
 
@@ -7,6 +6,38 @@ class EmptyChatsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(child: AppText(text: 'Нет чатов', size: 17, fw: FontWeight.w500));
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                'assets/images/2187-min.png',
+                fit: BoxFit.contain,
+                width: 160,
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          const AppText(
+            text: 'Нет чатов',
+            size: 24,
+            fw: FontWeight.w600,
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 16),
+          const AppText(
+            text: 'Добавьте чат,\nнажав кнопку (+) выше',
+            fw: FontWeight.normal,
+            color: greyscale700,
+            textAlign: TextAlign.center,
+            maxLine: 2,
+          ),
+        ],
+      ),
+    );
   }
 }

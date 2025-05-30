@@ -14,6 +14,7 @@ class UserModel {
   final String? city;
   final int? age;
   final bool notification;
+  final List<DocumentReference> connections;
 
 
   UserModel({
@@ -29,6 +30,7 @@ class UserModel {
     this.city,
     this.age,
     this.notification = true,
+    this.connections = const [],
   });
 
   factory UserModel.fromFirestore(DocumentSnapshot doc) {
@@ -45,7 +47,8 @@ class UserModel {
       fcmToken: data['fcm_token'],
       city: data['city'],
       age: data['age'],
-      notification: data['notification'] ?? true
+      notification: data['notification'] ?? true,
+      connections: (data['connections'] as List<dynamic>? ?? []).map((e) => e as DocumentReference).toList(),
     );
   }
 
@@ -65,7 +68,8 @@ class UserModel {
     String? fcmToken,
     String? city,
     int? age,
-    bool? notification
+    bool? notification,
+    List<DocumentReference>? connections,
   }) {
     return UserModel(
       id: id ?? this.id,
@@ -79,7 +83,8 @@ class UserModel {
       fcmToken: fcmToken ?? this.fcmToken,
       city: city ?? this.city,
       age: age ?? this.age,
-      notification: notification ?? this.notification
+      notification: notification ?? this.notification,
+      connections: connections ?? this.connections,
     );
   }
 }

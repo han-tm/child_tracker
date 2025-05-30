@@ -150,43 +150,6 @@ final GoRouter router = GoRouter(
           path: 'kid_signup_success',
           builder: (context, state) => const KidSignupSuccessScreen(),
         ),
-        // GoRoute(
-        //   path: 'login_phone',
-        //   builder: (context, state) => const LoginPhoneAuthScreen(),
-        // ),
-        // GoRoute(
-        //   path: 'signup_phone',
-        //   builder: (context, state) => const SignupPhoneAuthScreen(),
-        // ),
-        // GoRoute(
-        //   path: 'verify',
-        //   builder: (context, state) => const PhoneVerificationScreen(),
-        // ),
-        // GoRoute(
-        //   path: 'performer/info',
-        //   builder: (context, state) => const PerformerInfoScreen(),
-        // ),
-        // GoRoute(
-        //   path: 'performer/competency',
-        //   builder: (context, state) => const SelectCompetencyScreen(),
-        // ),
-        // GoRoute(
-        //   path: 'performer/add_worker',
-        //   builder: (context, state) => const AddWorkerScreen(),
-        // ),
-
-        // GoRoute(
-        //   path: 'performer/finish',
-        //   builder: (context, state) => const PerformerFinishScreen(),
-        // ),
-        // GoRoute(
-        //   path: 'customer/inn',
-        //   builder: (context, state) => const CustomerInnScreen(),
-        // ),
-        // GoRoute(
-        //   path: 'customer/about',
-        //   builder: (context, state) => const CustomerCompanyAboutScreen(),
-        // ),
       ],
     ),
 
@@ -209,12 +172,6 @@ final GoRouter router = GoRouter(
         GoRoute(
           path: '/kid_chat',
           builder: (context, state) => const ChatTabScreen(),
-          routes: [
-            GoRoute(
-              path: 'room/:chatId',
-              builder: (context, state) => ChatRoomScreen(chatId: state.pathParameters['chatId'] ?? ''),
-            ),
-          ],
         ),
         GoRoute(
           path: '/kid_profile',
@@ -243,12 +200,6 @@ final GoRouter router = GoRouter(
         GoRoute(
           path: '/mentor_chat',
           builder: (context, state) => const ChatTabScreen(),
-          routes: [
-            GoRoute(
-              path: 'room/:chatId',
-              builder: (context, state) => ChatRoomScreen(chatId: state.pathParameters['chatId'] ?? ''),
-            ),
-          ],
         ),
         GoRoute(
           path: '/mentor_profile',
@@ -283,6 +234,18 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: '/logout_result',
       builder: (context, state) => LogoutResultScreen(message: state.extra as String),
+    ),
+    GoRoute(
+      path: '/add_chat',
+      builder: (context, state) => const AddChatScreen(),
+    ),
+     GoRoute(
+      path: '/new_chat_success',
+      builder: (context, state) => NewChatSuccessCreateScreen(ref: state.extra as DocumentReference),
+    ),
+    GoRoute(
+      path: '/chat_room',
+      builder: (context, state) => ChatRoomScreen(chatRef: state.extra as DocumentReference),
     ),
   ],
   errorBuilder: (context, state) => ErrorScreen(error: state.error.toString()),

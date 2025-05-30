@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ChatModel {
   final String id;
-  final List<String> members;
+  final List<DocumentReference> members;
   final ChatType type;
   final LastMessage? lastMessage;
   final DateTime updatedAt;
@@ -27,7 +27,7 @@ class ChatModel {
 
     return ChatModel(
       id: doc.id,
-      members: List<String>.from(data['members'] ?? []),
+      members: List<DocumentReference>.from(data['members'] ?? []),
       type: data['type'] != null ? ChatType.values.byName(data['type']) : ChatType.private,
       lastMessage: data['last_message'] != null ? LastMessage.fromMap(data['last_message']) : null,
       updatedAt: (data['last_edit_time'] as Timestamp?)?.toDate() ?? DateTime.now(),

@@ -1,7 +1,10 @@
 import 'package:child_tracker/index.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 
 class ChatTabScreen extends StatelessWidget {
   const ChatTabScreen({super.key});
@@ -9,23 +12,43 @@ class ChatTabScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: white,
       appBar: AppBar(
-        title: const AppText(text: 'Chat'),
+        toolbarHeight: 72,
+        backgroundColor: white,
+        leadingWidth: 62,
+        automaticallyImplyLeading: false,
+        leading: Container(
+          width: 28,
+          height: 28,
+          margin: const EdgeInsets.only(left: 12),
+          padding: const EdgeInsets.all(10),
+          child: SvgPicture.asset(
+            'assets/images/logo_min.svg',
+            width: 28,
+            height: 28,
+            fit: BoxFit.contain,
+          ),
+        ),
+        title: const AppText(text: 'Чаты', size: 24, fw: FontWeight.w700),
+        centerTitle: true,
         actions: [
-          IconButton(
-            onPressed: () {
-              sl<NewChatCubit>()
-                  .createOrReturnPrivateChat('R6rWquLQSLgpkHIB203iYEgalHE3', 'R6rWquLQSLgpkHIB203iYEgalHE3');
-            },
-            icon: const Icon(Icons.add, color: greyscale900),
-          )
+          Padding(
+            padding: const EdgeInsets.only(right: 12),
+            child: IconButton(
+              onPressed: () {
+                context.push('/add_chat');
+              },
+              icon: const Icon(CupertinoIcons.add, size: 30),
+            ),
+          ),
         ],
       ),
       body: BlocBuilder<UserCubit, UserModel?>(
         builder: (context, user) {
           if (user == null) return const Center(child: CircularProgressIndicator());
           return StreamBuilder<List<ChatModel>>(
-            stream: getChats(user.id),
+            stream: getChats(user.ref),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting || snapshot.data == null) {
                 return const Center(child: CircularProgressIndicator());
@@ -49,10 +72,10 @@ class ChatTabScreen extends StatelessWidget {
   }
 }
 
-Stream<List<ChatModel>> getChats(String userId) {
+Stream<List<ChatModel>> getChats(DocumentReference ref) {
   final Query query = FirebaseFirestore.instance
       .collection('chats')
-      .where('members', arrayContains: userId)
+      .where('members', arrayContains: ref)
       .orderBy('last_edit_time', descending: true);
 
   return query.snapshots().map((query) => query.docs.map((doc) => ChatModel.fromFirestore(doc)).toList());

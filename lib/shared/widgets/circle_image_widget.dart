@@ -6,6 +6,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 class CachedClickableImage extends StatelessWidget {
   final String? imageUrl;
   final File? imageFile;
+  final String? emoji;
+  final double emojiFontSize;
   final double? width;
   final double? height;
   final BorderRadius? borderRadius;
@@ -29,6 +31,8 @@ class CachedClickableImage extends StatelessWidget {
     this.placeholder,
     this.errorWidget,
     this.noImageWidget,
+    this.emoji,
+    this.emojiFontSize = 50,
   }) : assert(!(borderRadius != null && circularRadius != null),
             'Нельзя одновременно указывать borderRadius и circularRadius.');
 
@@ -58,6 +62,21 @@ class CachedClickableImage extends StatelessWidget {
         errorWidget: (context, url, error) => Container(
           color: Colors.grey.shade300,
           child: errorWidget ?? const Icon(Icons.error),
+        ),
+      );
+    } else if (emoji != null) {
+      imageWidget = Container(
+        width: width,
+        height: height,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(300),
+          border: Border.all(color: greyscale200, width: 2),
+        ),
+        child: Center(
+          child: Text(
+            emoji!,
+            style: TextStyle(fontSize: emojiFontSize),
+          ),
         ),
       );
     } else {

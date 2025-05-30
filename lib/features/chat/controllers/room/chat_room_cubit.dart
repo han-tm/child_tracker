@@ -8,9 +8,9 @@ part 'state.dart';
 class ChatCubit extends Cubit<ChatRoomState> {
   final FirebaseFirestore _fs = FirebaseFirestore.instance;
   final String chatId;
-  final String senderId;
+  final DocumentReference sender;
 
-  ChatCubit({required this.chatId, required this.senderId})
+  ChatCubit({required this.chatId, required this.sender})
       : assert(chatId.isNotEmpty),
         super(const ChatRoomState());
 
@@ -39,7 +39,7 @@ class ChatCubit extends Cubit<ChatRoomState> {
     try {
       final chatRef = state.chat!.ref;
 
-      final newMessage = LastMessage(text: message, senderId: senderId, timestamp: DateTime.now());
+      final newMessage = LastMessage(text: message, senderId: sender.id, timestamp: DateTime.now());
 
       await chatRef.collection('messages').add(newMessage.toMap());
 
@@ -48,8 +48,8 @@ class ChatCubit extends Cubit<ChatRoomState> {
 
       final unreadUpdate = Map<String, int>.from(currentChat.unreads);
       for (var member in currentChat.members) {
-        if (member != senderId) {
-          unreadUpdate[member] = (unreadUpdate[member] ?? 0) + 1;
+        if (member.id != sender.id) {
+          unreadUpdate[member.id] = (unreadUpdate[member.id] ?? 0) + 1;
         }
       }
 
