@@ -239,13 +239,35 @@ final GoRouter router = GoRouter(
       path: '/add_chat',
       builder: (context, state) => const AddChatScreen(),
     ),
-     GoRoute(
+    GoRoute(
       path: '/new_chat_success',
       builder: (context, state) => NewChatSuccessCreateScreen(ref: state.extra as DocumentReference),
     ),
     GoRoute(
       path: '/chat_room',
       builder: (context, state) => ChatRoomScreen(chatRef: state.extra as DocumentReference),
+      routes: [
+        GoRoute(
+          path: '/edit_chat',
+          builder: (context, state) => EditChatScreen(chat: state.extra as ChatModel),
+        ),
+        GoRoute(
+          path: '/members',
+          builder: (context, state) => EditChatMembersScreen(chat: state.extra as ChatModel),
+        ),
+        GoRoute(
+          path: '/add_member',
+          builder: (context, state) => EditChatAddMembersScreen(chat: state.extra as ChatModel),
+        ),
+        GoRoute(
+          path: '/edit_photo',
+          builder: (context, state) => EditChatPhotoScreen(chat: state.extra as ChatModel),
+        ),
+        GoRoute(
+          path: '/edit_name',
+          builder: (context, state) => EditChatNameScreen(chat: state.extra as ChatModel),
+        ),
+      ],
     ),
   ],
   errorBuilder: (context, state) => ErrorScreen(error: state.error.toString()),

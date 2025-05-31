@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:child_tracker/index.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
@@ -13,20 +15,25 @@ class ChatCubit extends Cubit<ChatRoomState> {
   ChatCubit({required this.chatId, required this.sender})
       : assert(chatId.isNotEmpty),
         super(const ChatRoomState());
+  StreamSubscription<DocumentSnapshot>? _chatSubscription;
 
   Future<void> getCurrentChat() async {
     emit(state.copyWith(status: ChatRoomStatus.loading));
     try {
       final doc = await _fs.collection('chats').doc(chatId).get();
       final chat = ChatModel.fromFirestore(doc);
-      final memberRefs = chat.members.where((member) => member.id != sender.id).toList();
+      final memberRefs = chat.unmodifiedMembers.where((member) => member.id != sender.id).toList();
       final members = await Future.wait(
           memberRefs.map((ref) async => await ref.get().then((doc) => UserModel.fromFirestore(doc))).toList());
 
       final unreadUpdate = Map<String, int>.from(chat.unreads);
-      unreadUpdate.update(sender.id, (_) => 0);
-      await chat.ref.update({'unreads': unreadUpdate});
+      final myUnreadCount = unreadUpdate[sender.id] ?? 0;
+      if (myUnreadCount > 0) {
+        unreadUpdate.update(sender.id, (_) => 0);
+        await chat.ref.update({'unreads': unreadUpdate});
+      }
       emit(state.copyWith(chat: chat, members: members, status: ChatRoomStatus.success));
+      _listenToChatUpdates();
     } catch (e) {
       print('Error getting current chat: $e');
       emit(state.copyWith(status: ChatRoomStatus.error, errorMessage: e.toString()));
@@ -69,7 +76,23 @@ class ChatCubit extends Cubit<ChatRoomState> {
     }
   }
 
-  Future<void> resetMyUnreadCount(Map<String, dynamic> unreads) async {
+  void _listenToChatUpdates() {
+    _chatSubscription = state.chat!.ref.snapshots().listen((snapshot) {
+      if (!snapshot.exists) return;
+
+      final chat = ChatModel.fromFirestore(snapshot);
+      emit(state.copyWith(chat: chat));
+
+      final unreads = Map<String, dynamic>.from(snapshot.get('unreads') ?? {});
+      final myUnreadCount = unreads[sender.id] as int? ?? 0;
+
+      if (myUnreadCount > 0) {
+        _resetMyUnreadCount(unreads);
+      }
+    });
+  }
+
+  Future<void> _resetMyUnreadCount(Map<String, dynamic> unreads) async {
     final unreadUpdate = Map<String, int>.from(unreads);
     unreadUpdate.update(sender.id, (_) => 0);
     await state.chat!.ref.update({'unreads': unreadUpdate});
@@ -86,5 +109,11 @@ class ChatCubit extends Cubit<ChatRoomState> {
         }).toList();
       },
     );
+  }
+
+  @override
+  Future<void> close() {
+    _chatSubscription?.cancel();
+    return super.close();
   }
 }

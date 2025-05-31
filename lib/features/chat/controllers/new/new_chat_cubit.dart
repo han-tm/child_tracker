@@ -59,6 +59,7 @@ class NewChatCubit extends Cubit<NewChatState> {
 
         final Map<String, dynamic> newChatData = {
           'members': members,
+          'unmodified_members': members,
           'type': ChatType.private.name,
           'last_message': newMessage.toMap(),
           'last_edit_time': FieldValue.serverTimestamp(),

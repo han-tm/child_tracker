@@ -6,3 +6,4 @@ export './set_chat_members.dart';
 export './set_chat_name.dart';
 export './set_chat_photo.dart';
 export './no_members_widget.dart';
+export './member_card.dart';

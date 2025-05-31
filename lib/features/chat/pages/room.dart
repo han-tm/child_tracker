@@ -1,4 +1,3 @@
-import 'dart:async';
 
 import 'package:child_tracker/index.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -22,38 +21,11 @@ class ChatRoomScreen extends StatefulWidget {
 class _ChatRoomScreenState extends State<ChatRoomScreen> {
   final TextEditingController controller = TextEditingController();
   late DocumentReference? senderRef;
-  StreamSubscription<DocumentSnapshot>? _chatSubscription;
 
   @override
   void initState() {
     senderRef = sl<UserCubit>().state?.ref;
     super.initState();
-    _listenToChatUpdates();
-  }
-
-  void _listenToChatUpdates() {
-    _chatSubscription = widget.chatRef.snapshots().listen((snapshot) {
-      if (!snapshot.exists) return;
-
-      final unreads = Map<String, dynamic>.from(snapshot.get('unreads') ?? {});
-      final myUnreadCount = unreads[senderRef?.id] as int? ?? 0;
-
-      if (myUnreadCount > 0) {
-        _resetMyUnreadCount(unreads);
-      }
-    });
-  }
-
-  Future<void> _resetMyUnreadCount(Map<String, dynamic> unreads) async {
-    final unreadUpdate = Map<String, int>.from(unreads);
-    unreadUpdate.update(senderRef!.id, (_) => 0);
-    await widget.chatRef.update({'unreads': unreadUpdate});
-  }
-
-  @override
-  void dispose() {
-    _chatSubscription?.cancel();
-    super.dispose();
   }
 
   @override
@@ -117,7 +89,9 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                       height: 24,
                       fit: BoxFit.contain,
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      context.push('/chat_room/edit_chat', extra: chat);
+                    },
                   ),
                 ),
               ],

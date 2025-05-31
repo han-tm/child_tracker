@@ -7,10 +7,10 @@ class ChatModel {
   final DateTime? lastEditTime;
   final LastMessage? lastMessage;
   final List<DocumentReference> members;
-  final String? name;
+   String? name;
   final Map<String, bool> notification;
   final DocumentReference? owner;
-  final String? photo;
+   String? photo;
   final ChatType type;
   final List<DocumentReference> unmodifiedMembers;
   final Map<String, int> unreads;
