@@ -71,6 +71,7 @@ class CachedClickableImage extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(300),
           border: Border.all(color: greyscale200, width: 2),
+          color: greyscale100,
         ),
         child: Center(
           child: Text(

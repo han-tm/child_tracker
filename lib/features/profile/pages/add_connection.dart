@@ -24,8 +24,8 @@ class AddConnectionScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<UserCubit, UserModel?>(
-      builder: (context, user) {
-        if (user == null) return const SizedBox();
+      builder: (context, me) {
+        if (me == null) return const SizedBox();
         return Scaffold(
           backgroundColor: white,
           appBar: AppBar(
@@ -35,7 +35,7 @@ class AddConnectionScreen extends StatelessWidget {
               onPressed: () => context.pop(),
             ),
             title:
-                AppText(text: user.isKid ? 'Добавить наставника' : 'Добавить ребенка', size: 24, fw: FontWeight.w700),
+                AppText(text: me.isKid ? 'Добавить наставника' : 'Добавить ребенка', size: 24, fw: FontWeight.w700),
             centerTitle: true,
           ),
           body: Column(
@@ -43,14 +43,15 @@ class AddConnectionScreen extends StatelessWidget {
               Expanded(
                 child: ListView.builder(
                   padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-                  itemCount: 3,
+                  itemCount: me.connections.length,
                   itemBuilder: (context, index) {
+                    final userRef = me.connections[index];
                     return ConnectionCard(
                       onDelete: () {},
                       onChat: () {},
                       onAdd: onAdd,
                       isAdd: true,
-                      user: user,
+                      userRef: userRef,
                     );
                   },
                 ),
@@ -88,16 +89,16 @@ class AddConnectionScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 20),
                       FilledSecondaryAppButton(
-                        text: !user.isKid ? 'Сканируйте  QR-код' : 'Поделиться QR кодом',
+                        text: !me.isKid ? 'Сканируйте  QR-код' : 'Поделиться QR кодом',
                         icon: Padding(
                           padding: const EdgeInsets.only(right: 15),
-                          child: !user.isKid
+                          child: !me.isKid
                               ? SvgPicture.asset('assets/images/scan_q.svg', color: primary900, width: 20, height: 20)
                               : SvgPicture.asset('assets/images/qr.svg', color: primary900, width: 20, height: 20),
                         ),
                         onTap: () {
-                          if (user.isKid) {
-                            onShowQr(context, user.id);
+                          if (me.isKid) {
+                            onShowQr(context, me.id);
                           } else {
                             onScanQr(context);
                           }

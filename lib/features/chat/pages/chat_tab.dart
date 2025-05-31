@@ -56,12 +56,13 @@ class ChatTabScreen extends StatelessWidget {
               if (snapshot.hasError) return Center(child: AppText(text: snapshot.error.toString(), color: red));
               final chats = snapshot.data!;
               if (chats.isEmpty) return const EmptyChatsWidget();
-              return ListView.builder(
+              return ListView.separated(
                 padding: const EdgeInsets.all(24),
+                separatorBuilder: (context, index) => const SizedBox(height: 32),
                 itemCount: chats.length,
                 itemBuilder: (context, index) {
                   final chat = chats[index];
-                  return ChatCard(chat: chat, unreads: chat.getUnreadCount(user.id));
+                  return ChatCard(chat: chat, me: user.id);
                 },
               );
             },

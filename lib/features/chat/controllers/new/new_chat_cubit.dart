@@ -19,45 +19,63 @@ class NewChatCubit extends Cubit<NewChatState> {
         pageController = PageController(initialPage: 0),
         super(const NewChatState());
 
-  Future<void> createOrReturnPrivateChat(String kidId, String mentorId) async {
-    // emit(state.copyWith(status: NewChatStatus.loading));
+  Future<DocumentReference?> createOrReturnPrivateChat(DocumentReference user) async {
+    if (_userCubit.state == null) {
+      throw Exception('Пользователь не найден');
+    }
 
-    // try {
-    //   final QuerySnapshot query = await _fs
-    //       .collection('chats')
-    //       .where('kid', isEqualTo: kidId)
-    //       .where('mentor', isEqualTo: mentorId)
-    //       .limit(1)
-    //       .get();
+    if (_userCubit.state!.ref.id == user.id) {
+      throw Exception('Нельзя писать самому себе');
+    }
 
-    //   if (query.docs.isNotEmpty) {
-    //     final chatId = query.docs.first.id;
-    //     emit(NewChatReturn(chatId));
-    //   } else {
-    //     //создаем новый приватный чат
-    //     final newChatRef = _fs.collection('chats').doc();
+    final DocumentReference kidRef = _userCubit.state!.isKid ? _userCubit.state!.ref : user;
+    final DocumentReference mentorRef = _userCubit.state!.isKid ? user : _userCubit.state!.ref;
 
-    //     final newMessage = LastMessage(text: 'Напишите первое сообщение', senderId: kidId, timestamp: DateTime.now());
+    print('Kid id: ${kidRef.id}, Mentor id: ${mentorRef.id}');
 
-    //     final Map<String, dynamic> newChatData = {
-    //       'members': [kidId, mentorId],
-    //       'kid': kidId,
-    //       'mentor': mentorId,
-    //       'type': ChatType.private.name,
-    //       'last_message': newMessage.toMap(),
-    //       'last_edit_time': FieldValue.serverTimestamp(),
-    //       'unreads': {kidId: 0, mentorId: 0},
-    //     };
+    try {
+      final QuerySnapshot query = await _fs
+          .collection('chats')
+          .where('kid', isEqualTo: kidRef)
+          .where('mentor', isEqualTo: mentorRef)
+          .limit(1)
+          .get();
 
-    //     await newChatRef.set(newChatData);
+      if (query.docs.isNotEmpty) {
+        return query.docs.first.reference;
+      } else {
+        //создаем новый приватный чат
+        final newChatRef = _fs.collection('chats').doc();
 
-    //     emit(NewChatReturn(newChatRef.id));
-    //     emit(NewChatInitial());
-    //   }
-    // } catch (e) {
-    //   print('Error creating or returning chat: $e');
-    //   emit(NewChatError(e.toString()));
-    // }
+        final newMessage = LastMessage(
+          text: 'Напишите первое сообщение',
+          senderId: _userCubit.state!.ref.id,
+          timestamp: DateTime.now(),
+        );
+
+        final members = [kidRef, mentorRef];
+        final unreads = {for (var member in members) member.id: 0};
+        final notification = {for (var member in members) member.id: true};
+
+        final Map<String, dynamic> newChatData = {
+          'members': members,
+          'type': ChatType.private.name,
+          'last_message': newMessage.toMap(),
+          'last_edit_time': FieldValue.serverTimestamp(),
+          'unreads': unreads,
+          'notification': notification,
+          'kid': kidRef,
+          'mentor': mentorRef,
+        };
+
+        await newChatRef.set(newChatData);
+
+        return newChatRef;
+      }
+    } catch (e) {
+      print('Error {createOrReturnPrivateChat}: $e');
+      rethrow;
+    }
   }
 
   Future<void> createGroupChat() async {
@@ -76,14 +94,38 @@ class NewChatCubit extends Cubit<NewChatState> {
 
       final members = [_userCubit.state!.ref, ...state.members];
       final unreads = {for (var member in members) member.id: 0};
+      final notification = {for (var member in members) member.id: true};
 
       final Map<String, dynamic> newChatData = {
-        'members': [_userCubit.state!.ref, ...state.members],
+        'members': members,
+        'unmodified_members': members,
         'type': ChatType.group.name,
         'last_message': newMessage.toMap(),
         'last_edit_time': FieldValue.serverTimestamp(),
         'unreads': unreads,
+        'owner': _userCubit.state!.ref,
+        'name': state.name,
+        'notification': notification,
       };
+
+      if (state.photo != null) {
+        final uploadService = FirebaseStorageService();
+        final photoUrl = await uploadService.uploadFile(
+          file: state.photo!,
+          type: UploadType.chat,
+          uid: newChatRef.id,
+        );
+        if (photoUrl == null) {
+          emit(state.copyWith(status: NewChatStatus.error, errorMessage: 'Ошибка загрузки фото'));
+          return;
+        } else {
+          newChatData['photo'] = photoUrl;
+        }
+      } else if (state.emoji != null) {
+        newChatData['photo'] = 'emoji:${state.emoji}';
+      } else {
+        emit(state.copyWith(status: NewChatStatus.error, errorMessage: 'Ошибка загрузки фото'));
+      }
 
       await newChatRef.set(newChatData);
 

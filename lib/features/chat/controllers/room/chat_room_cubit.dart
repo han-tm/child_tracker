@@ -19,7 +19,14 @@ class ChatCubit extends Cubit<ChatRoomState> {
     try {
       final doc = await _fs.collection('chats').doc(chatId).get();
       final chat = ChatModel.fromFirestore(doc);
-      emit(state.copyWith(chat: chat, status: ChatRoomStatus.success));
+      final memberRefs = chat.members.where((member) => member.id != sender.id).toList();
+      final members = await Future.wait(
+          memberRefs.map((ref) async => await ref.get().then((doc) => UserModel.fromFirestore(doc))).toList());
+
+      final unreadUpdate = Map<String, int>.from(chat.unreads);
+      unreadUpdate.update(sender.id, (_) => 0);
+      await chat.ref.update({'unreads': unreadUpdate});
+      emit(state.copyWith(chat: chat, members: members, status: ChatRoomStatus.success));
     } catch (e) {
       print('Error getting current chat: $e');
       emit(state.copyWith(status: ChatRoomStatus.error, errorMessage: e.toString()));
@@ -43,20 +50,16 @@ class ChatCubit extends Cubit<ChatRoomState> {
 
       await chatRef.collection('messages').add(newMessage.toMap());
 
-      final currentChatSnap = await chatRef.get();
-      final currentChat = ChatModel.fromFirestore(currentChatSnap);
-
-      final unreadUpdate = Map<String, int>.from(currentChat.unreads);
-      for (var member in currentChat.members) {
-        if (member.id != sender.id) {
-          unreadUpdate[member.id] = (unreadUpdate[member.id] ?? 0) + 1;
-        }
-      }
-
-      await chatRef.update({
-        'last_message': newMessage.toMap(),
-        'last_edit_time': FieldValue.serverTimestamp(),
-        'unreadCounts': unreadUpdate,
+      await _fs.runTransaction((transaction) async {
+        final chatSnap = await transaction.get(chatRef);
+        final newestchat = ChatModel.fromFirestore(chatSnap);
+        final unreadUpdate = Map<String, int>.from(newestchat.unreads);
+        unreadUpdate.updateAll((key, value) => key == sender.id ? value : value + 1);
+        transaction.update(chatRef, {
+          'last_message': newMessage.toMap(),
+          'last_edit_time': FieldValue.serverTimestamp(),
+          'unreads': unreadUpdate,
+        });
       });
 
       emit(state.copyWith(status: ChatRoomStatus.messageSent));
@@ -64,6 +67,12 @@ class ChatCubit extends Cubit<ChatRoomState> {
       print('Error sending message: $e');
       emit(state.copyWith(status: ChatRoomStatus.messageSentError, errorMessage: e.toString()));
     }
+  }
+
+  Future<void> resetMyUnreadCount(Map<String, dynamic> unreads) async {
+    final unreadUpdate = Map<String, int>.from(unreads);
+    unreadUpdate.update(sender.id, (_) => 0);
+    await state.chat!.ref.update({'unreads': unreadUpdate});
   }
 
   Stream<List<MessageModel>> getMessageStream() {

@@ -25,3 +25,15 @@ String getMonthYearInNominative(DateTime date) {
   final String year = DateFormat('yyyy').format(date);
   return '$month $year';
 }
+
+
+String dateToChatDivider(DateTime date) {
+  DateTime now = DateTime.now();
+  if (date.year == now.year && date.month == now.month && date.day == now.day) {
+    return 'Сегодня';
+  } else if (date.year == now.year && date.month == now.month && date.day == now.day - 1) {
+    return 'Вчера';
+  } else {
+    return DateFormat('d MMMM', 'ru').format(date);
+  }
+}
