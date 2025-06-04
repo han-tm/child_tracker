@@ -9,6 +9,7 @@ class NoMembersWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
+      margin: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         color: white,
         borderRadius: BorderRadius.circular(6),
@@ -29,8 +30,9 @@ class NoMembersWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(
-                'assets/images/2186-min.png',
+                'assets/images/2187-min.png',
                 fit: BoxFit.contain,
+                width: 180,
               ),
             ],
           ),

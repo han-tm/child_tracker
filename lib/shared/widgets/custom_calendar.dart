@@ -21,10 +21,7 @@ class _CustomCalendarState extends State<CustomCalendar> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-        color: white,
-        border: Border(bottom: BorderSide(color: greyscale200))
-      ),
+      decoration: const BoxDecoration(color: white, border: Border(bottom: BorderSide(color: greyscale200))),
       child: Column(
         children: [
           Stack(
@@ -65,49 +62,49 @@ class _CustomCalendarState extends State<CustomCalendar> {
                   ),
                 ),
                 startingDayOfWeek: StartingDayOfWeek.monday,
-                calendarStyle: CalendarStyle(
-                  tablePadding: const EdgeInsets.fromLTRB(12, 8, 12, 0),
-                  cellMargin: const EdgeInsets.symmetric(vertical: 6),
-                  defaultTextStyle: const TextStyle(
+                calendarStyle: const CalendarStyle(
+                  tablePadding: EdgeInsets.fromLTRB(16, 8, 16, 0),
+                  cellMargin: EdgeInsets.symmetric(vertical: 6),
+                  defaultTextStyle: TextStyle(
                     color: greyscale800,
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                     fontFamily: Involve,
                   ),
                   selectedTextStyle: TextStyle(
-                    color: isWeekFormat ? greyscale800 : primary900,
+                    color:  primary900,
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                     fontFamily: Involve,
                   ),
-                  outsideTextStyle: const TextStyle(
+                  outsideTextStyle: TextStyle(
                     color: greyscale400,
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                     fontFamily: Involve,
                   ),
-                  holidayTextStyle: const TextStyle(
+                  holidayTextStyle: TextStyle(
                     color: greyscale800,
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                     fontFamily: Involve,
                   ),
-                  weekendTextStyle: const TextStyle(
+                  weekendTextStyle: TextStyle(
                     color: greyscale800,
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                     fontFamily: Involve,
                   ),
-                  todayTextStyle: const TextStyle(
+                  todayTextStyle: TextStyle(
                     color: greyscale800,
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                     fontFamily: Involve,
                   ),
-                  todayDecoration: const BoxDecoration(shape: BoxShape.circle),
-                  defaultDecoration: const BoxDecoration(shape: BoxShape.circle),
+                  todayDecoration: BoxDecoration(shape: BoxShape.circle),
+                  defaultDecoration: BoxDecoration(shape: BoxShape.circle),
                   isTodayHighlighted: false,
-                  selectedDecoration: const BoxDecoration(shape: BoxShape.circle),
+                  selectedDecoration: BoxDecoration(shape: BoxShape.circle),
                 ),
                 calendarBuilders: CalendarBuilders(
                   headerTitleBuilder: (context, day) {
@@ -140,7 +137,7 @@ class _CustomCalendarState extends State<CustomCalendar> {
               ),
               if (isWeekFormat)
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  padding: const EdgeInsets.symmetric(horizontal: 18),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: List.generate(7, (index) => weedDaySelector(index)),

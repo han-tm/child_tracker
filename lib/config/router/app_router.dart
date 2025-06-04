@@ -269,6 +269,10 @@ final GoRouter router = GoRouter(
         ),
       ],
     ),
+    GoRoute(
+      path: '/kid_create_task',
+      builder: (context, state) => const CreateKidTaskScreen(),
+    ),
   ],
   errorBuilder: (context, state) => ErrorScreen(error: state.error.toString()),
 );

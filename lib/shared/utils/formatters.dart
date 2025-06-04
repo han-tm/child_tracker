@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 String dateToStringDDMMYYYY(DateTime? date) =>
@@ -20,12 +21,13 @@ const Map<int, String> _russianMonthsNominative = {
   12: 'Декабрь',
 };
 
+const List<String> russianWeekdaysNominative = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
+
 String getMonthYearInNominative(DateTime date) {
   final String month = _russianMonthsNominative[date.month]!;
   final String year = DateFormat('yyyy').format(date);
   return '$month $year';
 }
-
 
 String dateToChatDivider(DateTime date) {
   DateTime now = DateTime.now();
@@ -36,4 +38,15 @@ String dateToChatDivider(DateTime date) {
   } else {
     return DateFormat('d MMMM', 'ru').format(date);
   }
+}
+
+String taskDate(DateTime? date) {
+  if (date == null) return '-';
+  if (date.hour == 0 && date.minute == 0) return DateFormat('dd.MM.yyyy', 'ru').format(date);
+  return DateFormat('dd.MM.yyyy,HH:mm', 'ru').format(date);
+}
+
+String formatTimeOfDay(BuildContext context, TimeOfDay? time) {
+  if (time == null) return '-';
+  return time.format(context);
 }
