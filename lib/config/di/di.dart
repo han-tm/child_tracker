@@ -31,4 +31,5 @@ Future<void> initializeDependencies() async {
   sl.registerLazySingleton(() => FillDataCubit(userCubit: sl(), fs: fs, auth: fa));
   sl.registerLazySingleton(() => NewChatCubit(fs: fs, userCubit: sl()));
   sl.registerLazySingleton(() => CurrentChatCubit());
+  sl.registerLazySingleton(() => TaskCubit(userCubit: sl(), fs: fs));
 }

@@ -143,15 +143,27 @@ class KidTaskCreateCubit extends Cubit<KidTaskCreateState> {
 
       final newTaskRef = _fs.collection('tasks').doc();
 
+      DateTime now = DateTime.now();
+      final DateTime? reminderTime = state.reminderTime != null
+          ? DateTime(
+              now.year,
+              now.month,
+              now.day,
+              state.reminderTime!.hour,
+              state.reminderTime!.minute,
+            )
+          : null;
+
       final data = {
         'owner': user.ref,
+        'kid': user.ref,
         'name': state.name,
         'description': state.description,
-        'start_data': state.startData,
-        'end_data': state.endData,
+        'start_date': state.startData,
+        'end_date': state.endData,
         'reminder_type': state.reminderType.name,
         'reminder_date': state.reminderDate,
-        'reminder_time': state.reminderTime,
+        'reminder_time': reminderTime,
         'reminder_days': state.reminderDays,
         'created_at': DateTime.now(),
         'type': TaskType.kid.name,
@@ -177,6 +189,7 @@ class KidTaskCreateCubit extends Cubit<KidTaskCreateState> {
 
       emit(state.copyWith(status: KidTaskCreateStatus.success));
     } catch (e) {
+      print('error {createTask}: $e');
       emit(state.copyWith(errorMessage: e.toString(), status: KidTaskCreateStatus.error));
     }
   }

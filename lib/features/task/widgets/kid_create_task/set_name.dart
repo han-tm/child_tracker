@@ -19,12 +19,7 @@ class _KidCreateTaskSetNameState extends State<KidCreateTaskSetName> {
         Validators.maxLength(120),
       ],
     ),
-    'description': FormControl<String>(
-      validators: [
-        Validators.minLength(3),
-        Validators.maxLength(500),
-      ],
-    ),
+    'description': FormControl<String>(),
   });
 
   @override

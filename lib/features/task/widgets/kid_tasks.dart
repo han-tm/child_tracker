@@ -1,12 +1,22 @@
 import 'package:child_tracker/index.dart';
 import 'package:flutter/material.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 class KidTasksWidget extends StatelessWidget {
-  const KidTasksWidget({super.key});
+  final List<TaskModel> tasks;
+  final KidTaskChip selectedKidChip;
+  final UserModel me;
+  final DateTime selectedDay;
+  const KidTasksWidget({
+    super.key,
+    required this.tasks,
+    required this.selectedKidChip,
+    required this.me,
+    required this.selectedDay,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final selectedTaskChip = KidTaskChip.values[0];
     return Column(
       children: [
         SingleChildScrollView(
@@ -16,13 +26,30 @@ class KidTasksWidget extends StatelessWidget {
             children: KidTaskChip.values
                 .map((e) => TaskChip(
                       label: kidTaskChipRusName(e),
-                      selected: selectedTaskChip == e,
+                      chip: e,
+                      selected: selectedKidChip == e,
                     ))
                 .toList(),
           ),
         ),
-        const Expanded(
-          child: KidTaskList(tasks: []),
+        Expanded(
+          child: Builder(builder: (context) {
+            final tasksCopy = List.of(tasks);
+            late List<TaskModel> result;
+            if (selectedKidChip == KidTaskChip.progress) {
+              result = tasksCopy.where((task) => task.status == TaskStatus.inProgress).toList();
+            } else if (selectedKidChip == KidTaskChip.completed) {
+              result = tasksCopy.where((task) => task.status == TaskStatus.completed).toList();
+            } else if (selectedKidChip == KidTaskChip.canceled) {
+              result = tasksCopy.where((task) => task.status == TaskStatus.canceled).toList();
+            } else {
+              result = tasksCopy;
+            }
+
+            result = result.where((task) => isSameDay(selectedDay, task.startDate)).toList();
+
+            return KidTaskList(tasks: result, me: me);
+          }),
         ),
       ],
     );

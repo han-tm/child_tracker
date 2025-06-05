@@ -17,6 +17,7 @@ class CachedClickableImage extends StatelessWidget {
   final Widget? placeholder;
   final Widget? errorWidget;
   final Widget? noImageWidget;
+  final Widget? emojiWidget;
 
   const CachedClickableImage({
     super.key,
@@ -33,6 +34,7 @@ class CachedClickableImage extends StatelessWidget {
     this.noImageWidget,
     this.emoji,
     this.emojiFontSize = 50,
+    this.emojiWidget,
   }) : assert(!(borderRadius != null && circularRadius != null),
             'Нельзя одновременно указывать borderRadius и circularRadius.');
 
@@ -65,21 +67,22 @@ class CachedClickableImage extends StatelessWidget {
         ),
       );
     } else if (emoji != null) {
-      imageWidget = Container(
-        width: width,
-        height: height,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(300),
-          border: Border.all(color: greyscale200, width: 2),
-          color: greyscale100,
-        ),
-        child: Center(
-          child: Text(
-            emoji!,
-            style: TextStyle(fontSize: emojiFontSize),
-          ),
-        ),
-      );
+      imageWidget = emojiWidget ??
+          Container(
+            width: width,
+            height: height,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(300),
+              border: Border.all(color: greyscale200, width: 2),
+              color: greyscale100,
+            ),
+            child: Center(
+              child: Text(
+                emoji!,
+                style: TextStyle(fontSize: emojiFontSize),
+              ),
+            ),
+          );
     } else {
       imageWidget = SizedBox(
         width: width,

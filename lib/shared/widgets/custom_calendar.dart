@@ -1,11 +1,12 @@
 import 'package:child_tracker/index.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class CustomCalendar extends StatefulWidget {
-  const CustomCalendar({super.key});
+  final List<TaskModel> tasks;
+  const CustomCalendar({super.key, required this.tasks});
 
   @override
   State<CustomCalendar> createState() => _CustomCalendarState();
@@ -72,7 +73,7 @@ class _CustomCalendarState extends State<CustomCalendar> {
                     fontFamily: Involve,
                   ),
                   selectedTextStyle: TextStyle(
-                    color:  primary900,
+                    color: primary900,
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                     fontFamily: Involve,
@@ -115,12 +116,37 @@ class _CustomCalendarState extends State<CustomCalendar> {
                       textAlign: TextAlign.center,
                     );
                   },
+                  markerBuilder: (context, day, events) {
+                    return events.isEmpty
+                        ? null
+                        : Container(
+                            constraints: const BoxConstraints.expand(),
+                            margin: const EdgeInsets.all(3),
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: primary900,
+                            ),
+                            child: Center(
+                              child: Padding(
+                                padding: const EdgeInsets.only(right: 1),
+                                child: AppText(
+                                  text: '${day.day}',
+                                  size: 16,
+                                  height: 1,
+                                  color: white,
+                                  fw: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          );
+                  },
                 ),
                 onDaySelected: (selectedDay, focusedDay) {
                   if (!isSameDay(_selectedDay, selectedDay)) {
                     setState(() {
                       _selectedDay = selectedDay;
                       _focusedDay = focusedDay;
+                      if (mounted) context.read<TaskCubit>().onChangeDate(selectedDay);
                     });
                   }
                 },
@@ -131,9 +157,12 @@ class _CustomCalendarState extends State<CustomCalendar> {
                 onFormatChanged: (format) => setState(() {
                   _calendarFormat = format;
                 }),
-                firstDay: DateTime.now(),
+                firstDay: DateTime.utc(2024, 1, 1),
                 lastDay: DateTime.utc(2100, 3, 14),
                 focusedDay: _focusedDay,
+                eventLoader: (day) {
+                  return widget.tasks.where((task) => isSameDay(task.startDate, day)).toList();
+                },
               ),
               if (isWeekFormat)
                 Padding(
@@ -186,11 +215,11 @@ class _CustomCalendarState extends State<CustomCalendar> {
                     color: primary900.withOpacity(0.08),
                   ),
           ),
-          if (show)
-            const Padding(
-              padding: EdgeInsets.only(top: 2),
-              child: Icon(Icons.lens, color: primary900, size: 8),
-            ),
+          // if (show)
+          //   const Padding(
+          //     padding: EdgeInsets.only(top: 2),
+          //     child: Icon(Icons.lens, color: primary900, size: 8),
+          //   ),
         ],
       ),
     );
