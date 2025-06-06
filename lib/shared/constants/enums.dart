@@ -117,3 +117,20 @@ String taskCardStatusText(TaskStatus? status) {
       return '-';
   }
 }
+
+String taskDetailCardStatusText(TaskStatus? status) {
+  switch (status) {
+    case TaskStatus.inProgress:
+    case TaskStatus.onReview:
+    case TaskStatus.needsRework:
+      return 'В процессе';
+    case TaskStatus.completed:
+      return 'Выполнено';
+    case TaskStatus.canceled:
+      return 'Отменено';
+    case TaskStatus.deleted:
+      return 'Удалено';
+    default:
+      return '-';
+  }
+}

@@ -1,6 +1,14 @@
 part of 'task_cubit.dart';
 
-enum TaskStateStatus { initial, loading, success, error }
+enum TaskStateStatus {
+  initial,
+  loading,
+  success,
+  error,
+  canceling,
+  cancelError,
+  cancelSuccess,
+}
 
 class TaskState extends Equatable {
   final String? errorMessage;
@@ -41,5 +49,5 @@ class TaskState extends Equatable {
         currentDay,
       ];
 
-  TaskState reset() =>  TaskState(currentDay: currentDay);
+  TaskState reset() => TaskState(currentDay: currentDay);
 }

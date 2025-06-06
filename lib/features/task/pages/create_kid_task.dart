@@ -17,8 +17,7 @@ class CreateKidTaskScreen extends StatelessWidget {
             if (state.status == KidTaskCreateStatus.error) {
               SnackBarSerive.showErrorSnackBar(state.errorMessage ?? defaultErrorText);
             } else if (state.status == KidTaskCreateStatus.success) {
-              SnackBarSerive.showSuccessSnackBar('Задача успешно создана');
-              context.pop();
+              context.replace('/kid_create_task/success');
             }
           },
           builder: (context, state) {
@@ -47,7 +46,7 @@ class CreateKidTaskScreen extends StatelessWidget {
                     : Row(
                         children: [
                           const SizedBox(width: 20),
-                          Expanded(child: StepProgressWidget(currentStep: state.step, totalSteps: 5)),
+                          Expanded(child: StepProgressWidget(currentStep: state.step, totalSteps: 6)),
                         ],
                       ),
               ),

@@ -23,3 +23,4 @@ export './error_widget.dart';
 export './custom_date_input.dart';
 export './custom_time_input.dart';
 export './task_card.dart';
+export './bonus_container.dart';

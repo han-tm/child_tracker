@@ -62,4 +62,6 @@ class TaskModel {
       coin: data['coin'],
     );
   }
+
+  DocumentReference get ref => FirebaseFirestore.instance.collection('tasks').doc(id);
 }

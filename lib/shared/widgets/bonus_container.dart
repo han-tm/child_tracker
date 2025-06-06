@@ -1,4 +1,3 @@
-
 import 'package:child_tracker/index.dart';
 import 'package:flutter/material.dart';
 
@@ -19,7 +18,6 @@ class BonusContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      height: double.infinity,
       child: Column(
         children: [
           Container(
@@ -31,15 +29,13 @@ class BonusContainer extends StatelessWidget {
             ),
             child: Center(child: AppText(text: title, color: white)),
           ),
-          Expanded(
-            child: Container(
-              padding: padding,
-              decoration: BoxDecoration(
-                borderRadius: const BorderRadius.vertical(bottom: Radius.circular(10)),
-                border: Border.all(color: color, width: 3),
-              ),
-              child: child,
+          Container(
+            padding: padding,
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.vertical(bottom: Radius.circular(10)),
+              border: Border.all(color: color, width: 3),
             ),
+            child: child,
           ),
         ],
       ),

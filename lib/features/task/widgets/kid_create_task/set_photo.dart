@@ -72,11 +72,16 @@ class KidCreateTaskSetPhoto extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24),
                     child: FilledAppButton(
-                      text: 'Далее',
+                      text: state.isEditMode ? 'Применить' : 'Далее',
                       isActive: valid,
                       onTap: () {
                         if (valid) {
-                          context.read<KidTaskCreateCubit>().nextPage();
+                          if (state.isEditMode) {
+                            context.read<KidTaskCreateCubit>().onChangeMode(false);
+                            context.read<KidTaskCreateCubit>().onJumpToPage(5);
+                          } else {
+                            context.read<KidTaskCreateCubit>().nextPage();
+                          }
                         }
                       },
                     ),

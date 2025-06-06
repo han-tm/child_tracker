@@ -7,6 +7,7 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:go_router/go_router.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+final GlobalKey<NavigatorState> kidEditTaskNavigatorKey = GlobalKey<NavigatorState>();
 
 enum UserInitialStatus {
   noFound,
@@ -272,6 +273,66 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: '/kid_create_task',
       builder: (context, state) => const CreateKidTaskScreen(),
+      routes: [
+        GoRoute(
+          path: 'success',
+          builder: (context, state) => const CreateTaskSuccessScreen(),
+        ),
+      ],
+    ),
+    ShellRoute(
+      builder: (context, state, child) {
+        final task = state.extra as TaskModel;
+        return BlocProvider(
+          create: (context) => KidTaskEditCubit(userCubit: sl(), task: task)..init(),
+          child: child,
+        );
+      },
+      routes: [
+        GoRoute(
+          path: '/edit_create_task',
+          builder: (context, state) => EditKidTaskScreen(task: state.extra as TaskModel),
+          routes: [
+            GoRoute(
+              path: 'name',
+              builder: (context, state) => const KidTaskEditNameScreen(),
+            ),
+            GoRoute(
+              path: 'photo',
+              builder: (context, state) => const KidTaskEditPhotoScreen(),
+            ),
+            GoRoute(
+              path: 'startDate',
+              builder: (context, state) => const KidTaskEditStartDateScreen(),
+            ),
+            GoRoute(
+              path: 'endDate',
+              builder: (context, state) => const KidTaskEditEndDateScreen(),
+            ),
+            GoRoute(
+              path: 'reminer',
+              builder: (context, state) => const KidTaskEditReminderScreen(),
+            ),
+          ],
+        ),
+      ],
+    ),
+    GoRoute(
+      path: '/task_detail',
+      builder: (context, state) {
+        final extra = state.extra as Map<String, dynamic>;
+        final taskRef = extra['taskRef'] as DocumentReference;
+        final task = extra['task'] as TaskModel?;
+        return TaskDetailScreen(taskRef: taskRef, task: task);
+      },
+    ),
+    GoRoute(
+      path: '/task_cancel_reason',
+      builder: (context, state) => TaskCancelReasonScreen(task: state.extra as TaskModel),
+    ),
+    GoRoute(
+      path: '/task_delete_success',
+      builder: (context, state) => const DeleteTaskSuccessScreen(),
     ),
   ],
   errorBuilder: (context, state) => ErrorScreen(error: state.error.toString()),

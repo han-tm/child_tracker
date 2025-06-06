@@ -107,7 +107,7 @@ class _KidCreateTaskSetNameState extends State<KidCreateTaskSetName> {
                                             context.read<KidTaskCreateCubit>().onChangeNameAndDescription(name, desc);
                                             if (state.isEditMode) {
                                               context.read<KidTaskCreateCubit>().onChangeMode(false);
-                                              context.read<KidTaskCreateCubit>().onJumpToPage(2);
+                                              context.read<KidTaskCreateCubit>().onJumpToPage(5);
                                             } else {
                                               context.read<KidTaskCreateCubit>().nextPage();
                                             }

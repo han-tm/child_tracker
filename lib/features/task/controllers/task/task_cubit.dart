@@ -51,6 +51,27 @@ class TaskCubit extends Cubit<TaskState> {
     emit(state.copyWith(currentDay: date));
   }
 
+  void cancelTask(TaskModel task, String? reason) async {
+    emit(state.copyWith(status: TaskStateStatus.canceling));
+    try {
+      await task.ref.update({'status': TaskStatus.canceled.name, 'cancel_reason': reason});
+      emit(state.copyWith(status: TaskStateStatus.cancelSuccess));
+    } catch (e) {
+      print('error: {cancelTask}: ${e.toString()}');
+      emit(state.copyWith(status: TaskStateStatus.cancelError, errorMessage: e.toString()));
+    }
+  }
+
+  Future<bool> deleteTask(TaskModel task) async {
+    try {
+      await task.ref.update({'status': TaskStatus.deleted.name});
+      return true;
+    } catch (e) {
+      print('error: {deleteTask}: ${e.toString()}');
+      return false;
+    }
+  }
+
   @override
   Future<void> close() {
     _taskStreamSubscription?.cancel();
