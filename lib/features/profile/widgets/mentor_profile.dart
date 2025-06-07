@@ -51,7 +51,15 @@ class MentorProfileWidget extends StatelessWidget {
           ),
           const SizedBox(height: 24),
           ProfileMenuCard(
-            onTap: () => context.push('/connections'),
+            onTap: () {
+              final Map<String, dynamic> extra = {
+                'user': user,
+                'canAdd': true,
+                'showChat': true,
+                'showDelete': true,
+              };
+              context.push('/connections', extra: extra);
+            },
             icon: '3user',
             title: 'Мои дети',
             iconColor: blue,

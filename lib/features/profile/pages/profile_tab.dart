@@ -6,15 +6,51 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
-class ProfileTabScreen extends StatelessWidget {
+class ProfileTabScreen extends StatefulWidget {
   const ProfileTabScreen({super.key});
 
-  void onScanQr(BuildContext context) async {
-    final UserModel? kid = await context.push('/scan_qr');
-    print(kid?.id);
+  @override
+  State<ProfileTabScreen> createState() => _ProfileTabScreenState();
+}
+
+class _ProfileTabScreenState extends State<ProfileTabScreen> {
+  bool loading = false;
+
+  void onScanQr(UserModel me) async {
+    final UserModel? kid = await context.push<UserModel?>(
+      '/mentor_profile/scan_qr',
+    );
+
+    if (kid != null) {
+      debugPrint('connection kid: ${kid.id}');
+      if (me.connections.contains(kid.ref)) {
+        SnackBarSerive.showErrorSnackBar('Ребенок уже добавлен');
+        return;
+      } else if (me.connectionRequests.contains(kid.ref)) {
+        SnackBarSerive.showErrorSnackBar('Заявка уже отправлена');
+        return;
+      } else {
+        if (mounted) {
+          setState(() {
+            loading = true;
+          });
+          final bool result = await context.read<UserCubit>().addRequestToConnection(kid.ref);
+          if (mounted) {
+            setState(() {
+              loading = false;
+            });
+            if (result) {
+              SnackBarSerive.showSuccessSnackBar('Заявка отправлена');
+            } else {
+              SnackBarSerive.showErrorSnackBar('Произошла ошибка');
+            }
+          }
+        }
+      }
+    }
   }
 
-  void onShowQr(BuildContext context, String id) {
+  void onShowQr(String id) {
     showQRModalBottomSheet(context, id);
   }
 
@@ -50,9 +86,9 @@ class ProfileTabScreen extends StatelessWidget {
                 child: IconButton(
                   onPressed: () {
                     if (user.isKid) {
-                      onShowQr(context, user.id);
+                      onShowQr(user.id);
                     } else {
-                      onScanQr(context);
+                      onScanQr(user);
                     }
                   },
                   icon: SvgPicture.asset(
@@ -67,6 +103,7 @@ class ProfileTabScreen extends StatelessWidget {
           ),
           body: Builder(
             builder: (context) {
+              if (loading) return const Center(child: CircularProgressIndicator());
               if (user.isKid) return KidProfileWidget(user: user);
               return MentorProfileWidget(user: user);
             },

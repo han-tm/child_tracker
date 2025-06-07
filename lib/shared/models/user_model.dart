@@ -15,7 +15,7 @@ class UserModel {
   final int? age;
   final bool notification;
   final List<DocumentReference> connections;
-
+  final List<DocumentReference> connectionRequests;
 
   UserModel({
     required this.name,
@@ -31,6 +31,7 @@ class UserModel {
     this.age,
     this.notification = true,
     this.connections = const [],
+    this.connectionRequests = const [],
   });
 
   factory UserModel.fromFirestore(DocumentSnapshot doc) {
@@ -49,12 +50,15 @@ class UserModel {
       age: data['age'],
       notification: data['notification'] ?? true,
       connections: (data['connections'] as List<dynamic>? ?? []).map((e) => e as DocumentReference).toList(),
+      connectionRequests: (data['connection_requests'] as List<dynamic>? ?? []).map((e) => e as DocumentReference).toList(),
     );
   }
 
   bool get isKid => userType == UserType.kid;
 
   DocumentReference get ref => FirebaseFirestore.instance.collection('users').doc(id);
+
+  bool hasInConnections(DocumentReference ref) => connections.contains(ref);
 
   UserModel copyWith({
     String? id,
@@ -70,6 +74,7 @@ class UserModel {
     int? age,
     bool? notification,
     List<DocumentReference>? connections,
+    List<DocumentReference>? connectionRequests,
   }) {
     return UserModel(
       id: id ?? this.id,
@@ -85,6 +90,7 @@ class UserModel {
       age: age ?? this.age,
       notification: notification ?? this.notification,
       connections: connections ?? this.connections,
+      connectionRequests: connectionRequests ?? this.connectionRequests,
     );
   }
 }

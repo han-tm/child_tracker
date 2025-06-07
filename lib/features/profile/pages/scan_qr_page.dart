@@ -13,41 +13,14 @@ class ScanQRScreen extends StatefulWidget {
   State<ScanQRScreen> createState() => _ScanQRScreenState();
 }
 
-class _ScanQRScreenState extends State<ScanQRScreen> with WidgetsBindingObserver {
+class _ScanQRScreenState extends State<ScanQRScreen> {
   StreamSubscription<Object?>? _subscription;
   final MobileScannerController controller = MobileScannerController(
     torchEnabled: false,
     autoStart: false,
+    detectionSpeed: DetectionSpeed.noDuplicates,
     formats: [BarcodeFormat.qrCode],
   );
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    // If the controller is not ready, do not try to start or stop it.
-    // Permission dialogs can trigger lifecycle changes before the controller is ready.
-    if (!controller.value.hasCameraPermission) {
-      return;
-    }
-
-    switch (state) {
-      case AppLifecycleState.detached:
-      case AppLifecycleState.hidden:
-      case AppLifecycleState.paused:
-        return;
-      case AppLifecycleState.resumed:
-        // Restart the scanner when the app is resumed.
-        // Don't forget to resume listening to the barcode events.
-        _subscription = controller.barcodes.listen(onData);
-
-        unawaited(controller.start());
-      case AppLifecycleState.inactive:
-        // Stop the scanner when the app is paused.
-        // Also stop the barcode events subscription.
-        unawaited(_subscription?.cancel());
-        _subscription = null;
-        unawaited(controller.stop());
-    }
-  }
 
   void onData(BarcodeCapture capture) {
     final data = capture.barcodes.first.rawValue;
@@ -71,11 +44,9 @@ class _ScanQRScreenState extends State<ScanQRScreen> with WidgetsBindingObserver
         final user = UserModel.fromFirestore(doc);
         if (!user.isKid) {
           SnackBarSerive.showErrorSnackBar('Сканируйте QR-код ребенка');
-          return;
         } else {
           controller.stop();
           if (mounted) context.pop(user);
-          return;
         }
       } else {
         SnackBarSerive.showErrorSnackBar('Пользователь не найден');
@@ -92,23 +63,15 @@ class _ScanQRScreenState extends State<ScanQRScreen> with WidgetsBindingObserver
   void initState() {
     super.initState();
 
-    WidgetsBinding.instance.addObserver(this);
-
+    controller.start();
     _subscription = controller.barcodes.listen(onData);
-
-    unawaited(controller.start());
   }
 
   @override
-  Future<void> dispose() async {
-    WidgetsBinding.instance.removeObserver(this);
-
-    unawaited(_subscription?.cancel());
-    _subscription = null;
-
+  void dispose() {
+    _subscription?.cancel();
+    controller.dispose();
     super.dispose();
-
-    await controller.dispose();
   }
 
   @override
@@ -175,8 +138,6 @@ class _ScanQRScreenState extends State<ScanQRScreen> with WidgetsBindingObserver
       ),
     );
   }
-
-
 }
 
 class CornerOverlayPainter extends CustomPainter {

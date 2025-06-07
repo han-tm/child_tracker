@@ -42,6 +42,62 @@ class UserCubit extends Cubit<UserModel?> {
     return UserModel.fromFirestore(doc);
   }
 
+  Future<bool> addRequestToConnection(DocumentReference kidRef) async {
+    if (state == null) return false;
+    try {
+      await state?.ref.update({
+        'connection_requests': FieldValue.arrayUnion([kidRef])
+      });
+      await kidRef.update({
+        'connection_requests': FieldValue.arrayUnion([state!.ref])
+      });
+      emit(state!.copyWith(connectionRequests: List.from(state!.connectionRequests)..add(kidRef)));
+      return true;
+    } catch (e) {
+      print('error: {addRequestToConnection}: ${e.toString()}');
+      return false;
+    }
+  }
+
+  Future<bool> acceptConnection(DocumentReference mentorRef) async {
+    if (state == null) return false;
+    try {
+      await state?.ref.update({
+        'connections': FieldValue.arrayUnion([mentorRef])
+      });
+      await mentorRef.update({
+        'connections': FieldValue.arrayUnion([state!.ref])
+      });
+      emit(state!.copyWith(connections: List.from(state!.connections)..add(mentorRef)));
+      return true;
+    } catch (e) {
+      print('error: {acceptConnection}: ${e.toString()}');
+      return false;
+    }
+  }
+
+  Future<bool> deleteConnection(DocumentReference userRef) async {
+    if (state == null) return false;
+    try {
+      await state?.ref.update({
+        'connections': FieldValue.arrayRemove([userRef]),
+        'connection_requests': FieldValue.arrayRemove([userRef])
+      });
+      await userRef.update({
+        'connections': FieldValue.arrayRemove([state!.ref]),
+        'connection_requests': FieldValue.arrayRemove([state!.ref])
+      });
+      emit(state!.copyWith(
+        connections: List.from(state!.connections)..remove(userRef),
+        connectionRequests: List.from(state!.connectionRequests)..remove(userRef),
+      ));
+      return true;
+    } catch (e) {
+      print('error: {acceptConnection}: ${e.toString()}');
+      return false;
+    }
+  }
+
   Future<void> markAsDeleted() async {
     await state?.ref.update({
       'deleted': true,

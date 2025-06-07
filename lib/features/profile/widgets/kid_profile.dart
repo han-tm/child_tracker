@@ -42,6 +42,13 @@ class KidProfileWidget extends StatelessWidget {
               ),
             ),
           ),
+          const SizedBox(height: 24),
+          ProfileMenuCard(
+            onTap: () => {},
+            icon: 'diary',
+            title: 'Мой дневник',
+            color: const Color(0xFF246BFD).withOpacity(0.08),
+          ),
           const Divider(height: 48, thickness: 1, color: greyscale200),
           ProfileMenuCard(
             onTap: () => {},
@@ -73,7 +80,15 @@ class KidProfileWidget extends StatelessWidget {
           ),
           const Divider(height: 48, thickness: 1, color: greyscale200),
           ProfileMenuCard(
-           onTap: () => context.push('/connections'),
+            onTap: () {
+              final Map<String, dynamic> extra = {
+                'user': user,
+                'canAdd': true,
+                'showChat': true,
+                'showDelete': true,
+              };
+              context.push('/connections', extra: extra);
+            },
             icon: '3user',
             title: 'Мои наставники',
             iconColor: blue,

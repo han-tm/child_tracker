@@ -205,6 +205,12 @@ final GoRouter router = GoRouter(
         GoRoute(
           path: '/mentor_profile',
           builder: (context, state) => const ProfileTabScreen(),
+          routes: [
+            GoRoute(
+              path: 'scan_qr',
+              builder: (context, state) => const ScanQRScreen(),
+            ),
+          ],
         ),
       ],
     ),
@@ -218,16 +224,34 @@ final GoRouter router = GoRouter(
     ),
     GoRoute(
       path: '/connections',
-      builder: (context, state) => const MyConnectionsScreen(),
+      builder: (context, state) {
+        final extra = state.extra as Map<String, dynamic>;
+
+        final user = extra['user'] as UserModel;
+        final canAdd = extra['canAdd'] as bool? ?? true;
+        final showChat = extra['showChat'] as bool? ?? true;
+        final showDelete = extra['showDelete'] as bool? ?? true;
+        return MyConnectionsScreen(
+          user: user,
+          canAdd: canAdd,
+          showChat: showChat,
+          showDelete: showDelete,
+        );
+      },
+      routes: [
+        GoRoute(
+          path: 'add_connection',
+          builder: (context, state) => const AddConnectionScreen(),
+          routes: [
+            GoRoute(
+              path: 'scan_qr',
+              builder: (context, state) => const ScanQRScreen(),
+            ),
+          ],
+        ),
+      ],
     ),
-    GoRoute(
-      path: '/add_connection',
-      builder: (context, state) => const AddConnectionScreen(),
-    ),
-    GoRoute(
-      path: '/scan_qr',
-      builder: (context, state) => const ScanQRScreen(),
-    ),
+
     GoRoute(
       path: '/city_search',
       builder: (context, state) => CitySearchScreen(onSelected: state.extra as Function(String)),
@@ -342,6 +366,10 @@ final GoRouter router = GoRouter(
         final coin = extra['coin'] as int?;
         return TaskCompleteSuccessScreen(userName: name, coin: coin);
       },
+    ),
+    GoRoute(
+      path: '/kid_detail',
+      builder: (context, state) => KidDetailScreen(kidRef: state.extra as DocumentReference),
     ),
   ],
   errorBuilder: (context, state) => ErrorScreen(error: state.error.toString()),
