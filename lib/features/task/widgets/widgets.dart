@@ -10,3 +10,4 @@ export './kid_create_task/kid_create_task.dart';
 export './kid_edit_task/edit_kid_task.dart';
 export './cancel_couse_screen.dart';
 export './delete_task_success.dart';
+export './task_complete_success.dart';

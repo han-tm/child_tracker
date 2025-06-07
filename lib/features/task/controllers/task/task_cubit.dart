@@ -72,6 +72,16 @@ class TaskCubit extends Cubit<TaskState> {
     }
   }
 
+  Future<bool> completeTask(TaskModel task) async {
+    try {
+      await task.ref.update({'status': TaskStatus.completed.name});
+      return true;
+    } catch (e) {
+      print('error: {completeTask}: ${e.toString()}');
+      return false;
+    }
+  }
+
   @override
   Future<void> close() {
     _taskStreamSubscription?.cancel();

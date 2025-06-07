@@ -334,6 +334,15 @@ final GoRouter router = GoRouter(
       path: '/task_delete_success',
       builder: (context, state) => const DeleteTaskSuccessScreen(),
     ),
+    GoRoute(
+      path: '/task_complete_success',
+      builder: (context, state) {
+        final extra = state.extra as Map<String, dynamic>;
+        final name = extra['name'] as String?;
+        final coin = extra['coin'] as int?;
+        return TaskCompleteSuccessScreen(userName: name, coin: coin);
+      },
+    ),
   ],
   errorBuilder: (context, state) => ErrorScreen(error: state.error.toString()),
 );

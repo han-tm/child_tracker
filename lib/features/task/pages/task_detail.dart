@@ -79,6 +79,34 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
     }
   }
 
+  void onComplete(UserModel me) async {
+    if ((me.isKid) && me.id == task.owner?.id) {
+      // kids task
+      final confrim = await showConfirmModalBottomSheet(
+        context,
+        title: 'Задание выполнено',
+        isDestructive: false,
+        cancelText: 'Отмена',
+        confirmText: 'Да, подтвердить',
+        message: 'Ну что, всё готово? Жми подтвердить!',
+      );
+      if (confrim == true && mounted) {
+        final result = await context.read<TaskCubit>().completeTask(task);
+        if (result && mounted) {
+          final data = {'name': me.name};
+          context.replace('/task_complete_success', extra: data);
+        } else {
+          SnackBarSerive.showErrorSnackBar('Не удалось выполнить задачу');
+        }
+      }
+    }
+    if (!(me.isKid) && me.id == task.owner?.id) {
+      // parent task | confirming
+    } else if (me.id == task.kid?.id) {
+      // parents task | send to review
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     if (loading) {
@@ -90,6 +118,13 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
     }
     return BlocBuilder<UserCubit, UserModel?>(
       builder: (context, me) {
+        if (me == null) {
+          return Container(
+            constraints: const BoxConstraints.expand(),
+            color: white,
+            child: const Center(child: CircularProgressIndicator()),
+          );
+        }
         return Scaffold(
           backgroundColor: white,
           appBar: AppBar(
@@ -100,7 +135,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                 context.pop();
               },
             ),
-            actions: ((me?.id != task.owner?.id) ||
+            actions: ((me.id != task.owner?.id) ||
                     task.status == TaskStatus.canceled ||
                     task.status == TaskStatus.deleted ||
                     task.status == TaskStatus.completed)
@@ -214,7 +249,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                                     children: [
                                       Expanded(
                                         child: AppText(
-                                          text: 'Ребёнок ${task.owner?.id == me?.id ? '(создал)' : ''}',
+                                          text: 'Ребёнок ${task.owner?.id == me.id ? '(создал)' : ''}',
                                           size: 16,
                                           fw: FontWeight.w500,
                                           color: greyscale800,
@@ -244,7 +279,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                                           Expanded(
                                             flex: 2,
                                             child: AppText(
-                                              text: 'Наставник ${task.owner?.id == me?.id ? '(создал)' : ''}',
+                                              text: 'Наставник ${task.owner?.id == me.id ? '(создал)' : ''}',
                                               size: 16,
                                               fw: FontWeight.w500,
                                               color: greyscale800,
@@ -417,7 +452,8 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                           ),
                           const Spacer(),
                           const SizedBox(height: 24),
-                          if (task.status == TaskStatus.inProgress || task.status == TaskStatus.needsRework)
+                          if ((task.status == TaskStatus.inProgress || task.status == TaskStatus.needsRework) &&
+                              task.kid?.id == me.id)
                             Container(
                               decoration: const BoxDecoration(border: Border(top: BorderSide(color: greyscale100))),
                               child: Column(
@@ -428,7 +464,9 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                                     padding: const EdgeInsets.symmetric(horizontal: 24),
                                     child: FilledAppButton(
                                       text: 'Задание выполнено',
-                                      onTap: () {},
+                                      onTap: () {
+                                        onComplete(me);
+                                      },
                                     ),
                                   ),
                                   const SizedBox(height: 20),
