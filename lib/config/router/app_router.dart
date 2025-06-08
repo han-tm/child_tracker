@@ -371,6 +371,14 @@ final GoRouter router = GoRouter(
       path: '/kid_detail',
       builder: (context, state) => KidDetailScreen(kidRef: state.extra as DocumentReference),
     ),
+    GoRoute(
+      path: '/kid_coins',
+      builder: (context, state) => KidCoinsScreen(kid: state.extra as UserModel),
+    ),
+     GoRoute(
+      path: '/kid_progress',
+      builder: (context, state) => KidProgressScreen(kid: state.extra as UserModel),
+    ),
   ],
   errorBuilder: (context, state) => ErrorScreen(error: state.error.toString()),
 );

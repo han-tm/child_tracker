@@ -8,3 +8,4 @@ export './empty_notifications.dart';
 export './notification_setting_modal.dart';
 export './connection_card.dart';
 export './show_qr_modal.dart';
+export './coin_change_card.dart';

@@ -6,3 +6,5 @@ export './add_connection.dart';
 export './my_connections.dart';
 export './scan_qr_page.dart';
 export './kid_detail.dart';
+export './kid_coins.dart';
+export './kid_progress.dart';

@@ -18,6 +18,7 @@ class TaskModel {
   final ReminderType? reminderType;
   final TaskStatus? status;
   final DateTime? createdAt;
+  final DateTime? actionDate;
   final int? coin;
 
   TaskModel({
@@ -36,6 +37,7 @@ class TaskModel {
     this.reminderType,
     this.status,
     this.createdAt,
+    this.actionDate,
     this.coin,
   });
 
@@ -59,9 +61,12 @@ class TaskModel {
       type: data['type'] != null ? TaskType.values.byName(data['type']) : null,
       status: data['status'] != null ? TaskStatus.values.byName(data['status']) : null,
       createdAt: data['created_at'] != null ? (data['created_at'] as Timestamp).toDate() : null,
+      actionDate: data['action_date'] != null ? (data['action_date'] as Timestamp).toDate() : null,
       coin: data['coin'],
     );
   }
 
-  DocumentReference get ref => FirebaseFirestore.instance.collection('tasks').doc(id);
+  static CollectionReference get collection => FirebaseFirestore.instance.collection('tasks');
+
+  DocumentReference get ref => collection.doc(id);
 }

@@ -51,14 +51,14 @@ class KidProfileWidget extends StatelessWidget {
           ),
           const Divider(height: 48, thickness: 1, color: greyscale200),
           ProfileMenuCard(
-            onTap: () => {},
+            onTap: () => context.push('/kid_progress', extra: user),
             icon: 'progress',
             title: 'Прогресс по заданиям',
             color: const Color(0xFF246BFD).withOpacity(0.08),
           ),
           const SizedBox(height: 24),
           ProfileMenuCard(
-            onTap: () => {},
+            onTap: () => context.push('/kid_coins', extra: user),
             icon: 'coin',
             title: 'Баллы по заданиям',
             color: orange.withOpacity(0.08),

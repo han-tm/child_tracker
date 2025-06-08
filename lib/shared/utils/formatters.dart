@@ -50,3 +50,8 @@ String formatTimeOfDay(BuildContext context, TimeOfDay? time) {
   if (time == null) return '-';
   return time.format(context);
 }
+
+String dateFormatDDMMYYYYHHMM(DateTime? date) {
+  if (date == null) return '-';
+  return DateFormat('dd.MM.yyyy, HH:mm', 'ru').format(date);
+}
