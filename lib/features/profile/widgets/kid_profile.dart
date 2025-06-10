@@ -44,7 +44,7 @@ class KidProfileWidget extends StatelessWidget {
           ),
           const SizedBox(height: 24),
           ProfileMenuCard(
-            onTap: () => {},
+            onTap:  () => context.push('/dairy', extra: user),
             icon: 'diary',
             title: 'Мой дневник',
             color: const Color(0xFF246BFD).withOpacity(0.08),

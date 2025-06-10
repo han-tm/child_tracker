@@ -2,6 +2,7 @@ import 'package:child_tracker/index.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class KidDetailScreen extends StatefulWidget {
@@ -88,16 +89,24 @@ class _KidDetailScreenState extends State<KidDetailScreen> {
               ],
             ),
             const Divider(height: 48, thickness: 1, color: greyscale200),
-            Column(
-              children: [
-                ProfileMenuCard(
-                  onTap: () => {},
-                  icon: 'diary',
-                  title: 'Мой дневник',
-                  color: const Color(0xFF246BFD).withOpacity(0.08),
-                ),
-                const Divider(height: 48, thickness: 1, color: greyscale200),
-              ],
+            BlocBuilder<UserCubit, UserModel?>(
+              builder: (context, me) {
+                if (me == null) return const SizedBox();
+                if (kid.dairyMembers.contains(me.ref)) {
+                  return Column(
+                    children: [
+                      ProfileMenuCard(
+                        onTap:  () => context.push('/dairy', extra: kid),
+                        icon: 'diary',
+                        title: 'Мой дневник',
+                        color: const Color(0xFF246BFD).withOpacity(0.08),
+                      ),
+                      const Divider(height: 48, thickness: 1, color: greyscale200),
+                    ],
+                  );
+                }
+                return const SizedBox();
+              },
             ),
             ProfileMenuCard(
               onTap: () => {},

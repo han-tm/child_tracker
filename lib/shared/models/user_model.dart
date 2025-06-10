@@ -14,8 +14,10 @@ class UserModel {
   final String? city;
   final int? age;
   final bool notification;
+  final bool dairyNotification;
   final List<DocumentReference> connections;
   final List<DocumentReference> connectionRequests;
+  final List<DocumentReference> dairyMembers;
 
   UserModel({
     required this.name,
@@ -30,8 +32,10 @@ class UserModel {
     this.city,
     this.age,
     this.notification = true,
+    this.dairyNotification = true,
     this.connections = const [],
     this.connectionRequests = const [],
+    this.dairyMembers = const [],
   });
 
   factory UserModel.fromFirestore(DocumentSnapshot doc) {
@@ -49,8 +53,10 @@ class UserModel {
       city: data['city'],
       age: data['age'],
       notification: data['notification'] ?? true,
+      dairyNotification: data['dairy_notification'] ?? true,
       connections: (data['connections'] as List<dynamic>? ?? []).map((e) => e as DocumentReference).toList(),
       connectionRequests: (data['connection_requests'] as List<dynamic>? ?? []).map((e) => e as DocumentReference).toList(),
+      dairyMembers: (data['dairy_members'] as List<dynamic>? ?? []).map((e) => e as DocumentReference).toList(),
     );
   }
 
@@ -73,8 +79,10 @@ class UserModel {
     String? city,
     int? age,
     bool? notification,
+    bool? dairyNotification,
     List<DocumentReference>? connections,
     List<DocumentReference>? connectionRequests,
+    List<DocumentReference>? dairyMembers,
   }) {
     return UserModel(
       id: id ?? this.id,
@@ -89,8 +97,10 @@ class UserModel {
       city: city ?? this.city,
       age: age ?? this.age,
       notification: notification ?? this.notification,
+      dairyNotification: dairyNotification ?? this.dairyNotification,
       connections: connections ?? this.connections,
       connectionRequests: connectionRequests ?? this.connectionRequests,
+      dairyMembers: dairyMembers ?? this.dairyMembers,
     );
   }
 }

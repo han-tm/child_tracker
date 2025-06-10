@@ -375,9 +375,46 @@ final GoRouter router = GoRouter(
       path: '/kid_coins',
       builder: (context, state) => KidCoinsScreen(kid: state.extra as UserModel),
     ),
-     GoRoute(
+    GoRoute(
       path: '/kid_progress',
       builder: (context, state) => KidProgressScreen(kid: state.extra as UserModel),
+    ),
+    ShellRoute(
+      builder: (context, state, child) {
+        return BlocProvider(create: (context) => DairyCubit(userCubit: sl()), child: child);
+      },
+      routes: [
+        GoRoute(
+          path: '/dairy',
+          builder: (context, state) => DairyScreen(user: state.extra as UserModel),
+          routes: [
+            GoRoute(
+              path: 'add',
+              builder: (context, state) => const AddDairyScreen(),
+            ),
+            GoRoute(
+              path: 'edit',
+              builder: (context, state) => EditDairyScreen(dairy: state.extra as DairyModel),
+            ),
+            GoRoute(
+              path: 'setting',
+              builder: (context, state) => const DairySettingScreen(),
+            ),
+            GoRoute(
+              path: 'members',
+              builder: (context, state) => const DairyMembersScreen(),
+            ),
+            GoRoute(
+              path: 'add_member',
+              builder: (context, state) => const AddMemberToDairyScreen(),
+            ),
+             GoRoute(
+              path: 'dairy_success',
+              builder: (context, state) => const AddDairySuccessScreen(),
+            ),
+          ],
+        ),
+      ],
     ),
   ],
   errorBuilder: (context, state) => ErrorScreen(error: state.error.toString()),

@@ -27,9 +27,28 @@ class UserCubit extends Cubit<UserModel?> {
     }
   }
 
-  void setNotification(bool value) async {
+  Future<void> setNotification(bool value) async {
     await state?.ref.update({'notification': value});
     emit(state?.copyWith(notification: value));
+  }
+
+  Future<void> setDairyNotification(bool value) async {
+    await state?.ref.update({'dairy_notification': value});
+    emit(state?.copyWith(dairyNotification: value));
+  }
+
+  Future<void> addDairyMember(DocumentReference ref) async {
+    await state?.ref.update({
+      'dairy_members': FieldValue.arrayUnion([ref])
+    });
+    emit(state?.copyWith(dairyMembers: List.from(state!.dairyMembers)..add(ref)));
+  }
+
+  Future<void> deleteDairyMember(DocumentReference ref) async {
+    await state?.ref.update({
+      'dairy_members': FieldValue.arrayRemove([ref])
+    });
+    emit(state?.copyWith(dairyMembers: List.from(state!.dairyMembers)..remove(ref)));
   }
 
   Future<void> onDeleteFcmToken() async {

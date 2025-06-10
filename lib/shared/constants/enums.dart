@@ -134,3 +134,39 @@ String taskDetailCardStatusText(TaskStatus? status) {
       return '-';
   }
 }
+
+enum DairyEmotion { bad, sad, normal, good, joyful }
+
+String dairyEmotionIcon(DairyEmotion emotion, {bool filled = true}) {
+  switch (emotion) {
+    case DairyEmotion.bad:
+      return 'em_bad${filled ? '_filled' : ''}';
+    case DairyEmotion.sad:
+      return 'em_sad${filled ? '_filled' : ''}';
+    case DairyEmotion.normal:
+      return 'em_normal${filled ? '_filled' : ''}';
+    case DairyEmotion.joyful:
+      return 'em_joyful${filled ? '_filled' : ''}';
+    case DairyEmotion.good:
+      return 'em_good${filled ? '_filled' : ''}';
+    default:
+      return 'em_normal${filled ? '_filled' : ''}';
+  }
+}
+
+String dairyEmotionNameRus(DairyEmotion emotion) {
+  switch (emotion) {
+    case DairyEmotion.bad:
+      return 'Плохо';
+    case DairyEmotion.sad:
+      return 'Грустно';
+    case DairyEmotion.normal:
+      return 'Нормально';
+    case DairyEmotion.joyful:
+      return 'Радостно';
+    case DairyEmotion.good:
+      return 'Хорошо';
+    default:
+      return 'Нормально';
+  }
+}
