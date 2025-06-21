@@ -7,11 +7,17 @@ class PhoneAuthInitial extends PhoneAuthState {}
 
 class PhoneAuthLoading extends PhoneAuthState {}
 
-class PhoneAuthCodeSentSuccess extends PhoneAuthState {}
+class PhoneAuthCodeSentSuccess extends PhoneAuthState {
+  final String code;
+  PhoneAuthCodeSentSuccess({required this.code});
+}
 
 // class PhoneAuthCodeAutoRetrievalTimeout extends PhoneAuthState {}
 
-class PhoneAuthResendOTPSuccess extends PhoneAuthState {}
+class PhoneAuthResendOTPSuccess extends PhoneAuthState {
+  final String code;
+  PhoneAuthResendOTPSuccess({required this.code});
+}
 
 class PhoneAuthSuccess extends PhoneAuthState {
   final String type;

@@ -5,7 +5,7 @@ import 'package:path/path.dart' as p;
 
 enum UploadType {
   user, // Для аватарки пользователя
-  object, // Для объектов/товаров
+  task, // Для задач
   chat, // Для файлов чата
 }
 
@@ -55,8 +55,8 @@ class FirebaseStorageService {
     switch (type) {
       case UploadType.user:
         return 'users/$uuid/${DateTime.now().millisecondsSinceEpoch}_$fileName';
-      case UploadType.object:
-        return 'objects/$uuid/${DateTime.now().millisecondsSinceEpoch}_$fileName';
+      case UploadType.task:
+        return 'task/$uuid/${DateTime.now().millisecondsSinceEpoch}_$fileName';
       case UploadType.chat:
         return 'chats/$uuid/${DateTime.now().millisecondsSinceEpoch}_$fileName';
     }

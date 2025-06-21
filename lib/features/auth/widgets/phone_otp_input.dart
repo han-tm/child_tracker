@@ -26,6 +26,12 @@ class _PhoneOtpInputState extends State<PhoneOtpInput> {
       builder: (context, state) {
         String? errorText = state is PhoneAuthFailure ? state.errorMessage : null;
         bool isValid = ((otp ?? '').trim()).length == 6;
+        String? code;
+        if (state is PhoneAuthCodeSentSuccess) {
+          code = state.code;
+        } else if (state is PhoneAuthResendOTPSuccess) {
+          code = state.code;
+        }
         return GestureDetector(
           behavior: HitTestBehavior.translucent,
           onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
@@ -56,6 +62,11 @@ class _PhoneOtpInputState extends State<PhoneOtpInput> {
                           ),
                         ),
                         const SizedBox(height: 40),
+                        if (code != null)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 8, bottom: 18, left: 24),
+                            child: AppText(text: 'Тестовый код: $code', color: greyscale600),
+                          ),
                         OtpInput(
                           errorText: errorText,
                           onCompleted: (v) {
@@ -69,7 +80,7 @@ class _PhoneOtpInputState extends State<PhoneOtpInput> {
                           padding: const EdgeInsets.symmetric(horizontal: 24),
                           child: OtpTimer(
                             onResend: () {
-                              context.read<PhoneAuthCubit>().resendOTP();
+                              context.read<PhoneAuthCubit>().sendCode(widget.phone, isResend: true);
                             },
                           ),
                         ),
@@ -87,7 +98,7 @@ class _PhoneOtpInputState extends State<PhoneOtpInput> {
                                   isActive: ((otp ?? '').trim()).length == 6,
                                   onTap: (!isValid || state is PhoneAuthLoading)
                                       ? null
-                                      : () => context.read<PhoneAuthCubit>().verifyOTP(otp!),
+                                      : () => context.read<PhoneAuthCubit>().verifyOTP(widget.phone, otp!),
                                   isLoading: state is PhoneAuthLoading,
                                 ),
                               ),

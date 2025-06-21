@@ -29,8 +29,8 @@ class _PhoneInputWidgetState extends State<PhoneInputWidget> {
   void onTap() {
     if (form.valid) {
       FocusManager.instance.primaryFocus?.unfocus();
-      final phone = '+${phoneFormatter.getUnmaskedText()}';
-      context.read<PhoneAuthCubit>().sendOTP(phone);
+      final phone = phoneFormatter.getUnmaskedText();
+      context.read<PhoneAuthCubit>().sendCode(phone);
     }
   }
 
@@ -39,7 +39,7 @@ class _PhoneInputWidgetState extends State<PhoneInputWidget> {
     return BlocConsumer<PhoneAuthCubit, PhoneAuthState>(
       listener: (context, state) {
         if (state is PhoneAuthCodeSentSuccess) {
-          final phone = '+${phoneFormatter.getUnmaskedText()}';
+          final phone = phoneFormatter.getUnmaskedText();
           context.push('/auth/verify', extra: phone);
         }
       },

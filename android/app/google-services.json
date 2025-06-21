@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "834616459066",
-    "project_id": "kid-tracker-demo",
-    "storage_bucket": "kid-tracker-demo.firebasestorage.app"
+    "project_number": "864285389296",
+    "project_id": "externalproject-d904d",
+    "storage_bucket": "externalproject-d904d.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:834616459066:android:f1744158bdb40620f39a03",
+        "mobilesdk_app_id": "1:864285389296:android:682f88324dbdf745a6ed35",
         "android_client_info": {
           "package_name": "com.example.child_tracker"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAdwVmHzphwSJwG0j-M6ZGoORqMt9HwyAk"
+          "current_key": "AIzaSyCKZkum_QJHjaaHVEmPz-RaectgXPPsFvY"
         }
       ],
       "services": {

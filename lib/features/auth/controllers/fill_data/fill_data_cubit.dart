@@ -79,18 +79,18 @@ class FillDataCubit extends Cubit<FillDataState> {
     try {
       Map<String, dynamic> data = state.userType == UserType.kid ? _getKidData() : _getMentorData();
 
-      // final uploadService = FirebaseStorageService();
-      // final photoUrl = await uploadService.uploadFile(
-      //   file: state.photo!,
-      //   type: UploadType.user,
-      //   uid: _auth.currentUser!.uid,
-      // );
-      // if (photoUrl == null) {
-      //   emit(state.copyWith(status: FillDataStatus.error, errorMessage: 'Ошибка загрузки фото'));
-      //   return;
-      // } else {
-      //   data['photo'] = photoUrl;
-      // }
+      final uploadService = FirebaseStorageService();
+      final photoUrl = await uploadService.uploadFile(
+        file: state.photo!,
+        type: UploadType.user,
+        uid: _auth.currentUser!.uid,
+      );
+      if (photoUrl == null) {
+        emit(state.copyWith(status: FillDataStatus.error, errorMessage: 'Ошибка загрузки фото'));
+        return;
+      } else {
+        data['photo'] = photoUrl;
+      }
 
       final orderRef = _fs.collection('users').doc(_auth.currentUser!.uid);
       await orderRef.update(data);

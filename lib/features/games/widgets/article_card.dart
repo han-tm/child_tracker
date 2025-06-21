@@ -32,7 +32,7 @@ class ArticleCard extends StatelessWidget {
                       width: double.infinity,
                       height: double.infinity,
                       fit: BoxFit.contain,
-                      placeholder: (context, url) => Center(child: CupertinoActivityIndicator()),
+                      placeholder: (context, url) => const Center(child: CupertinoActivityIndicator()),
                       errorWidget: (context, url, error) => Container(
                         color: Colors.grey.shade300,
                         child: const Icon(Icons.error),
