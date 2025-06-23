@@ -1,4 +1,5 @@
 import 'package:child_tracker/index.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,7 +16,7 @@ class ProfileCubit extends Cubit<ProfileState> {
   void updateProfile(Map<String, dynamic> data, XFile? file) async {
     final user = _userCubit.state;
     if (user == null) {
-      emit(state.copyWith(status: ProfileStateStatus.error, errorMessage: "Пользователь не найден"));
+      emit(state.copyWith(status: ProfileStateStatus.error, errorMessage: "userNotFound".tr()));
       return;
     }
     emit(state.copyWith(status: ProfileStateStatus.saving));
@@ -43,7 +44,7 @@ class ProfileCubit extends Cubit<ProfileState> {
 
       emit(state.copyWith(status: ProfileStateStatus.success));
     } catch (e) {
-      print('Произошла ошибка {updateProfile}: $e');
+      print('Error {updateProfile}: $e');
       emit(state.copyWith(status: ProfileStateStatus.error, errorMessage: e.toString()));
     }
   }

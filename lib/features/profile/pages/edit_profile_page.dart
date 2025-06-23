@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:child_tracker/features/profile/controllers/profile/profile_cubit.dart';
 import 'package:child_tracker/index.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -93,7 +94,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           if (state.status == ProfileStateStatus.error) {
             SnackBarSerive.showErrorSnackBar(state.errorMessage ?? defaultErrorText);
           } else if (state.status == ProfileStateStatus.success) {
-            SnackBarSerive.showSuccessSnackBar('Профиль успешно обновлён');
+            SnackBarSerive.showSuccessSnackBar('profile_updated'.tr());
             context.pop();
           }
         },
@@ -105,7 +106,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 icon: const Icon(CupertinoIcons.arrow_left),
                 onPressed: () => context.pop(),
               ),
-              title: const AppText(text: 'Данные профиля', size: 24, fw: FontWeight.w700),
+              title: AppText(text: 'profileData'.tr(), size: 24, fw: FontWeight.w700),
               centerTitle: true,
             ),
             body: GestureDetector(
@@ -141,22 +142,22 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 padding: const EdgeInsets.symmetric(horizontal: 24),
                                 child: ReactiveCustomInput(
                                   formName: 'name',
-                                  label: 'Имя',
-                                  hint: 'Введите имя',
+                                  label: 'nameInputPlaceholder'.tr(),
+                                  hint: 'nameInputHint'.tr(),
                                   inputType: TextInputType.text,
                                   textCapitalization: TextCapitalization.sentences,
                                   textInputAction: TextInputAction.next,
                                   validationMessages: {
-                                    'required': (error) => 'Заполните поле',
-                                    'minLength': (error) => 'Минимум 3 символа',
-                                    'maxLength': (error) => 'Максимум 60 символов',
-                                    'pattern': (error) => 'Недопустимые символы',
+                                    'required': (error) => 'fill_field'.tr(),
+                                    'minLength': (error) => 'min_length_3'.tr(),
+                                    'maxLength': (error) => 'max_length_60'.tr(),
+                                    'pattern': (error) => 'invalid_characters'.tr(),
                                   },
                                 ),
                               ),
                               BlocBuilder<UserCubit, UserModel?>(
                                 builder: (context, user) {
-                                  if(user == null) return const SizedBox();
+                                  if (user == null) return const SizedBox();
                                   if (user.isKid) {
                                     return Padding(
                                       padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -166,20 +167,20 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                           const SizedBox(height: 28),
                                           ReactiveCustomInput(
                                             formName: 'age',
-                                            label: 'Возраст',
-                                            hint: 'Введите возраст',
+                                            label: 'age'.tr(),
+                                            hint: 'enterAge'.tr(),
                                             inputType: TextInputType.number,
                                             textCapitalization: TextCapitalization.none,
                                             textInputAction: TextInputAction.done,
                                             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                                             validationMessages: {
-                                              'required': (error) => 'Заполните поле',
-                                              'min': (error) => 'Минимум 5 лет',
-                                              'max': (error) => 'Максимум 18 лет',
+                                              'required': (error) => 'fill_field'.tr(),
+                                              'min': (error) => 'min5Age'.tr(),
+                                              'max': (error) => 'max18Age'.tr(),
                                             },
                                           ),
                                           const SizedBox(height: 28),
-                                          const AppText(text: 'Город'),
+                                          AppText(text: 'cityInputPlaceholder'.tr()),
                                           const SizedBox(height: 8),
                                           GestureDetector(
                                             onTap: () {
@@ -193,7 +194,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                                 borderRadius: BorderRadius.circular(10),
                                               ),
                                               child: AppText(
-                                                text: city != null ? city! : 'Введите',
+                                                text: city != null ? city! : 'cityInputEnter'.tr(),
                                                 fw: city != null ? FontWeight.w600 : FontWeight.normal,
                                                 color: city != null ? greyscale900 : greyscale500,
                                               ),
@@ -227,13 +228,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                               color: error,
                                             ),
                                             const SizedBox(width: 20),
-                                            const AppText(text: 'Выйти из аккаунта', color: error, fw: FontWeight.w700),
+                                            AppText(text: 'signOutButton'.tr(), color: error, fw: FontWeight.w700),
                                           ],
                                         ),
                                       ),
                                       const SizedBox(height: 24),
                                       FilledDestructiveAppButton(
-                                        onTap: () =>  showDeleteAccountDialog(context),
+                                        onTap: () => showDeleteAccountDialog(context),
                                         child: Row(
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
@@ -244,7 +245,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                               color: error,
                                             ),
                                             const SizedBox(width: 20),
-                                            const AppText(text: 'Удалить аккаунт', color: error, fw: FontWeight.w700),
+                                            AppText(
+                                                text: 'confirmDeleteAccountTitle'.tr(),
+                                                color: error,
+                                                fw: FontWeight.w700),
                                           ],
                                         ),
                                       ),
@@ -252,7 +256,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                       ReactiveFormConsumer(
                                         builder: (context, formGroup, child) {
                                           return FilledAppButton(
-                                            text: 'Применить',
+                                            text: 'apply'.tr(),
                                             onTap: () =>
                                                 state.status == ProfileStateStatus.saving ? null : onSaveTap(context),
                                             isLoading: state.status == ProfileStateStatus.saving,

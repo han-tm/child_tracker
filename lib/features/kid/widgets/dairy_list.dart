@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:child_tracker/index.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -14,10 +15,10 @@ class DairyListWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (dairyList.isEmpty) {
-      return const Expanded(
+      return Expanded(
         child: Center(
           child: AppText(
-            text: 'Нет записей',
+            text: 'noDaries'.tr(),
             size: 14,
             fw: FontWeight.normal,
             color: greyscale500,
@@ -91,16 +92,17 @@ class _DairyCard extends StatelessWidget {
                   onOption2Selected: () async {
                     final bool confirm = await showConfirmModalBottomSheet(
                           context,
-                          confirmText: 'Да, удалить',
-                          title: 'Удалить',
-                          message: 'Ой... точно удаляем?',
+                          confirmText: 'yes_delete'.tr(),
+                          title: 'delete'.tr(),
+                          message: 'are_you_sure_delete'.tr(),
+                          cancelText: 'cancel'.tr(),
                           isDestructive: true,
                         ) ??
                         false;
 
                     if (confirm && context.mounted) {
                       await context.read<DairyCubit>().deleteDairy(dairy);
-                      SnackBarSerive.showSuccessSnackBar('Отзыв удален');
+                      SnackBarSerive.showSuccessSnackBar('review_deleted'.tr());
                     }
                   },
                 ),
@@ -144,7 +146,7 @@ class _CustomGamePopupMenuButton extends StatelessWidget {
                 height: 24,
               ),
               const SizedBox(width: 12),
-              const AppText(text: 'Редактировать'),
+              AppText(text: 'edit'.tr()),
             ],
           ),
         ),
@@ -162,7 +164,7 @@ class _CustomGamePopupMenuButton extends StatelessWidget {
                 color: error,
               ),
               const SizedBox(width: 12),
-              const AppText(text: 'Удалить'),
+              AppText(text: 'delete'.tr()),
             ],
           ),
         ),
@@ -174,7 +176,7 @@ class _CustomGamePopupMenuButton extends StatelessWidget {
           onOption2Selected();
         }
       },
-      tooltip: 'Меню',
+      tooltip: 'Menu',
       offset: const Offset(-10, 25),
       elevation: 20,
       shadowColor: const Color(0xFF04060F).withOpacity(0.25),

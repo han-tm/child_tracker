@@ -1,4 +1,5 @@
 import 'package:child_tracker/index.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -57,7 +58,7 @@ class DairySummaryWidget extends StatelessWidget {
                   ),
                   const SizedBox(height: 14),
                   AppText(
-                    text: '$count эмоций - $count отзывов',
+                    text: '${'emotion'.plural(count)} - ${'reviews'.plural(count)}',
                     size: 12,
                     fw: FontWeight.normal,
                     color: greyscale700,

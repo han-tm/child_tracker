@@ -1,4 +1,5 @@
 import 'package:child_tracker/index.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
@@ -87,22 +88,22 @@ class _MentorMainScreenState extends State<MentorMainScreen> {
             BottomNavigationBarItem(
               activeIcon: SvgPicture.asset('assets/images/bonus_filled_tab.svg'),
               icon: SvgPicture.asset('assets/images/bonus_tab.svg'),
-              label: 'Бонусы',
+              label: 'bonuses'.tr(),
             ),
             BottomNavigationBarItem(
               activeIcon: SvgPicture.asset('assets/images/tracker_filled_tab.svg'),
               icon: SvgPicture.asset('assets/images/tracker_tab.svg'),
-              label: 'Задания',
+              label: 'tasks'.tr(),
             ),
             BottomNavigationBarItem(
               activeIcon: SvgPicture.asset('assets/images/chat_filled_tab.svg'),
               icon: SvgPicture.asset('assets/images/chat_tab.svg'),
-              label: 'Чаты',
+              label: 'chats'.tr(),
             ),
             BottomNavigationBarItem(
               activeIcon: SvgPicture.asset('assets/images/profile_filled_tab.svg'),
               icon: SvgPicture.asset('assets/images/profile_tab.svg'),
-              label: 'Профиль',
+              label: 'profile'.tr(),
             ),
           ],
         ),

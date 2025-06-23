@@ -2,6 +2,7 @@
 
 import 'package:child_tracker/index.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,9 +17,10 @@ class EditChatScreen extends StatelessWidget {
     final result = await showConfirmModalBottomSheet(
       context,
       isDestructive: true,
-      confirmText: 'Да, удалить',
-      title: 'Удалить чат',
-      message: 'Вы уверены, что хотите удалить чат?',
+      confirmText: 'yesDelete'.tr(),
+      title: 'delete_chat'.tr(),
+      message: 'confirm_delete_chat'.tr(),
+      cancelText: 'cancel'.tr(),
     );
 
     if (result == true && context.mounted) {
@@ -34,9 +36,10 @@ class EditChatScreen extends StatelessWidget {
     final result = await showConfirmModalBottomSheet(
       context,
       isDestructive: true,
-      confirmText: 'Да, выйти',
-      title: 'Выйти из чата',
-      message: 'Вы уверены, что хотите выйти?',
+      confirmText: 'yes_leave'.tr(),
+      title: 'leave_chat'.tr(),
+      message: 'confirm_leave_chat'.tr(),
+      cancelText: 'cancel'.tr(),
     );
 
     if (result == true && context.mounted) {
@@ -64,8 +67,8 @@ class EditChatScreen extends StatelessWidget {
           icon: const Icon(CupertinoIcons.arrow_left),
           onPressed: () => context.pop(),
         ),
-        title: const AppText(
-          text: 'Настройки',
+        title: AppText(
+          text: 'settings'.tr(),
           size: 24,
           fw: FontWeight.w700,
         ),
@@ -96,8 +99,8 @@ class EditChatScreen extends StatelessWidget {
                               children: [
                                 SvgPicture.asset('assets/images/logout.svg', width: 20, height: 20),
                                 const SizedBox(width: 20),
-                                const AppText(
-                                  text: 'Выйти из группы',
+                                AppText(
+                                  text: 'exitGroup'.tr(),
                                   size: 16,
                                   color: error,
                                   fw: FontWeight.w700,
@@ -116,8 +119,8 @@ class EditChatScreen extends StatelessWidget {
                               children: [
                                 SvgPicture.asset('assets/images/delete.svg', width: 20, height: 20),
                                 const SizedBox(width: 20),
-                                const AppText(
-                                  text: 'Удалить чат',
+                                AppText(
+                                  text: 'delete_chat'.tr(),
                                   size: 16,
                                   color: error,
                                   fw: FontWeight.w700,
@@ -188,8 +191,8 @@ class _PrivateChatSettingState extends State<_PrivateChatSetting> {
           ],
         ),
         const SizedBox(height: 16),
-        const AppText(
-          text: 'Приватный чат',
+        AppText(
+          text: 'privateChat'.tr(),
           size: 24,
           fw: FontWeight.w700,
           textAlign: TextAlign.center,
@@ -201,7 +204,7 @@ class _PrivateChatSettingState extends State<_PrivateChatSetting> {
             children: [
               SvgPicture.asset('assets/images/bell.svg', width: 24, height: 24),
               const SizedBox(width: 20),
-              const Expanded(child: AppText(text: 'Уведомления', size: 16, fw: FontWeight.w700)),
+              Expanded(child: AppText(text: 'notifications'.tr(), size: 16, fw: FontWeight.w700)),
               Transform.scale(
                 scale: 0.8,
                 child: CupertinoSwitch(
@@ -340,7 +343,7 @@ class _GroupChatSettingState extends State<_GroupChatSetting> {
               children: [
                 SvgPicture.asset('assets/images/members.svg', width: 24, height: 24),
                 const SizedBox(width: 20),
-                const Expanded(child: AppText(text: 'Участники чата', size: 16, fw: FontWeight.w700)),
+                Expanded(child: AppText(text: 'chat_members'.tr(), size: 16, fw: FontWeight.w700)),
                 const Icon(CupertinoIcons.chevron_right, size: 22, color: greyscale900),
               ],
             ),
@@ -352,7 +355,7 @@ class _GroupChatSettingState extends State<_GroupChatSetting> {
             children: [
               SvgPicture.asset('assets/images/bell.svg', width: 24, height: 24),
               const SizedBox(width: 20),
-              const Expanded(child: AppText(text: 'Уведомления', size: 16, fw: FontWeight.w700)),
+              Expanded(child: AppText(text: 'notifications'.tr(), size: 16, fw: FontWeight.w700)),
               Transform.scale(
                 scale: 0.8,
                 child: CupertinoSwitch(

@@ -1,5 +1,6 @@
 import 'package:child_tracker/index.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -50,8 +51,8 @@ class DairyMemberCard extends StatelessWidget {
                         text: user == null
                             ? '...'
                             : user.isKid
-                                ? 'Ребёнок ${isMe ? '(я)' : ''}'
-                                : 'Наставник',
+                                ? '${"roleSelectionKid".tr()} ${isMe ? '(${'amI'.tr()})' : ''}'
+                                : 'roleSelectionMentor'.tr(),
                         size: 14,
                         color: greyscale700,
                         fw: FontWeight.w500,
@@ -62,13 +63,13 @@ class DairyMemberCard extends StatelessWidget {
                 Row(
                   children: [
                     if (onDelete == null && isAddedUser)
-                      const SizedBox(
+                       SizedBox(
                         width: 106,
                         child: OutlinedAppButton(
                           height: 34,
                           fontSize: 14,
                           fw: FontWeight.w600,
-                          text: 'Добавлен',
+                          text: 'added'.tr(),
                         ),
                       ),
                     if (onDelete == null && !isAddedUser)
@@ -79,7 +80,7 @@ class DairyMemberCard extends StatelessWidget {
                           height: 34,
                           fontSize: 14,
                           fw: FontWeight.w600,
-                          text: 'Добавить',
+                          text: 'add'.tr(),
                         ),
                       ),
                     if (onDelete != null && !isMe)

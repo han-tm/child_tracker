@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:child_tracker/index.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -24,10 +25,10 @@ class _ProfileTabScreenState extends State<ProfileTabScreen> {
     if (kid != null) {
       debugPrint('connection kid: ${kid.id}');
       if (me.connections.contains(kid.ref)) {
-        SnackBarSerive.showErrorSnackBar('Ребенок уже добавлен');
+        SnackBarSerive.showErrorSnackBar('kidAlreadyAdded'.tr());
         return;
       } else if (me.connectionRequests.contains(kid.ref)) {
-        SnackBarSerive.showErrorSnackBar('Заявка уже отправлена');
+        SnackBarSerive.showErrorSnackBar('requestAlreadySent'.tr());
         return;
       } else {
         if (mounted) {
@@ -40,9 +41,9 @@ class _ProfileTabScreenState extends State<ProfileTabScreen> {
               loading = false;
             });
             if (result) {
-              SnackBarSerive.showSuccessSnackBar('Заявка отправлена');
+              SnackBarSerive.showSuccessSnackBar('requestSent'.tr());
             } else {
-              SnackBarSerive.showErrorSnackBar('Произошла ошибка');
+              SnackBarSerive.showErrorSnackBar('defaultErrorText'.tr());
             }
           }
         }
@@ -78,7 +79,7 @@ class _ProfileTabScreenState extends State<ProfileTabScreen> {
                 fit: BoxFit.contain,
               ),
             ),
-            title: const AppText(text: 'Профиль', size: 24, fw: FontWeight.w700),
+            title:  AppText(text: 'profileTitle'.tr(), size: 24, fw: FontWeight.w700),
             centerTitle: true,
             actions: [
               Padding(

@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:child_tracker/index.dart';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -18,7 +19,7 @@ class MultiFilePickerWidget extends StatefulWidget {
     this.maxLenght = 6,
     required this.onFilePicked,
     required this.onFileRemoved,
-    this.label = 'Добавить фото/видео',
+    required this.label,
   });
 
   @override
@@ -28,7 +29,7 @@ class MultiFilePickerWidget extends StatefulWidget {
 class _MultiFilePickerWidgetState extends State<MultiFilePickerWidget> {
   void onAddFile() async {
     if (widget.files.length >= widget.maxLenght) {
-      SnackBarSerive.showErrorSnackBar('Достигнут лимит');
+      SnackBarSerive.showErrorSnackBar('limit'.tr());
       return;
     }
     final pickedFile = await CustomImagePicker.pickPhotoOrVideo(context);

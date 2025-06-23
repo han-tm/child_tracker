@@ -1,5 +1,6 @@
 
 import 'package:child_tracker/index.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 Future<String?> showKidSelectorModalBottomSheet(BuildContext context) async {
@@ -49,7 +50,7 @@ class _SelectKidContentState extends State<_SelectKidContent> {
             ],
           ),
           const SizedBox(height: 24),
-          const AppText(text: 'Выбрать ребёнка', size: 24, fw: FontWeight.w700),
+           AppText(text: 'selectKid'.tr(), size: 24, fw: FontWeight.w700),
           const Divider(height: 40, thickness: 1, color: greyscale200),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -65,11 +66,11 @@ class _SelectKidContentState extends State<_SelectKidContent> {
                 ),
               ),
               const SizedBox(width: 6),
-              const Expanded(
+               Expanded(
                 flex: 3,
                 child: LeftArrowBubleShape(
                   child: AppText(
-                    text: 'У кого посмотрим задания?',
+                    text: 'whoToSeeTasks'.tr(),
                     size: 20,
                     maxLine: 10,
                     textAlign: TextAlign.center,
@@ -85,7 +86,7 @@ class _SelectKidContentState extends State<_SelectKidContent> {
               padding: const EdgeInsets.only(bottom: 12),
               child: Column(
                 children: [
-                  ...['Все наставники', 'Аня', 'Мама', 'Папа', 'Дедушка', 'Бабушка'].map((e) {
+                  ...['allMentors'.tr(), 'Аня', 'Мама', 'Папа', 'Дедушка', 'Бабушка'].map((e) {
                     return Padding(
                       padding: const EdgeInsets.only(top: 20),
                       child: UserSelector(
@@ -109,14 +110,14 @@ class _SelectKidContentState extends State<_SelectKidContent> {
             children: [
               Expanded(
                 child: FilledSecondaryAppButton(
-                  text: 'Отмена',
+                  text: 'cancel'.tr(),
                   onTap: () => Navigator.pop(context),
                 ),
               ),
               const SizedBox(width: 16),
               Expanded(
                 child: FilledAppButton(
-                  text: 'Выбрать',
+                  text: 'select'.tr(),
                   onTap: () => Navigator.pop(context, 'true'),
                 ),
               ),

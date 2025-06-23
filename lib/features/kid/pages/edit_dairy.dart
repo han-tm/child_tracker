@@ -1,5 +1,6 @@
 import 'package:child_tracker/index.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -49,17 +50,18 @@ class _EditDairyScreenState extends State<EditDairyScreen> {
   void onDelete() async {
     final bool confirm = await showConfirmModalBottomSheet(
           context,
-          confirmText: 'Да, удалить',
-          title: 'Удалить',
-          message: 'Ой... точно удаляем?',
+          confirmText: 'yes_delete'.tr(),
+          title: 'delete'.tr(),
+          message: 'are_you_sure_delete'.tr(),
           isDestructive: true,
+          cancelText: 'cancel'.tr(),
         ) ??
         false;
 
     if (confirm && mounted) {
       await context.read<DairyCubit>().deleteDairy(widget.dairy);
-      SnackBarSerive.showSuccessSnackBar('Отзыв удален');
-      if(mounted) context.pop();
+      SnackBarSerive.showSuccessSnackBar('review_deleted'.tr());
+      if (mounted) context.pop();
     }
   }
 
@@ -124,11 +126,11 @@ class _EditDairyScreenState extends State<EditDairyScreen> {
                               child: IntrinsicHeight(
                                 child: Column(
                                   children: [
-                                    const Padding(
-                                      padding: EdgeInsets.only(left: 40, right: 24, top: 16),
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 40, right: 24, top: 16),
                                       child: MaskotMessage(
                                         maskot: '2185-min',
-                                        message: 'Как твой день сегодня?',
+                                        message: 'how_was_your_day'.tr(),
                                       ),
                                     ),
                                     const SizedBox(height: 40),
@@ -193,12 +195,12 @@ class _EditDairyScreenState extends State<EditDairyScreen> {
                                       ),
                                     ),
                                     const SizedBox(height: 24),
-                                    const Padding(
-                                      padding: EdgeInsets.symmetric(horizontal: 24),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 24),
                                       child: ReactiveCustomInput(
                                         formName: 'text',
-                                        label: 'Отзыв',
-                                        hint: 'Расскажи о своем дне',
+                                        label: 'review'.tr(),
+                                        hint: 'tell_about_your_day'.tr(),
                                         maxLines: 6,
                                         minLines: 5,
                                       ),
@@ -212,7 +214,7 @@ class _EditDairyScreenState extends State<EditDairyScreen> {
                                         listener: (context, state) {
                                           if (state.status == DairyStateStatus.editSuccess) {
                                             context.pop();
-                                            SnackBarSerive.showSuccessSnackBar('Отзыв обновлён');
+                                            SnackBarSerive.showSuccessSnackBar('review_updated'.tr());
                                           } else if (state.status == DairyStateStatus.editError) {
                                             SnackBarSerive.showErrorSnackBar(state.errorMessage ?? defaultErrorText);
                                           }
@@ -222,7 +224,7 @@ class _EditDairyScreenState extends State<EditDairyScreen> {
                                             builder: (context, formGroup, child) {
                                               final valid = formGroup.valid && selectedEmotion != null;
                                               return FilledAppButton(
-                                                text: 'Применить',
+                                                text: 'apply'.tr(),
                                                 onTap: state.status == DairyStateStatus.editing ? null : onSubmit,
                                                 isActive: valid,
                                                 isLoading: state.status == DairyStateStatus.editing,

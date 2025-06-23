@@ -1,4 +1,3 @@
-
 import 'package:child_tracker/index.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
@@ -19,13 +18,8 @@ Future<void> initializeDependencies() async {
   // final fcm = FirebaseMessaging.instance;
   final ff = FirebaseFunctions.instance;
 
-  
-
-  //services
-  // sl.registerLazySingleton(() => PhoneValidatorService(firestore: fs));
-  // sl.registerLazySingleton(() => FirebaseStorageService());
-
   // Cubits
+  sl.registerLazySingleton(() => LocaleCubit(storageService: sl()));
   sl.registerLazySingleton(() => UserCubit(fs: fs));
   sl.registerLazySingleton(() => PhoneAuthCubit(userCubit: sl(), fs: fs, auth: fa, ff: ff));
   sl.registerLazySingleton(() => FillDataCubit(userCubit: sl(), fs: fs, auth: fa));

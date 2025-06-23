@@ -10,8 +10,8 @@ class CustomTimeInput extends StatelessWidget {
   final bool enable;
   const CustomTimeInput({
     super.key,
-    this.label = 'Время',
-    this.hint = 'Выберите время',
+    required this.label,
+    required this.hint,
     this.time,
     this.errorText,
     required this.onTap,

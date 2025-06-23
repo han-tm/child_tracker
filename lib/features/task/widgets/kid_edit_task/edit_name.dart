@@ -1,4 +1,5 @@
 import 'package:child_tracker/index.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -66,10 +67,10 @@ class _KidTaskEditNameScreenState extends State<KidTaskEditNameScreen> {
                         formGroup: form,
                         child: Column(
                           children: [
-                            const Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 24),
+                             Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 24),
                               child: MaskotMessage(
-                                message: 'Как назовём\nзадание?',
+                                message: 'name_the_task_prompt'.tr(),
                                 maskot: '2186-min',
                                 flip: true,
                               ),
@@ -79,16 +80,16 @@ class _KidTaskEditNameScreenState extends State<KidTaskEditNameScreen> {
                               padding: const EdgeInsets.symmetric(horizontal: 24),
                               child: ReactiveCustomInput(
                                 formName: 'name',
-                                label: 'Название',
-                                hint: 'Введите название',
+                                label: 'title'.tr(),
+                                hint: 'enter_name'.tr(),
                                 inputType: TextInputType.text,
                                 textCapitalization: TextCapitalization.sentences,
                                 textInputAction: TextInputAction.next,
                                 maxLenght: 120,
                                 validationMessages: {
-                                  'required': (error) => 'Заполните поле',
-                                  'minLength': (error) => 'Минимум 3 символа',
-                                  'maxLength': (error) => 'Максимум 120 символов',
+                                  'required': (error) => 'fill_field'.tr(),
+                                  'minLength': (error) => 'min_length_3'.tr(),
+                                  'maxLength': (error) => 'max_120_chars_error'.tr(),
                                 },
                               ),
                             ),
@@ -97,8 +98,8 @@ class _KidTaskEditNameScreenState extends State<KidTaskEditNameScreen> {
                               padding: const EdgeInsets.symmetric(horizontal: 24),
                               child: ReactiveCustomInput(
                                 formName: 'description',
-                                label: 'Описание (опц.)',
-                                hint: 'Введите описание',
+                                label: 'description_optional'.tr(),
+                                hint: 'enter_description_hint'.tr(),
                                 inputType: TextInputType.multiline,
                                 textCapitalization: TextCapitalization.sentences,
                                 textInputAction: TextInputAction.newline,
@@ -106,8 +107,8 @@ class _KidTaskEditNameScreenState extends State<KidTaskEditNameScreen> {
                                 maxLines: 5,
                                 maxLenght: 500,
                                 validationMessages: {
-                                  'minLength': (error) => 'Минимум 3 символа',
-                                  'maxLength': (error) => 'Максимум 500 символов',
+                                  'minLength': (error) => 'min_length_3'.tr(),
+                                  'maxLength': (error) => 'max_500_chars_error'.tr(),
                                 },
                               ),
                             ),
@@ -124,7 +125,7 @@ class _KidTaskEditNameScreenState extends State<KidTaskEditNameScreen> {
                                       Padding(
                                         padding: const EdgeInsets.symmetric(horizontal: 24),
                                         child: FilledAppButton(
-                                          text: 'Применить',
+                                          text: 'apply'.tr(),
                                           isActive: valid,
                                           onTap: () {
                                             formGroup.markAllAsTouched();

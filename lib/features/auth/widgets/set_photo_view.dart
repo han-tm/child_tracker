@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:child_tracker/index.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -23,10 +24,10 @@ class SetPhotoView extends StatelessWidget {
         final valid = state.photo != null;
         return Column(
           children: [
-            const Padding(
-              padding: EdgeInsets.only(left: 34, right: 24),
+            Padding(
+              padding: const EdgeInsets.only(left: 34, right: 24),
               child: MaskotMessage(
-                message: 'Хочешь добавить фото?',
+                message: 'photoInputQuestion'.tr(),
                 maskot: '2188-min',
                 flip: true,
               ),
@@ -66,11 +67,11 @@ class SetPhotoView extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24),
                     child: FilledAppButton(
-                      text: 'Далее',
+                      text: 'buttonNext'.tr(),
                       isActive: valid,
                       onTap: () {
                         if (valid) {
-                          if(state.status == FillDataStatus.loading) return;
+                          if (state.status == FillDataStatus.loading) return;
                           context.read<FillDataCubit>().nextPage();
                         }
                       },

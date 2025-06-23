@@ -1,11 +1,11 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:child_tracker/index.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 
 class TakeSubscriptionPlanScreen extends StatelessWidget {
   const TakeSubscriptionPlanScreen({super.key});
@@ -31,24 +31,23 @@ class TakeSubscriptionPlanScreen extends StatelessWidget {
                     child: SvgPicture.asset('assets/images/crown.svg'),
                   ),
                   const SizedBox(height: 24),
-                  const AppText(
-                    text: 'Бесплатный период',
+                  AppText(
+                    text: 'freePeriodTitle'.tr(),
                     size: 32,
                     fw: FontWeight.w700,
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 12),
-                  const AppText(
-                    text:
-                        'Вы получаете бесплатный доступ на 30 дней. После этого для продолжения использования приложения необходимо оформить подписку',
+                  AppText(
+                    text: 'free_access_info'.tr(),
                     size: 16,
                     fw: FontWeight.normal,
                     textAlign: TextAlign.center,
                     maxLine: 5,
                   ),
                   const Divider(height: 48, thickness: 1, color: greyscale200),
-                  const AppText(
-                    text: 'Воспользуйтесь всеми функциями',
+                  AppText(
+                    text: 'full_features_title'.tr(),
                     size: 24,
                     fw: FontWeight.w700,
                     textAlign: TextAlign.center,
@@ -64,9 +63,9 @@ class TakeSubscriptionPlanScreen extends StatelessWidget {
                         color: greyscale900,
                       ),
                       const SizedBox(width: 12),
-                      const Expanded(
+                      Expanded(
                         child: AppText(
-                          text: 'Следите за прогрессом',
+                          text: 'track_progress'.tr(),
                           size: 16,
                           fw: FontWeight.w500,
                           maxLine: 2,
@@ -84,9 +83,9 @@ class TakeSubscriptionPlanScreen extends StatelessWidget {
                         color: greyscale900,
                       ),
                       const SizedBox(width: 12),
-                      const Expanded(
+                      Expanded(
                         child: AppText(
-                          text: 'Настраивайте цели и награды',
+                          text: 'setup_goals_rewards'.tr(),
                           size: 16,
                           fw: FontWeight.w500,
                           maxLine: 2,
@@ -104,9 +103,9 @@ class TakeSubscriptionPlanScreen extends StatelessWidget {
                         color: greyscale900,
                       ),
                       const SizedBox(width: 12),
-                      const Expanded(
+                      Expanded(
                         child: AppText(
-                          text: 'Подбирайте обучающие мини-игры и активности для ребёнка',
+                          text: 'educational_games_activities'.tr(),
                           size: 16,
                           fw: FontWeight.w500,
                           maxLine: 2,
@@ -116,25 +115,25 @@ class TakeSubscriptionPlanScreen extends StatelessWidget {
                   ),
                   const Divider(height: 48, thickness: 1, color: greyscale200),
                   AppText(
-                    text: 'Срок действия истекает\n$date г.',
+                    text: '${'expires_on'.tr()}\n$date.',
                     size: 18,
                     fw: FontWeight.w500,
                     maxLine: 2,
                     color: greyscale800,
                     textAlign: TextAlign.center,
                   ),
-                  const Row(
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       AppText(
-                        text: 'Продлите подписку',
+                        text: 'renewSubscription'.tr(),
                         size: 16,
                         fw: FontWeight.w500,
                         maxLine: 1,
                         color: greyscale800,
                       ),
                       AppText(
-                        text: ' здесь',
+                        text: ' ${'hereText'.tr()}',
                         size: 18,
                         fw: FontWeight.w700,
                         color: primary900,
@@ -155,7 +154,7 @@ class TakeSubscriptionPlanScreen extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: FilledAppButton(
-                    text: 'Начать использование',
+                    text: 'startUsingButton'.tr(),
                     onTap: () {
                       context.read<FillDataCubit>().reset();
                       context.go('/mentor_bonus');

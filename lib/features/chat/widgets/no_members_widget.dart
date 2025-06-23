@@ -1,4 +1,5 @@
 import 'package:child_tracker/index.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 
 class NoMembersWidget extends StatelessWidget {
@@ -38,7 +39,7 @@ class NoMembersWidget extends StatelessWidget {
           ),
           const SizedBox(height: 32),
           AppText(
-            text: isKid ? 'Нет наставников' : 'Нет детей',
+            text: isKid ? 'no_mentors'.tr() : 'no_kids'.tr(),
             size: 24,
             fw: FontWeight.w700,
             textAlign: TextAlign.center,

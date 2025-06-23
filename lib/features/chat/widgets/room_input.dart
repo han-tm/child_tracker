@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:child_tracker/index.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -48,7 +49,7 @@ class _RoomInputWidgetState extends State<RoomInputWidget> {
                 ),
                 filled: true,
                 fillColor: greyscale50,
-                hintText: 'Введите ...',
+                hintText: '${"cityInputEnter".tr()} ...',
                 counterText: '',
                 hintStyle: const TextStyle(
                   fontSize: 18,

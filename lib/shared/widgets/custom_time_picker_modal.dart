@@ -1,4 +1,5 @@
 import 'package:child_tracker/index.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:wheel_picker/wheel_picker.dart';
 
@@ -67,7 +68,7 @@ class _TimeWheelContentState extends State<_TimeWheelContent> {
             ],
           ),
           const SizedBox(height: 24),
-          const AppText(text: 'Время', size: 24, fw: FontWeight.w700),
+          AppText(text: 'time'.tr(), size: 24, fw: FontWeight.w700),
           const SizedBox(height: 12),
           const Divider(height: 1, thickness: 1, color: greyscale200),
           WheelPickerWidget(hoursWheel: _hoursWheel, minuteWheel: _minutesWheel),
@@ -77,14 +78,14 @@ class _TimeWheelContentState extends State<_TimeWheelContent> {
             children: [
               Expanded(
                 child: FilledSecondaryAppButton(
-                  text: 'Отмена',
+                  text: 'cancel'.tr(),
                   onTap: () => Navigator.of(context).pop(),
                 ),
               ),
               const SizedBox(width: 16),
               Expanded(
                 child: FilledAppButton(
-                  text: 'Ок',
+                  text: 'ok'.tr(),
                   isActive: true,
                   onTap: () {
                     final time = TimeOfDay(

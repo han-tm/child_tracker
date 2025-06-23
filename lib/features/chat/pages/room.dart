@@ -2,13 +2,14 @@
 import 'package:child_tracker/index.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collection/collection.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
+
 
 class ChatRoomScreen extends StatefulWidget {
   final DocumentReference chatRef;
@@ -109,14 +110,14 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                         //   return const Center(child: CircularProgressIndicator());
                         // }
                         if (snapshot.hasError) {
-                          return const Center(
+                          return  Center(
                             child: AppText(text: defaultErrorText, color: secondary900),
                           );
                         }
                         if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                          return const Center(
+                          return  Center(
                             child: AppText(
-                              text: 'Напишите первое сообщение',
+                              text: 'writeFirstMessage'.tr(),
                               color: greyscale400,
                               fw: FontWeight.normal,
                               size: 16,

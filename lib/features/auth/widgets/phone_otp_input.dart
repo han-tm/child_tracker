@@ -1,4 +1,5 @@
 import 'package:child_tracker/index.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -53,10 +54,10 @@ class _PhoneOtpInputState extends State<PhoneOtpInput> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 24),
+                         Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 24),
                           child: MaskotMessage(
-                            message: 'Проверь СМС и введи код. Мы почти у цели!',
+                            message: 'checkSmsMessage'.tr(),
                             maskot: '2177-min',
                             flip: true,
                           ),
@@ -65,7 +66,7 @@ class _PhoneOtpInputState extends State<PhoneOtpInput> {
                         if (code != null)
                           Padding(
                             padding: const EdgeInsets.only(top: 8, bottom: 18, left: 24),
-                            child: AppText(text: 'Тестовый код: $code', color: greyscale600),
+                            child: AppText(text: '${'testCodePrefix'.tr()}: $code', color: greyscale600),
                           ),
                         OtpInput(
                           errorText: errorText,
@@ -94,7 +95,7 @@ class _PhoneOtpInputState extends State<PhoneOtpInput> {
                               Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 24),
                                 child: FilledAppButton(
-                                  text: 'Далее',
+                                  text: 'buttonNext'.tr(),
                                   isActive: ((otp ?? '').trim()).length == 6,
                                   onTap: (!isValid || state is PhoneAuthLoading)
                                       ? null

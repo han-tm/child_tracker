@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:child_tracker/index.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -44,7 +45,7 @@ class ChatCubit extends Cubit<ChatRoomState> {
     if (message.trim().isEmpty) return;
 
     if (state.chat == null) {
-      emit(state.copyWith(errorMessage: 'Чат не найден', status: ChatRoomStatus.messageSentError));
+      emit(state.copyWith(errorMessage: 'chatNotFound'.tr(), status: ChatRoomStatus.messageSentError));
       return;
     }
 

@@ -1,4 +1,5 @@
 import 'package:child_tracker/index.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -103,7 +104,7 @@ class BonusCard extends StatelessWidget {
                   color: const Color(0xFFEBF8F3),
                   borderRadius: BorderRadius.circular(4),
                 ),
-                child: const AppText(text: 'Готов к получению', size: 10, color: success),
+                child:  AppText(text: 'readyToReceive'.tr(), size: 10, color: success),
               ),
             ],
           ),

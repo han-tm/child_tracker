@@ -1,5 +1,6 @@
 import 'package:child_tracker/index.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -129,12 +130,12 @@ class KidTaskCreateCubit extends Cubit<KidTaskCreateState> {
   void createTask() async {
     final user = _userCubit.state;
     if (user == null) {
-      emit(state.copyWith(errorMessage: 'Пользователь не найден', status: KidTaskCreateStatus.error));
+      emit(state.copyWith(errorMessage: 'userNotFound'.tr(), status: KidTaskCreateStatus.error));
       return;
     }
 
     if (state.name == null || state.startData == null || (state.photo == null && state.emoji == null)) {
-      emit(state.copyWith(errorMessage: 'Заполните все поля', status: KidTaskCreateStatus.error));
+      emit(state.copyWith(errorMessage: 'fillAllFields'.tr(), status: KidTaskCreateStatus.error));
       return;
     }
 
@@ -174,7 +175,7 @@ class KidTaskCreateCubit extends Cubit<KidTaskCreateState> {
         final uploadService = FirebaseStorageService();
         final photoUrl = await uploadService.uploadFile(file: state.photo!, type: UploadType.user, uid: user.id);
         if (photoUrl == null) {
-          emit(state.copyWith(status: KidTaskCreateStatus.error, errorMessage: 'Ошибка загрузки фото'));
+          emit(state.copyWith(status: KidTaskCreateStatus.error, errorMessage: 'photoUploadError'.tr()));
           return;
         } else {
           data['photo'] = photoUrl;
@@ -182,7 +183,7 @@ class KidTaskCreateCubit extends Cubit<KidTaskCreateState> {
       } else if (state.emoji != null) {
         data['photo'] = 'emoji:${state.emoji}';
       } else {
-        emit(state.copyWith(status: KidTaskCreateStatus.error, errorMessage: 'Ошибка загрузки фото'));
+        emit(state.copyWith(status: KidTaskCreateStatus.error, errorMessage: 'photoUploadError'.tr()));
       }
 
       await newTaskRef.set(data);

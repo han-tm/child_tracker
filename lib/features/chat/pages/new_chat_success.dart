@@ -1,5 +1,6 @@
 import 'package:child_tracker/index.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -21,9 +22,9 @@ class NewChatSuccessCreateScreen extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const BottomArrowBubleShape(
+                     BottomArrowBubleShape(
                       child: AppText(
-                        text: 'Ура!',
+                        text: 'hooray'.tr(),
                         size: 24,
                         fw: FontWeight.w700,
                         textAlign: TextAlign.center,
@@ -36,16 +37,16 @@ class NewChatSuccessCreateScreen extends StatelessWidget {
                       width: 260,
                     ),
                     const SizedBox(height: 20),
-                    const AppText(
-                      text: 'Чат создан!',
+                     AppText(
+                      text: 'chat_created'.tr(),
                       size: 32,
                       fw: FontWeight.w700,
                       color: primary900,
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 12),
-                    const AppText(
-                      text: 'Жми "Ок" — и начнём приятный разговор!',
+                     AppText(
+                      text: 'press_ok_to_start_chat'.tr(),
                       size: 16,
                       fw: FontWeight.normal,
                       color: greyscale800,
@@ -64,7 +65,7 @@ class NewChatSuccessCreateScreen extends StatelessWidget {
                   children: [
                     const SizedBox(height: 20),
                     FilledAppButton(
-                        text: 'Ок',
+                        text: 'ok'.tr(),
                         onTap: () {
                           context.replace('/chat_room', extra: ref);
                         }),

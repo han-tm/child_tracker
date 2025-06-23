@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:child_tracker/index.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import 'package:image_picker/image_picker.dart';
@@ -53,7 +54,7 @@ class CustomImagePicker {
 
   static final _picker = ImagePicker();
 
-  /// Показывает галерею и возвращает XFile только если это изображение.
+  
   static Future<XFile?> pickAvatarFromGallery(BuildContext context, {ImageSource? source}) async {
     source ??= await showImageSourceSelectModalBottomSheet(context);
 
@@ -66,27 +67,27 @@ class CustomImagePicker {
     final mimeType = lookupMimeType(xfile.path);
 
     if (mimeType == null || !allowedMimeTypes.contains(mimeType)) {
-      SnackBarSerive.showErrorSnackBar('Можно выбрать только фотографию');
+      SnackBarSerive.showErrorSnackBar('onlyPhoto'.tr());
       return null;
     }
 
     return xfile;
   }
 
-  static Future<XFile?> pickVideoFromGallery() async {
-    final XFile? xfile = await _picker.pickVideo(source: ImageSource.gallery);
+  // static Future<XFile?> pickVideoFromGallery() async {
+  //   final XFile? xfile = await _picker.pickVideo(source: ImageSource.gallery);
 
-    if (xfile == null) return null;
+  //   if (xfile == null) return null;
 
-    final mimeType = lookupMimeType(xfile.path);
+  //   final mimeType = lookupMimeType(xfile.path);
 
-    if (mimeType == null || !allowedVideoMimeTypes.contains(mimeType)) {
-      SnackBarSerive.showErrorSnackBar('Можно выбрать только видео');
-      return null;
-    }
+  //   if (mimeType == null || !allowedVideoMimeTypes.contains(mimeType)) {
+  //     SnackBarSerive.showErrorSnackBar('Можно выбрать только видео');
+  //     return null;
+  //   }
 
-    return xfile;
-  }
+  //   return xfile;
+  // }
 
   static Future<XFile?> pickPhotoOrVideo(BuildContext context) async {
     final XFile? xfile = await _picker.pickMedia();
@@ -96,7 +97,7 @@ class CustomImagePicker {
     final mimeType = lookupMimeType(xfile.path);
 
     if (mimeType == null || !allowedPhotoOrVideoTypes.contains(mimeType)) {
-      SnackBarSerive.showErrorSnackBar('Можно выбрать только фото или видео');
+      SnackBarSerive.showErrorSnackBar('onlyPhotoOrVideo'.tr());
       return null;
     }
 

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:child_tracker/index.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,18 +19,18 @@ class EditKidTaskScreen extends StatelessWidget {
   void onDelete(BuildContext context) async {
     final confrim = await showConfirmModalBottomSheet(
       context,
-      title: 'Удалить',
+      title: 'delete'.tr(),
       isDestructive: true,
-      cancelText: 'Отмена',
-      confirmText: 'Да, удалить',
-      message: 'Ой... точно удаляем?',
+      cancelText: 'cancel'.tr(),
+      confirmText: 'yesDelete'.tr(),
+      message: 'are_you_sure_delete'.tr(),
     );
     if (confrim == true && context.mounted) {
       final result = await context.read<TaskCubit>().deleteTask(task);
       if (result && context.mounted) {
         context.replace('/task_delete_success');
       } else {
-        SnackBarSerive.showErrorSnackBar('Не удалось удалить задачу');
+        SnackBarSerive.showErrorSnackBar('failed_to_delete_task'.tr());
       }
     }
   }
@@ -42,7 +43,7 @@ class EditKidTaskScreen extends StatelessWidget {
           if (state.status == KidTaskEditStatus.error) {
             SnackBarSerive.showErrorSnackBar(state.errorMessage ?? defaultErrorText);
           } else if (state.status == KidTaskEditStatus.success) {
-            SnackBarSerive.showSuccessSnackBar('Задание обновлено');
+            SnackBarSerive.showSuccessSnackBar('task_updated'.tr());
             context.pop(true);
           }
         },
@@ -83,10 +84,10 @@ class EditKidTaskScreen extends StatelessWidget {
                       child: IntrinsicHeight(
                         child: Column(
                           children: [
-                            const Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 24),
+                             Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 24),
                               child: MaskotMessage(
-                                message: 'Хочешь что-то исправить?',
+                                message: 'want_to_fix_something'.tr(),
                                 maskot: '2177-min',
                                 flip: true,
                               ),
@@ -165,9 +166,9 @@ class EditKidTaskScreen extends StatelessWidget {
                                     onTap: () => onChangeMode(context, 'startDate'),
                                     child: Row(
                                       children: [
-                                        const Expanded(
+                                         Expanded(
                                           child: AppText(
-                                            text: 'Начало',
+                                            text: 'start'.tr(),
                                             size: 16,
                                             fw: FontWeight.w500,
                                             color: greyscale800,
@@ -189,9 +190,9 @@ class EditKidTaskScreen extends StatelessWidget {
                                     onTap: () => onChangeMode(context, 'endDate'),
                                     child: Row(
                                       children: [
-                                        const Expanded(
+                                         Expanded(
                                           child: AppText(
-                                            text: 'Окончание (опц.)',
+                                            text: 'end_optional'.tr(),
                                             size: 16,
                                             fw: FontWeight.w500,
                                             color: greyscale800,
@@ -213,9 +214,9 @@ class EditKidTaskScreen extends StatelessWidget {
                                     onTap: () => onChangeMode(context, 'reminer'),
                                     child: Row(
                                       children: [
-                                        const Expanded(
+                                         Expanded(
                                           child: AppText(
-                                            text: 'Напоминание (опц.)',
+                                            text: 'reminder_optional'.tr(),
                                             size: 16,
                                             fw: FontWeight.w500,
                                             color: greyscale800,
@@ -248,7 +249,7 @@ class EditKidTaskScreen extends StatelessWidget {
                                   Padding(
                                     padding: const EdgeInsets.symmetric(horizontal: 24),
                                     child: FilledAppButton(
-                                      text: 'Применить',
+                                      text: 'apply'.tr(),
                                       isLoading: state.status == KidTaskEditStatus.loading,
                                       onTap: () {
                                         if (state.status == KidTaskEditStatus.loading) return;

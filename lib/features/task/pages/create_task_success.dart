@@ -1,4 +1,5 @@
 import 'package:child_tracker/index.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -16,9 +17,9 @@ class CreateTaskSuccessScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const BottomArrowBubleShape(
+                 BottomArrowBubleShape(
                   child: AppText(
-                    text: 'Ура!',
+                    text: 'accountReadyTitle'.tr(),
                     size: 24,
                     fw: FontWeight.w700,
                     textAlign: TextAlign.center,
@@ -31,15 +32,15 @@ class CreateTaskSuccessScreen extends StatelessWidget {
                   width: 240,
                 ),
                 const SizedBox(height: 16),
-                const AppText(
-                  text: 'Задание создано!',
+                 AppText(
+                  text: 'task_created'.tr(),
                   size: 32,
                   fw: FontWeight.w700,
                   color: primary900,
                 ),
                 const SizedBox(height: 10),
-                const AppText(
-                  text: 'Я прослежу, чтобы всё было выполнено',
+                 AppText(
+                  text: 'i_will_make_sure_done'.tr(),
                   size: 16,
                   fw: FontWeight.w400,
                   color: greyscale800,
@@ -56,7 +57,7 @@ class CreateTaskSuccessScreen extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: FilledAppButton(
-                    text: 'Ок',
+                    text: 'ok'.tr(),
                     onTap: () {
                       context.pop();
                     },

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:child_tracker/index.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -22,10 +23,10 @@ class KidCreateTaskSetPhoto extends StatelessWidget {
         final valid = state.photo != null || state.emoji != null;
         return Column(
           children: [
-            const Padding(
-              padding: EdgeInsets.only(left: 34, right: 24),
+             Padding(
+              padding: const EdgeInsets.only(left: 34, right: 24),
               child: MaskotMessage(
-                message: 'Добавим картинку?',
+                message: 'add_picture'.tr(),
                 maskot: '2177-min',
                 flip: true,
               ),
@@ -72,7 +73,7 @@ class KidCreateTaskSetPhoto extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24),
                     child: FilledAppButton(
-                      text: state.isEditMode ? 'Применить' : 'Далее',
+                      text: state.isEditMode ? 'apply'.tr() : 'next'.tr(),
                       isActive: valid,
                       onTap: () {
                         if (valid) {

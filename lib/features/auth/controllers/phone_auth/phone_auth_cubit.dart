@@ -1,6 +1,7 @@
 import 'package:child_tracker/index.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -32,7 +33,7 @@ class PhoneAuthCubit extends Cubit<PhoneAuthState> {
       final Map<String, dynamic> dataToSend = {'phone': phone};
       print('Data being sent to Firebase Function: $dataToSend');
       final HttpsCallableResult result = await callable.call(dataToSend);
-      print('Результат функции: ${result.data}');
+      print('Result: ${result.data}');
       final code = result.data['code'];
       if (isResend) {
         emit(PhoneAuthResendOTPSuccess(code: code));
@@ -55,7 +56,7 @@ class PhoneAuthCubit extends Cubit<PhoneAuthState> {
       final Map<String, dynamic> dataToSend = {'phone': phone, 'code': otp};
       print('Data being sent to Firebase Function: $dataToSend');
       final HttpsCallableResult result = await callable.call(dataToSend);
-      print('Результат функции: ${result.data}');
+      print('Result: ${result.data}');
 
       final String? token = result.data['token'];
 
@@ -87,7 +88,7 @@ class PhoneAuthCubit extends Cubit<PhoneAuthState> {
 
           final userModel = UserModel.fromFirestore(userData);
           if (userModel.banned) {
-            emit(PhoneAuthFailure(errorMessage: 'Пользователь заблокирован'));
+            emit(PhoneAuthFailure(errorMessage: 'userBanned'.tr()));
             return;
           } else if (!userModel.profileFilled) {
             emit(PhoneAuthSuccessRedirect());
@@ -98,15 +99,15 @@ class PhoneAuthCubit extends Cubit<PhoneAuthState> {
             return;
           }
         } else {
-          print('Создаем нового пользователя');
+          print('Create new User');
           await _createNewUser(userCredential.user!, phone);
           emit(PhoneAuthSuccessRedirect());
         }
       } else {
-        emit(PhoneAuthFailure(errorMessage: 'Ошибка входа. Пожалуйста, попробуйте еще раз.'));
+        emit(PhoneAuthFailure(errorMessage: 'errorSigningIn'.tr()));
       }
     } on FirebaseAuthException catch (e) {
-      emit(PhoneAuthFailure(errorMessage: mapFirebaseErrorCodeToMessage((e).code)));
+      emit(PhoneAuthFailure(errorMessage: e.code));
     } catch (e) {
       emit(PhoneAuthFailure(errorMessage: e.toString()));
     }
@@ -116,7 +117,7 @@ class PhoneAuthCubit extends Cubit<PhoneAuthState> {
     try {
       final userCollection = _fs.collection('users');
       Map<String, dynamic> userData = {
-        'name': user.displayName ?? 'Неизвестно',
+        'name': user.displayName ?? 'undefined'.tr(),
         'phone': '+$phone',
         'email': user.email,
         'type': null,

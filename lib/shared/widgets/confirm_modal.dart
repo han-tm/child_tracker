@@ -2,11 +2,11 @@ import 'package:child_tracker/index.dart';
 import 'package:flutter/material.dart';
 
 Future<bool?> showConfirmModalBottomSheet(BuildContext context,
-    {String title = 'Подтвердите действие',
+    {required String title,
     bool isDestructive = false,
-    String confirmText = 'Подтвердить',
-    String cancelText = 'Отмена',
-    String message = '?',
+    required String confirmText,
+    required String cancelText,
+    String message = '',
     String defaultmascot = '2179-min'}) async {
   return showModalBottomSheet<bool?>(
     context: context,
@@ -54,12 +54,12 @@ Future<bool?> showConfirmModalBottomSheet(BuildContext context,
                   flex: 2,
                   child: isDestructive
                       ? Transform.flip(
-                        flipX: true,
-                        child: Image.asset(
+                          flipX: true,
+                          child: Image.asset(
                             mascot,
                             fit: BoxFit.contain,
                           ),
-                      )
+                        )
                       : Image.asset(
                           mascot,
                           fit: BoxFit.contain,

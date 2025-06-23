@@ -1,4 +1,5 @@
 import 'package:child_tracker/index.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -46,28 +47,28 @@ class KidProfileWidget extends StatelessWidget {
           ProfileMenuCard(
             onTap:  () => context.push('/dairy', extra: user),
             icon: 'diary',
-            title: 'Мой дневник',
+            title: 'myDiary'.tr(),
             color: const Color(0xFF246BFD).withOpacity(0.08),
           ),
           const Divider(height: 48, thickness: 1, color: greyscale200),
           ProfileMenuCard(
             onTap: () => context.push('/kid_progress', extra: user),
             icon: 'progress',
-            title: 'Прогресс по заданиям',
+            title: 'taskProgress'.tr(),
             color: const Color(0xFF246BFD).withOpacity(0.08),
           ),
           const SizedBox(height: 24),
           ProfileMenuCard(
             onTap: () => context.push('/kid_coins', extra: user),
             icon: 'coin',
-            title: 'Баллы по заданиям',
+            title: 'taskPoints'.tr(),
             color: orange.withOpacity(0.08),
           ),
           const Divider(height: 48, thickness: 1, color: greyscale200),
           ProfileMenuCard(
             onTap: () => {},
             icon: 'game_filled_tab',
-            title: 'Игровой рейтинг',
+            title: 'gameRating'.tr(),
             iconColor: green,
             color: green.withOpacity(0.08),
           ),
@@ -75,7 +76,7 @@ class KidProfileWidget extends StatelessWidget {
           ProfileMenuCard(
             onTap: () => {},
             icon: 'star',
-            title: 'Игровой уровень',
+            title: 'gameLevel'.tr(),
             color: yellow.withOpacity(0.08),
           ),
           const Divider(height: 48, thickness: 1, color: greyscale200),
@@ -90,7 +91,7 @@ class KidProfileWidget extends StatelessWidget {
               context.push('/connections', extra: extra);
             },
             icon: '3user',
-            title: 'Мои наставники',
+            title: 'myMentors'.tr(),
             iconColor: blue,
             color: const Color(0xFF235DFF).withOpacity(0.08),
           ),
@@ -98,7 +99,7 @@ class KidProfileWidget extends StatelessWidget {
           ProfileMenuCard(
             onTap: () => context.push('/notification'),
             icon: 'bell_fill',
-            title: 'Уведомления',
+            title: 'notifications'.tr(),
             iconColor: red,
             color: const Color(0xFFFF5A5F).withOpacity(0.08),
           ),

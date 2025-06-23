@@ -1,4 +1,5 @@
 import 'package:child_tracker/index.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -19,9 +20,9 @@ class MentorAppbarWidget extends StatelessWidget {
             circularRadius: 100,
             noImageWidget: Image.asset('assets/images/mentors.png'),
           ),
-          const Expanded(
+           Expanded(
             child: AppText(
-              text: 'Задания',
+              text: 'tasks'.tr(),
               size: 24,
               fw: FontWeight.bold,
               textAlign: TextAlign.center,

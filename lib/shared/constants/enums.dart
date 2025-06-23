@@ -1,4 +1,5 @@
 import 'package:child_tracker/index.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 enum UserType { kid, mentor }
@@ -12,13 +13,13 @@ enum KidTaskChip { all, progress, completed, canceled }
 String kidTaskChipRusName(KidTaskChip chip) {
   switch (chip) {
     case KidTaskChip.all:
-      return 'Все';
+      return 'all'.tr();
     case KidTaskChip.progress:
-      return 'В процессе';
+      return 'in_progress'.tr();
     case KidTaskChip.completed:
-      return 'Выполнены';
+      return 'done'.tr();
     case KidTaskChip.canceled:
-      return 'Отменены';
+      return 'canceled_enum'.tr();
     default:
       return '-';
   }
@@ -27,22 +28,16 @@ String kidTaskChipRusName(KidTaskChip chip) {
 enum TaskType { kid, mentor, priority }
 
 enum TaskStatus {
-  /// Задание создано и доступно для выполнения.
   inProgress,
 
-  /// Задание отправлено на проверку.
   onReview,
 
-  /// Задание требует доработки после проверки.
   needsRework,
 
-  /// Задание успешно выполнено.
   completed,
 
-  /// Задание отменено.
   canceled,
 
-  /// Задание удалено.
   deleted,
 }
 
@@ -102,17 +97,17 @@ Color taskCardStatusTextColor(TaskStatus? status) {
 String taskCardStatusText(TaskStatus? status) {
   switch (status) {
     case TaskStatus.inProgress:
-      return 'В процессе';
+      return 'in_progress'.tr();
     case TaskStatus.onReview:
-      return 'Проверить';
+      return 'check'.tr();
     case TaskStatus.needsRework:
-      return 'Доработать';
+      return 'rework'.tr();
     case TaskStatus.completed:
-      return 'Выполнено';
+      return 'done_enum'.tr();
     case TaskStatus.canceled:
-      return 'Отменено';
+      return 'cancele_enum'.tr();
     case TaskStatus.deleted:
-      return 'Удалено';
+      return 'delet_enum'.tr();
     default:
       return '-';
   }
@@ -123,13 +118,13 @@ String taskDetailCardStatusText(TaskStatus? status) {
     case TaskStatus.inProgress:
     case TaskStatus.onReview:
     case TaskStatus.needsRework:
-      return 'В процессе';
+      return 'in_progress'.tr();
     case TaskStatus.completed:
-      return 'Выполнено';
+      return 'done_enum'.tr();
     case TaskStatus.canceled:
-      return 'Отменено';
+      return 'cancele_enum'.tr();
     case TaskStatus.deleted:
-      return 'Удалено';
+      return 'delet_enum'.tr();
     default:
       return '-';
   }
@@ -157,16 +152,16 @@ String dairyEmotionIcon(DairyEmotion emotion, {bool filled = true}) {
 String dairyEmotionNameRus(DairyEmotion emotion) {
   switch (emotion) {
     case DairyEmotion.bad:
-      return 'Плохо';
+      return 'bad'.tr();
     case DairyEmotion.sad:
-      return 'Грустно';
+      return 'sad'.tr();
     case DairyEmotion.normal:
-      return 'Нормально';
+      return 'normal'.tr();
     case DairyEmotion.joyful:
-      return 'Радостно';
+      return 'joyful'.tr();
     case DairyEmotion.good:
-      return 'Хорошо';
+      return 'good'.tr();
     default:
-      return 'Нормально';
+      return 'normal'.tr();
   }
 }

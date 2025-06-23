@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:child_tracker/index.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class OtpTimer extends StatefulWidget {
@@ -60,7 +61,7 @@ class _OtpTimerState extends State<OtpTimer> {
             Expanded(
               child: RichText(
                 text: TextSpan(
-                  text: 'Вы можете повторно отправить\nкод через',
+                  text: 'resendCodeMessage'.tr(),
                   style: const TextStyle(
                     color: greyscale700,
                     fontWeight: FontWeight.normal,
@@ -79,9 +80,9 @@ class _OtpTimerState extends State<OtpTimer> {
                         height: 1.6,
                       ),
                     ),
-                    const TextSpan(
-                      text: 'секунд',
-                      style: TextStyle(
+                     TextSpan(
+                      text: 'secondsSuffix'.tr(),
+                      style: const TextStyle(
                         color: greyscale700,
                         fontWeight: FontWeight.normal,
                         fontSize: 18,
@@ -101,7 +102,7 @@ class _OtpTimerState extends State<OtpTimer> {
         TextButton(
           onPressed: _canResend ? handleResend : null,
           child: AppText(
-            text: 'Отправить новый код',
+            text: 'sendNewCodeButton'.tr(),
             color: _canResend ? primary900 : greyscale500,
             textAlign: TextAlign.center,
           ),

@@ -9,8 +9,8 @@ class CustomDateInput extends StatelessWidget {
   final VoidCallback onTap;
   const CustomDateInput({
     super.key,
-    this.label = 'Дата',
-    this.hint = 'Выберите дату',
+    required this.label,
+    required this.hint,
     this.date,
     this.errorText,
     required this.onTap,

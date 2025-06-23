@@ -1,5 +1,6 @@
 import 'package:child_tracker/index.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,9 +9,9 @@ import 'package:go_router/go_router.dart';
 class DairyMembersScreen extends StatelessWidget {
   const DairyMembersScreen({super.key});
 
-  void onDelete(BuildContext context, DocumentReference userRef)async{
+  void onDelete(BuildContext context, DocumentReference userRef) async {
     await context.read<UserCubit>().deleteDairyMember(userRef);
-    SnackBarSerive.showSuccessSnackBar('Участник удален');
+    SnackBarSerive.showSuccessSnackBar('member_deleted'.tr());
   }
 
   @override
@@ -23,8 +24,8 @@ class DairyMembersScreen extends StatelessWidget {
           icon: const Icon(CupertinoIcons.arrow_left),
           onPressed: () => context.pop(),
         ),
-        title: const AppText(
-          text: 'Участники дневника',
+        title: AppText(
+          text: 'diary_members'.tr(),
           size: 24,
           fw: FontWeight.w700,
         ),
@@ -63,7 +64,7 @@ class DairyMembersScreen extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 24),
                       child: FilledSecondaryAppButton(
                         onTap: () => context.push('/dairy/add_member'),
-                        text: '+  Добавить участника',
+                        text: 'add_member_button'.tr(),
                       ),
                     ),
                     const SizedBox(height: 20),

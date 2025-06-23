@@ -1,4 +1,5 @@
 import 'package:child_tracker/index.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -18,11 +19,11 @@ class DeleteTaskSuccessScreen extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const BottomArrowBubleShape(
+                   BottomArrowBubleShape(
                     child: Padding(
-                      padding: EdgeInsets.only(bottom: 12),
+                      padding: const EdgeInsets.only(bottom: 12),
                       child: AppText(
-                        text: 'Не остановишься\nна этом?',
+                        text: 'wont_stop_at_this'.tr(),
                         size: 24,
                         maxLine: 2,
                         fw: FontWeight.w700,
@@ -37,8 +38,8 @@ class DeleteTaskSuccessScreen extends StatelessWidget {
                     width: 240,
                   ),
                   const SizedBox(height: 16),
-                  const AppText(
-                    text: 'Задание удалено!',
+                   AppText(
+                    text: 'task_deleted'.tr(),
                     size: 32,
                     fw: FontWeight.w700,
                     color: primary900,
@@ -56,7 +57,7 @@ class DeleteTaskSuccessScreen extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: FilledAppButton(
-                    text: 'Ок',
+                    text: 'ok'.tr(),
                     onTap: () {
                       context.pop();
                       if (context.canPop()) {

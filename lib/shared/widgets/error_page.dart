@@ -1,4 +1,5 @@
 import 'package:child_tracker/index.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class ErrorScreen extends StatelessWidget {
@@ -10,13 +11,13 @@ class ErrorScreen extends StatelessWidget {
     print(error);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Ошибка'),
+        title:  Text('error'.tr()),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const AppText(
-            text: "Произошла ошибка",
+           AppText(
+            text: "defaultErrorText".tr(),
             size: 17,
             fw: FontWeight.w500,
             textAlign: TextAlign.center,

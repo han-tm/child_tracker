@@ -1,4 +1,5 @@
 import 'package:child_tracker/index.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -39,8 +40,8 @@ class _DairySettingScreenState extends State<DairySettingScreen> {
           icon: const Icon(CupertinoIcons.arrow_left),
           onPressed: () => context.pop(),
         ),
-        title: const AppText(
-          text: 'Настройки',
+        title:  AppText(
+          text: 'settings'.tr(),
           size: 24,
           fw: FontWeight.w700,
         ),
@@ -56,7 +57,7 @@ class _DairySettingScreenState extends State<DairySettingScreen> {
                 children: [
                   SvgPicture.asset('assets/images/members.svg', width: 24, height: 24),
                   const SizedBox(width: 20),
-                  const Expanded(child: AppText(text: 'Участники дневника', size: 16, fw: FontWeight.w700)),
+                   Expanded(child: AppText(text: 'diary_members'.tr(), size: 16, fw: FontWeight.w700)),
                   const Icon(CupertinoIcons.chevron_right, size: 22, color: greyscale900),
                 ],
               ),
@@ -68,7 +69,7 @@ class _DairySettingScreenState extends State<DairySettingScreen> {
               children: [
                 SvgPicture.asset('assets/images/bell.svg', width: 24, height: 24),
                 const SizedBox(width: 20),
-                const Expanded(child: AppText(text: 'Уведомления', size: 16, fw: FontWeight.w700)),
+                 Expanded(child: AppText(text: 'notifications'.tr(), size: 16, fw: FontWeight.w700)),
                 Transform.scale(
                   scale: 0.8,
                   child: CupertinoSwitch(

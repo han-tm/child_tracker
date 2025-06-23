@@ -1,5 +1,6 @@
 import 'package:child_tracker/index.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -65,12 +66,12 @@ class FillDataCubit extends Cubit<FillDataState> {
 
   Future<void> createUser() async {
     if (_auth.currentUser == null) {
-      emit(state.copyWith(status: FillDataStatus.error, errorMessage: 'Пользователь не найден'));
+      emit(state.copyWith(status: FillDataStatus.error, errorMessage: 'userNotFound'.tr()));
       return;
     }
 
     if (state.userType == null || state.name == null || state.photo == null) {
-      emit(state.copyWith(status: FillDataStatus.error, errorMessage: 'Заполните все поля'));
+      emit(state.copyWith(status: FillDataStatus.error, errorMessage: 'fillAllFields'.tr()));
       return;
     }
 
@@ -86,7 +87,7 @@ class FillDataCubit extends Cubit<FillDataState> {
         uid: _auth.currentUser!.uid,
       );
       if (photoUrl == null) {
-        emit(state.copyWith(status: FillDataStatus.error, errorMessage: 'Ошибка загрузки фото'));
+        emit(state.copyWith(status: FillDataStatus.error, errorMessage: 'photoUploadError'.tr()));
         return;
       } else {
         data['photo'] = photoUrl;
@@ -97,7 +98,7 @@ class FillDataCubit extends Cubit<FillDataState> {
       await _userCubit.getAndSet(_auth.currentUser!);
       emit(state.copyWith(status: FillDataStatus.success));
     } catch (e) {
-      print('Произошла ошибка {createUser}: $e');
+      print('Error {createUser}: $e');
       emit(state.copyWith(status: FillDataStatus.error, errorMessage: '$e'));
     }
   }

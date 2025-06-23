@@ -1,4 +1,5 @@
 import 'package:child_tracker/index.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -20,11 +21,11 @@ class TaskCompleteSuccessScreen extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const BottomArrowBubleShape(
+                  BottomArrowBubleShape(
                     child: Padding(
-                      padding: EdgeInsets.only(bottom: 12),
+                      padding: const EdgeInsets.only(bottom: 12),
                       child: AppText(
-                        text: 'Ура!',
+                        text: 'hooray'.tr(),
                         size: 24,
                         maxLine: 2,
                         fw: FontWeight.w700,
@@ -42,8 +43,8 @@ class TaskCompleteSuccessScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  const AppText(
-                    text: 'Задание выполнено!',
+                  AppText(
+                    text: 'task_completed_exclamation'.tr(),
                     size: 32,
                     fw: FontWeight.w700,
                     color: primary900,
@@ -61,10 +62,10 @@ class TaskCompleteSuccessScreen extends StatelessWidget {
                             fontFamily: Involve,
                             height: 1.6,
                           ),
-                          children: const [
+                          children: [
                             TextSpan(
-                              text: ' выполнил(а) задание',
-                              style: TextStyle(
+                              text: "completed_the_task_suffix".tr(),
+                              style: const TextStyle(
                                 color: greyscale800,
                                 fontWeight: FontWeight.normal,
                                 fontSize: 16,
@@ -81,7 +82,7 @@ class TaskCompleteSuccessScreen extends StatelessWidget {
                   if (coin != null)
                     RichText(
                       text: TextSpan(
-                        text: 'и получает',
+                        text: 'and_gets'.tr(),
                         style: const TextStyle(
                           color: greyscale800,
                           fontWeight: FontWeight.normal,
@@ -100,9 +101,9 @@ class TaskCompleteSuccessScreen extends StatelessWidget {
                               height: 1.6,
                             ),
                           ),
-                          const TextSpan(
-                            text: 'баллов!',
-                            style: TextStyle(
+                          TextSpan(
+                            text: 'points_exclamation'.tr(),
+                            style: const TextStyle(
                               color: greyscale800,
                               fontWeight: FontWeight.normal,
                               fontSize: 16,
@@ -115,7 +116,6 @@ class TaskCompleteSuccessScreen extends StatelessWidget {
                       maxLines: 2,
                       textAlign: TextAlign.center,
                     ),
-               
                 ],
               ),
             ),
@@ -129,7 +129,7 @@ class TaskCompleteSuccessScreen extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: FilledAppButton(
-                    text: 'Ок',
+                    text: 'ok'.tr(),
                     onTap: () {
                       context.pop();
                     },

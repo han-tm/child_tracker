@@ -1,5 +1,6 @@
 import 'package:child_tracker/index.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -50,7 +51,7 @@ class _KidDetailScreenState extends State<KidDetailScreen> {
           icon: const Icon(CupertinoIcons.arrow_left),
           onPressed: () => context.pop(),
         ),
-        title: const AppText(text: 'Ребёнок', size: 24, fw: FontWeight.w700),
+        title: AppText(text: 'roleSelectionKid'.tr(), size: 24, fw: FontWeight.w700),
         centerTitle: true,
       ),
       body: Padding(
@@ -78,7 +79,7 @@ class _KidDetailScreenState extends State<KidDetailScreen> {
                       ),
                       const SizedBox(height: 4),
                       AppText(
-                        text: '${kid.age} лет, ${kid.city}',
+                        text: '${kid.age} ${"ageInputYearsOld".tr()}, ${kid.city}',
                         size: 16,
                         fw: FontWeight.w500,
                         color: greyscale700,
@@ -96,9 +97,9 @@ class _KidDetailScreenState extends State<KidDetailScreen> {
                   return Column(
                     children: [
                       ProfileMenuCard(
-                        onTap:  () => context.push('/dairy', extra: kid),
+                        onTap: () => context.push('/dairy', extra: kid),
                         icon: 'diary',
-                        title: 'Мой дневник',
+                        title: 'myDiary'.tr(),
                         color: const Color(0xFF246BFD).withOpacity(0.08),
                       ),
                       const Divider(height: 48, thickness: 1, color: greyscale200),
@@ -111,14 +112,14 @@ class _KidDetailScreenState extends State<KidDetailScreen> {
             ProfileMenuCard(
               onTap: () => {},
               icon: 'progress',
-              title: 'Прогресс по заданиям',
+              title: 'taskProgress'.tr(),
               color: const Color(0xFF246BFD).withOpacity(0.08),
             ),
             const SizedBox(height: 24),
             ProfileMenuCard(
               onTap: () => {},
               icon: 'coin',
-              title: 'Баллы по заданиям',
+              title: 'taskPoints'.tr(),
               color: orange.withOpacity(0.08),
             ),
             const Divider(height: 48, thickness: 1, color: greyscale200),
@@ -133,7 +134,7 @@ class _KidDetailScreenState extends State<KidDetailScreen> {
                 context.push('/connections', extra: extra);
               },
               icon: '3user',
-              title: 'Мои наставники',
+              title: 'myMentors'.tr(),
               iconColor: blue,
               color: const Color(0xFF235DFF).withOpacity(0.08),
             ),

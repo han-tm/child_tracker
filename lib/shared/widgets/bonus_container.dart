@@ -8,7 +8,7 @@ class BonusContainer extends StatelessWidget {
   final Widget child;
   const BonusContainer({
     super.key,
-    this.title = 'В процессе',
+    required this.title,
     this.color = orange,
     this.padding = const EdgeInsets.all(20),
     this.child = const Placeholder(),

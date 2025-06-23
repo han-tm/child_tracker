@@ -1,5 +1,6 @@
 import 'package:child_tracker/index.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -46,13 +47,13 @@ class MemberCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      AppText(text: '${(user?.name ?? '...')} ${isMe ? '(я)' : ''}', size: 16, fw: FontWeight.w700),
+                      AppText(text: '${(user?.name ?? '...')} ${isMe ? '(${'amI'.tr()})' : ''}', size: 16, fw: FontWeight.w700),
                       AppText(
                         text: user == null
                             ? '...'
                             : user.isKid
-                                ? '${user.age} лет, ${user.city}'
-                                : 'Наставник',
+                                ? '${user.age} ${'ageInputYearsOld'.tr()}, ${user.city}'
+                                : 'roleSelectionMentor'.tr(),
                         size: 14,
                         color: greyscale700,
                         fw: FontWeight.w500,
@@ -81,17 +82,17 @@ class MemberCard extends StatelessWidget {
                       height: 34,
                       fontSize: 14,
                       fw: FontWeight.w600,
-                      text: 'Добавить',
+                      text: 'add'.tr(),
                     ),
                   ),
                 if (isMember)
-                  const SizedBox(
+                   SizedBox(
                     width: 106,
                     child: OutlinedAppButton(
                       height: 34,
                       fontSize: 14,
                       fw: FontWeight.w600,
-                      text: 'Добавлен',
+                      text: 'added'.tr(),
                     ),
                   ),
               ],

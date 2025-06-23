@@ -1,4 +1,5 @@
 import 'package:child_tracker/index.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -57,21 +58,21 @@ class _TaskCancelReasonScreenState extends State<TaskCancelReasonScreen> {
                           formGroup: form,
                           child: Column(
                             children: [
-                              const Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 24),
+                               Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 24),
                                 child: MaskotMessage(
-                                  message: 'Хочешь добавить причину отмены?',
+                                  message: 'add_cancellation_reason_prompt'.tr(),
                                   maskot: '2185-min',
                                   flip: false,
                                 ),
                               ),
                               const SizedBox(height: 40),
-                              const Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 24),
+                               Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 24),
                                 child: ReactiveCustomInput(
                                   formName: 'description',
-                                  label: 'Причина отмены',
-                                  hint: 'Введите',
+                                  label: 'cancellation_reason'.tr(),
+                                  hint: 'enter'.tr(),
                                   inputType: TextInputType.multiline,
                                   textCapitalization: TextCapitalization.sentences,
                                   textInputAction: TextInputAction.newline,
@@ -94,7 +95,7 @@ class _TaskCancelReasonScreenState extends State<TaskCancelReasonScreen> {
                                       children: [
                                         Expanded(
                                           child: FilledSecondaryAppButton(
-                                            text: 'Пропустить',
+                                            text: 'skip'.tr(),
                                             isLoading: state.status == TaskStateStatus.canceling && !valid,
                                             onTap: () {
                                               if (state.status == TaskStateStatus.canceling) return;
@@ -105,7 +106,7 @@ class _TaskCancelReasonScreenState extends State<TaskCancelReasonScreen> {
                                         const SizedBox(width: 24),
                                         Expanded(
                                           child: FilledAppButton(
-                                            text: 'Добавить',
+                                            text: 'add'.tr(),
                                             isActive: valid,
                                             isLoading: state.status == TaskStateStatus.canceling && valid,
                                             onTap: () {

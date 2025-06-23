@@ -1,4 +1,5 @@
 import 'package:child_tracker/index.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:reactive_forms/reactive_forms.dart';
@@ -26,7 +27,7 @@ class CustomReactiveCheckbox extends StatelessWidget {
         Expanded(
           child: RichText(
             text: TextSpan(
-              text: 'Я прочитал и согласен ',
+              text: 'privacyPolicyAgreement'.tr(),
               style: const TextStyle(
                 fontSize: 17,
                 color: greyscale900,
@@ -37,7 +38,7 @@ class CustomReactiveCheckbox extends StatelessWidget {
               children: [
                 TextSpan(
                   recognizer: TapGestureRecognizer()..onTap = () => launchUrl(Uri.parse(termsOfUse)),
-                  text: 'Правилами обработки персональных данных',
+                  text: 'privacyPolicy'.tr(),
                   style: const TextStyle(
                     fontSize: 17,
                     color: primary900,
@@ -46,9 +47,9 @@ class CustomReactiveCheckbox extends StatelessWidget {
                     height: 1.6,
                   ),
                 ),
-                const TextSpan(
-                  text: ' и ',
-                  style: TextStyle(
+                 TextSpan(
+                  text: 'andText'.tr(),
+                  style: const TextStyle(
                     fontSize: 17,
                     color: greyscale900,
                     fontWeight: FontWeight.w500,
@@ -58,7 +59,7 @@ class CustomReactiveCheckbox extends StatelessWidget {
                 ),
                 TextSpan(
                   recognizer: TapGestureRecognizer()..onTap = () => launchUrl(Uri.parse(privacyPolicy)),
-                  text: ' Пользовательским соглашением',
+                  text: 'termsOfUse'.tr(),
                   style: const TextStyle(
                     fontSize: 17,
                     color: primary900,

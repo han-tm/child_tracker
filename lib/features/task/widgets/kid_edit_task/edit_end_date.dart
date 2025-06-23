@@ -1,4 +1,5 @@
 import 'package:child_tracker/index.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,7 +21,7 @@ class _KidTaskEditEndDateScreenState extends State<KidTaskEditEndDateScreen> {
       final startDate = context.read<KidTaskEditCubit>().state.startData;
       if (startDate != null && selectedDate.isBefore(startDate)) {
         setState(() {
-          dateError = 'Дата окончания не может быть раньше даты начала';
+          dateError = 'end_date_before_start_error'.tr();
         });
       } else {
         if (dateError != null) setState(() => dateError = null);
@@ -54,10 +55,10 @@ class _KidTaskEditEndDateScreenState extends State<KidTaskEditEndDateScreen> {
           final valid = state.endData != null;
           return Column(
             children: [
-              const Padding(
-                padding: EdgeInsets.only(left: 34, right: 24),
+              Padding(
+                padding: const EdgeInsets.only(left: 34, right: 24),
                 child: MaskotMessage(
-                  message: 'Есть крайний срок? Можешь добавить его!',
+                  message: 'deadline_prompt'.tr(),
                   maskot: '2186-min',
                   flip: true,
                 ),
@@ -69,15 +70,16 @@ class _KidTaskEditEndDateScreenState extends State<KidTaskEditEndDateScreen> {
                   child: Column(
                     children: [
                       CustomDateInput(
-                        label: 'Дата окончания (опц.)',
+                        label: 'end_date_optional'.tr(),
+                        hint: 'selectDataHint'.tr(),
                         date: state.endData,
                         errorText: dateError,
                         onTap: () => onDatePick(context),
                       ),
                       const SizedBox(height: 16),
-                      CustomTimeInput(
+                      CustomTimeInput( hint: 'selectTime'.tr(),
                         onTap: () => onTimePick(context),
-                        label: 'Время окончания (опц.)',
+                        label: 'end_time_optional'.tr(),
                         enable: state.endData != null,
                         time: getTimeFromDate(state.endData),
                       ),
@@ -97,7 +99,7 @@ class _KidTaskEditEndDateScreenState extends State<KidTaskEditEndDateScreen> {
                         children: [
                           Expanded(
                             child: FilledAppButton(
-                              text: 'Применить',
+                              text: 'apply'.tr(),
                               isActive: valid,
                               onTap: () {
                                 if (valid) {

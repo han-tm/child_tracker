@@ -1,4 +1,5 @@
 import 'package:child_tracker/index.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:reactive_forms/reactive_forms.dart';
@@ -23,10 +24,10 @@ class SetChatName extends StatelessWidget {
           }),
           child: Column(
             children: [
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 24),
+               Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: MaskotMessage(
-                  message: 'Как назовём\nчат?',
+                  message: 'how_to_name_chat'.tr(),
                   maskot: '2186-min',
                   flip: true,
                 ),
@@ -36,16 +37,16 @@ class SetChatName extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: ReactiveCustomInput(
                   formName: 'name',
-                  label: 'Название',
-                  hint: 'Введите название',
+                  label: 'name'.tr(),
+                  hint: 'enter_name'.tr(),
                   inputType: TextInputType.text,
                   textCapitalization: TextCapitalization.sentences,
                   textInputAction: TextInputAction.done,
                   maxLenght: 60,
                   validationMessages: {
-                    'required': (error) => 'Заполните поле',
-                    'minLength': (error) => 'Минимум 3 символа',
-                    'maxLength': (error) => 'Максимум 60 символов',
+                    'required': (error) => 'fill_field'.tr(),
+                    'minLength': (error) => 'min_length_3'.tr(),
+                    'maxLength': (error) => 'max_length_60'.tr(),
                   },
                 ),
               ),
@@ -62,7 +63,7 @@ class SetChatName extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 24),
                           child: FilledAppButton(
-                            text: 'Далее',
+                            text: 'next'.tr(),
                             isActive: valid,
                             isLoading: state.status == NewChatStatus.loading,
                             onTap: () {

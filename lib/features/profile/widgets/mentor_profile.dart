@@ -1,4 +1,5 @@
 import 'package:child_tracker/index.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -46,8 +47,8 @@ class MentorProfileWidget extends StatelessWidget {
           ProfileMenuCard(
             onTap: () => {},
             icon: 'crown',
-            title: 'Оформите премиум!',
-            description: 'Срок бесплатного периода\nпо 22 апреля 2025 г',
+            title: 'buy_premium'.tr(),
+            description: '${"fremium_period".tr()} 22 апреля 2025 г',
           ),
           const SizedBox(height: 24),
           ProfileMenuCard(
@@ -61,14 +62,14 @@ class MentorProfileWidget extends StatelessWidget {
               context.push('/connections', extra: extra);
             },
             icon: '3user',
-            title: 'Мои дети',
+            title: 'myKids'.tr(),
             iconColor: blue,
           ),
           const SizedBox(height: 24),
           ProfileMenuCard(
             onTap: () => context.push('/notification'),
             icon: 'bell_fill',
-            title: 'Уведомления',
+            title: 'notifications'.tr(),
             iconColor: red,
             color: const Color(0xFFFF5A5F).withOpacity(0.08),
           ),

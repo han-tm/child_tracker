@@ -1,5 +1,6 @@
 import 'package:child_tracker/index.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,7 +11,7 @@ class AddMemberToDairyScreen extends StatelessWidget {
 
   void onAdd(BuildContext context, DocumentReference userRef) async {
     await context.read<UserCubit>().addDairyMember(userRef);
-    SnackBarSerive.showSuccessSnackBar('Участник добавлен');
+    SnackBarSerive.showSuccessSnackBar('member_added'.tr());
   }
 
   @override
@@ -23,8 +24,8 @@ class AddMemberToDairyScreen extends StatelessWidget {
           icon: const Icon(CupertinoIcons.arrow_left),
           onPressed: () => context.pop(),
         ),
-        title: const AppText(
-          text: 'Добавить участника',
+        title:  AppText(
+          text: 'add_member'.tr(),
           size: 24,
           fw: FontWeight.w700,
         ),

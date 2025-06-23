@@ -1,4 +1,5 @@
 import 'package:child_tracker/index.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -24,22 +25,19 @@ class _OnboardScreenState extends State<OnboardScreen> {
 
   void initOnboard() {
     pages = [
-      const _OnboardingPage(
-        title: 'Добро пожаловать!',
-        description:
-            'Это не просто приложение — это ваш помощник в воспитании, мотивации и общении с ребёнком.\nСоздавайте задания, следите за прогрессом и поощряйте успехи!',
+      _OnboardingPage(
+        title: 'welcome_title'.tr(),
+        description: 'welcomeScreenDescription1'.tr(),
         icon: '2186-min',
       ),
-      const _OnboardingPage(
-        title: 'Задачи и награды',
-        description:
-            'Ставьте цели: от домашних дел до школьных успехов.\nЗа выполнение заданий ребёнок получает баллы, которые можно обменять на приятные бонусы',
+      _OnboardingPage(
+        title: 'welcomeScreenTasksAndRewards'.tr(),
+        description: 'welcomeScreenDescription2'.tr(),
         icon: '2194-min',
       ),
-      const _OnboardingPage(
-        title: 'Волшебный помощник',
-        description:
-            'Наш $MASCOTNAME всегда рядом — подскажет, поддержит и поздравит.\nОн сделает обучение и мотивацию весёлой и понятной для ребёнка!',
+      _OnboardingPage(
+        title: 'welcomeScreenConvenientTools'.tr(),
+        description: 'welcomeScreenDescription3'.tr(args: [MASCOTNAME]),
         icon: '2192-min',
       ),
     ];
@@ -92,7 +90,7 @@ class _OnboardScreenState extends State<OnboardScreen> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
                 decoration: const BoxDecoration(border: Border(top: BorderSide(color: greyscale100))),
-                child: FilledAppButton(text: 'Далее', onTap: onTap),
+                child: FilledAppButton(text: 'buttonNext'.tr(), onTap: onTap),
               ),
             ],
           ),
@@ -138,7 +136,7 @@ class _OnboardingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size= MediaQuery.of(context).size;
+    final size = MediaQuery.of(context).size;
     return Column(
       children: [
         Expanded(

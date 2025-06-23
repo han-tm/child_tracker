@@ -2,6 +2,7 @@
 
 import 'package:child_tracker/index.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,7 +20,7 @@ class _AddConnectionScreenState extends State<AddConnectionScreen> {
   bool loading = false;
   void onAddMentor(UserModel me, DocumentReference mentorRef) async {
     if (me.connections.contains(mentorRef)) {
-      SnackBarSerive.showErrorSnackBar('Наставник уже добавлен');
+      SnackBarSerive.showErrorSnackBar('mentorAlreadyAdded'.tr());
       return;
     }
     setState(() {
@@ -30,9 +31,9 @@ class _AddConnectionScreenState extends State<AddConnectionScreen> {
       loading = false;
     });
     if (result) {
-      SnackBarSerive.showSuccessSnackBar('Наставник добавлен');
+      SnackBarSerive.showSuccessSnackBar('mentorAdded'.tr());
     } else {
-      SnackBarSerive.showErrorSnackBar('Произошла ошибка');
+      SnackBarSerive.showErrorSnackBar('defaultErrorText'.tr());
     }
   }
 
@@ -48,10 +49,10 @@ class _AddConnectionScreenState extends State<AddConnectionScreen> {
     if (kid != null) {
       debugPrint('connection kid: ${kid.id}');
       if (me.connections.contains(kid.ref)) {
-        SnackBarSerive.showErrorSnackBar('Ребенок уже добавлен');
+        SnackBarSerive.showErrorSnackBar('kidAlreadyAdded'.tr());
         return;
       } else if (me.connectionRequests.contains(kid.ref)) {
-        SnackBarSerive.showErrorSnackBar('Заявка уже отправлена');
+        SnackBarSerive.showErrorSnackBar('requestAlreadySent'.tr());
         return;
       } else {
         if (mounted) {
@@ -64,9 +65,9 @@ class _AddConnectionScreenState extends State<AddConnectionScreen> {
               loading = false;
             });
             if (result) {
-              SnackBarSerive.showSuccessSnackBar('Заявка отправлена');
+              SnackBarSerive.showSuccessSnackBar('requestSent'.tr());
             } else {
-              SnackBarSerive.showErrorSnackBar('Произошла ошибка');
+              SnackBarSerive.showErrorSnackBar('defaultErrorText'.tr());
             }
           }
         }
@@ -87,7 +88,7 @@ class _AddConnectionScreenState extends State<AddConnectionScreen> {
               icon: const Icon(CupertinoIcons.arrow_left),
               onPressed: () => context.pop(),
             ),
-            title: AppText(text: me.isKid ? 'Добавить наставника' : 'Добавить ребенка', size: 24, fw: FontWeight.w700),
+            title: AppText(text: me.isKid ? 'add_mentor'.tr() : 'add_kid'.tr(), size: 24, fw: FontWeight.w700),
             centerTitle: true,
           ),
           body: Stack(
@@ -147,7 +148,7 @@ class _AddConnectionScreenState extends State<AddConnectionScreen> {
                                 RichText(
                                   text: TextSpan(
                                     text:
-                                        'Чтобы добавить нового участника в спиок, ${streamUser.isKid ? 'поделитесь своим ' : 'отсканируйте его '} ',
+                                        '${'add_new_member_description'.tr()}, ${streamUser.isKid ? '${'share_your'.tr()} ' : '${'scan_his'.tr()} '} ',
                                     style: const TextStyle(
                                       color: greyscale800,
                                       fontWeight: FontWeight.w500,
@@ -157,7 +158,7 @@ class _AddConnectionScreenState extends State<AddConnectionScreen> {
                                     ),
                                     children: [
                                       TextSpan(
-                                        text: streamUser.isKid ? 'QR-кодом' : 'QR-код',
+                                        text: streamUser.isKid ? 'qr_code'.tr() : 'qr_code_simple'.tr(),
                                         style: const TextStyle(
                                           color: greyscale800,
                                           fontWeight: FontWeight.w700,
@@ -172,7 +173,7 @@ class _AddConnectionScreenState extends State<AddConnectionScreen> {
                                 ),
                                 const SizedBox(height: 20),
                                 FilledSecondaryAppButton(
-                                  text: !streamUser.isKid ? 'Сканируйте  QR-код' : 'Поделиться QR кодом',
+                                  text: !streamUser.isKid ? 'scan_qr_code'.tr() : 'share_qr_code'.tr(),
                                   icon: Padding(
                                     padding: const EdgeInsets.only(right: 15),
                                     child: !streamUser.isKid
@@ -206,14 +207,14 @@ class _AddConnectionScreenState extends State<AddConnectionScreen> {
                       width: 200,
                       height: 200,
                       decoration: BoxDecoration(borderRadius: BorderRadius.circular(16), color: white),
-                      child: const Center(
+                      child:  Center(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            AppText(text: 'Загрузка...', size: 18, fw: FontWeight.w700),
-                            SizedBox(height: 16),
-                            CircularProgressIndicator(),
+                            AppText(text: 'loading'.tr(), size: 18, fw: FontWeight.w700),
+                            const SizedBox(height: 16),
+                            const CircularProgressIndicator(),
                           ],
                         ),
                       ),

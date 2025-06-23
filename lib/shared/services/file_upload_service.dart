@@ -4,9 +4,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as p;
 
 enum UploadType {
-  user, // Для аватарки пользователя
-  task, // Для задач
-  chat, // Для файлов чата
+  user,
+  task,
+  chat,
 }
 
 class FirebaseStorageService {
@@ -19,22 +19,17 @@ class FirebaseStorageService {
     String? customFileName,
   }) async {
     try {
-      // Генерируем путь для загрузки
       final path = _generatePath(type, uid, file.path);
 
-      // Создаем reference для файла
       final ref = _storage.ref(path);
 
-      // Загружаем файл
       final uploadTask = ref.putFile(File(file.path));
 
-      // Следим за прогрессом (опционально)
       uploadTask.snapshotEvents.listen((taskSnapshot) {
         final progress = (taskSnapshot.bytesTransferred / taskSnapshot.totalBytes) * 100;
         print('Upload progress: ${progress.toStringAsFixed(2)}%');
       });
 
-      // Ждем завершения загрузки
       final taskSnapshot = await uploadTask;
       final downloadUrl = await taskSnapshot.ref.getDownloadURL();
 

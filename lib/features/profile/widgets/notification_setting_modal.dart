@@ -1,4 +1,5 @@
 import 'package:child_tracker/index.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -60,8 +61,8 @@ class __NotificationSettingModalContentState extends State<_NotificationSettingM
             ],
           ),
           const SizedBox(height: 24),
-          const AppText(
-            text: 'Настройки',
+          AppText(
+            text: 'settings'.tr(),
             size: 24,
             fw: FontWeight.w700,
           ),
@@ -82,7 +83,7 @@ class __NotificationSettingModalContentState extends State<_NotificationSettingM
                 ),
               ),
               const SizedBox(width: 20),
-              const Expanded(child: AppText(text: 'Уведомления', size: 20, fw: FontWeight.w700)),
+               Expanded(child: AppText(text: 'notifications'.tr(), size: 20, fw: FontWeight.w700)),
               const SizedBox(width: 10),
               CupertinoSwitch(
                 value: initialSetting,
@@ -101,7 +102,7 @@ class __NotificationSettingModalContentState extends State<_NotificationSettingM
           ),
           const Divider(height: 48, thickness: 1, color: greyscale200),
           FilledAppButton(
-            text: 'Применить',
+            text: 'apply'.tr(),
             onTap: () {
               context.read<UserCubit>().setNotification(initialSetting);
               context.pop();

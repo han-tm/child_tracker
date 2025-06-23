@@ -1,5 +1,6 @@
 import 'package:child_tracker/index.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -54,8 +55,8 @@ class ConnectionCard extends StatelessWidget {
                         text: user == null
                             ? '...'
                             : user.isKid
-                                ? '${user.age} лет, ${user.city}'
-                                : 'Наставник',
+                                ? '${user.age} ${"ageInputYearsOld".tr()}, ${user.city}'
+                                : 'roleSelectionMentor'.tr(),
                         size: 14,
                         color: greyscale700,
                         fw: FontWeight.w500,
@@ -73,7 +74,7 @@ class ConnectionCard extends StatelessWidget {
                             height: 34,
                             fontSize: 14,
                             fw: FontWeight.w600,
-                            text: isRequestedUser ? 'Отправлено' : 'Добавлен',
+                            text: isRequestedUser ? 'sent'.tr() : 'added'.tr(),
                           ),
                         );
                       } else {
@@ -84,7 +85,7 @@ class ConnectionCard extends StatelessWidget {
                             height: 34,
                             fontSize: 14,
                             fw: FontWeight.w600,
-                            text: 'Добавить',
+                            text: 'add'.tr(),
                           ),
                         );
                       }

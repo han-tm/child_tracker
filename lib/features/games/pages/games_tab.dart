@@ -1,4 +1,5 @@
 import 'package:child_tracker/index.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -28,7 +29,7 @@ class GamesTabScreen extends StatelessWidget {
               fit: BoxFit.contain,
             ),
           ),
-          title: const AppText(text: 'Игры', size: 24, fw: FontWeight.w700),
+          title:  AppText(text: 'games'.tr(), size: 24, fw: FontWeight.w700),
           centerTitle: true,
           bottom: PreferredSize(
             preferredSize: const Size.fromHeight(66),
@@ -69,9 +70,9 @@ class GamesTabScreen extends StatelessWidget {
                 labelPadding: EdgeInsets.zero,
                 padding: EdgeInsets.zero,
                 splashBorderRadius: BorderRadius.circular(6),
-                tabs: const [
-                  Text('Играй'),
-                  Text('Изучай'),
+                tabs:  [
+                  Text('play'.tr()),
+                  Text('learn'.tr()),
                 ],
               ),
             ),

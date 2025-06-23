@@ -1,5 +1,6 @@
 import 'package:child_tracker/index.dart';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:qr_flutter/qr_flutter.dart';
@@ -41,14 +42,14 @@ class _GenerateQrCardState extends State<GenerateQrCard> {
                   borderRadius: BorderRadius.circular(20.0),
                   color: greyscale50,
                 ),
-                child: const Center(
+                child:  Center(
                     child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Icon(CupertinoIcons.add, size: 32, color: primary900),
-                    SizedBox(height: 16),
-                    AppText(text: 'Сгенерировать', size: 14, color: primary900),
+                    const Icon(CupertinoIcons.add, size: 32, color: primary900),
+                    const SizedBox(height: 16),
+                    AppText(text: 'generate'.tr(), size: 14, color: primary900),
                   ],
                 )),
               ),

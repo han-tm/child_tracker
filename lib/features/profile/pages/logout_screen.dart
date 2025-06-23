@@ -1,4 +1,5 @@
 import 'package:child_tracker/index.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -20,9 +21,9 @@ class LogoutResultScreen extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const BottomArrowBubleShape(
+                     BottomArrowBubleShape(
                       child: AppText(
-                        text: 'Ох...',
+                        text: 'oh'.tr(),
                         size: 24,
                         fw: FontWeight.w700,
                         textAlign: TextAlign.center,
@@ -53,7 +54,7 @@ class LogoutResultScreen extends StatelessWidget {
                   children: [
                     const SizedBox(height: 20),
                     FilledAppButton(
-                      text: 'Ок',
+                      text: 'ok'.tr(),
                       onTap: () => context.go('/auth'),
                     ),
                     const SizedBox(height: 20),

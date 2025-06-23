@@ -1,4 +1,5 @@
 import 'package:child_tracker/index.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -17,10 +18,10 @@ class RoleSelectionScreen extends StatelessWidget {
           final valid = state.userType != null;
           return Column(
             children: [
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 24),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: MaskotMessage(
-                  message: 'Выберите роль',
+                  message: 'roleSelectionTitle'.tr(),
                   maskot: '2188-min',
                   flip: true,
                 ),
@@ -32,7 +33,7 @@ class RoleSelectionScreen extends StatelessWidget {
                   children: [
                     UserSelector(
                       onTap: () => context.read<FillDataCubit>().onChangeType(UserType.mentor),
-                      name: 'Наставник',
+                      name: 'roleSelectionMentor'.tr(),
                       radius: 10,
                       placeholder: SvgPicture.asset('assets/images/select_mentor.svg'),
                       isSelected: state.userType == UserType.mentor,
@@ -40,7 +41,7 @@ class RoleSelectionScreen extends StatelessWidget {
                     const SizedBox(height: 20),
                     UserSelector(
                       onTap: () => context.read<FillDataCubit>().onChangeType(UserType.kid),
-                      name: 'Ребёнок',
+                      name: 'roleSelectionKid'.tr(),
                       radius: 10,
                       placeholder: SvgPicture.asset('assets/images/select_kid.svg'),
                       isSelected: state.userType == UserType.kid,
@@ -58,7 +59,7 @@ class RoleSelectionScreen extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 24),
                       child: FilledAppButton(
-                        text: 'Далее',
+                        text: 'buttonNext'.tr(),
                         isActive: valid,
                         onTap: !valid ? null : () => context.push('/auth/fill_data'),
                       ),

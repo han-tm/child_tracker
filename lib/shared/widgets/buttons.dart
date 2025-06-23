@@ -1,4 +1,3 @@
-
 import 'package:child_tracker/index.dart';
 import 'package:flutter/material.dart';
 
@@ -13,7 +12,7 @@ class FilledAppButton extends StatelessWidget {
   const FilledAppButton({
     super.key,
     this.height = 58,
-    this.text = 'Продолжить',
+    required this.text,
     this.onTap,
     this.isLoading = false,
     this.isActive = true,
@@ -59,7 +58,7 @@ class FilledSecondaryAppButton extends StatelessWidget {
   const FilledSecondaryAppButton({
     super.key,
     this.height = 58,
-    this.text = 'Продолжить',
+     required this.text,
     this.onTap,
     this.isLoading = false,
     this.isActive = true,
@@ -83,20 +82,20 @@ class FilledSecondaryAppButton extends StatelessWidget {
           child: isLoading
               ? const CircularProgressIndicator(color: Colors.white)
               : Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  if(icon != null) icon!,
-                  Flexible(
-                    child: AppText(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    if (icon != null) icon!,
+                    Flexible(
+                      child: AppText(
                         text: text,
                         size: fontSize,
                         fw: fw,
                         color: primary900,
                         textAlign: TextAlign.center,
                       ),
-                  ),
-                ],
-              ),
+                    ),
+                  ],
+                ),
         ),
       ),
     );
@@ -153,7 +152,7 @@ class OutlinedAppButton extends StatelessWidget {
   const OutlinedAppButton({
     super.key,
     this.height = 58,
-    this.text = 'Продолжить',
+       required this.text,
     this.onPress,
     this.isLoading = false,
     this.fontSize = 16,

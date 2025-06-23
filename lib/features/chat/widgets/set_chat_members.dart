@@ -1,4 +1,5 @@
 import 'package:child_tracker/index.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -13,10 +14,10 @@ class SetChatMembers extends StatelessWidget {
         final valid = state.members.isNotEmpty;
         return Column(
           children: [
-            const Padding(
-              padding: EdgeInsets.only(left: 34, right: 24),
+            Padding(
+              padding: const EdgeInsets.only(left: 34, right: 24),
               child: MaskotMessage(
-                message: 'Кого добавим\nв новый чат?',
+                message: 'who_to_add_to_chat'.tr(),
                 maskot: '2186-min',
                 flip: true,
               ),
@@ -90,7 +91,7 @@ class SetChatMembers extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24),
                     child: FilledAppButton(
-                      text: 'Далее',
+                      text: 'buttonNext'.tr(),
                       isActive: valid,
                       onTap: () {
                         if (valid) {

@@ -1,4 +1,5 @@
 import 'package:child_tracker/index.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -126,12 +127,12 @@ class KidTaskEditCubit extends Cubit<KidTaskEditState> {
   void editTask() async {
     final user = _userCubit.state;
     if (user == null) {
-      emit(state.copyWith(errorMessage: 'Пользователь не найден', status: KidTaskEditStatus.error));
+      emit(state.copyWith(errorMessage: 'userNotFound'.tr(), status: KidTaskEditStatus.error));
       return;
     }
 
     if (state.name == null || state.startData == null ) {
-      emit(state.copyWith(errorMessage: 'Заполните все поля', status: KidTaskEditStatus.error));
+      emit(state.copyWith(errorMessage: 'fillAllFields'.tr(), status: KidTaskEditStatus.error));
       return;
     }
 
@@ -166,7 +167,7 @@ class KidTaskEditCubit extends Cubit<KidTaskEditState> {
         final uploadService = FirebaseStorageService();
         final photoUrl = await uploadService.uploadFile(file: state.photo!, type: UploadType.user, uid: user.id);
         if (photoUrl == null) {
-          emit(state.copyWith(status: KidTaskEditStatus.error, errorMessage: 'Ошибка загрузки фото'));
+          emit(state.copyWith(status: KidTaskEditStatus.error, errorMessage: 'photoUploadError'.tr()));
           return;
         } else {
           data['photo'] = photoUrl;

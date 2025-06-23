@@ -1,10 +1,11 @@
 import 'package:child_tracker/index.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
+
 import 'package:table_calendar/table_calendar.dart';
 
 class KidProgressScreen extends StatefulWidget {
@@ -175,7 +176,7 @@ class _KidProgressScreenState extends State<KidProgressScreen> with SingleTicker
           icon: const Icon(CupertinoIcons.arrow_left),
           onPressed: () => context.pop(),
         ),
-        title: const AppText(text: 'Прогресс по заданиям', size: 24, fw: FontWeight.w700),
+        title:  AppText(text: 'taskProgress'.tr(), size: 24, fw: FontWeight.w700),
         centerTitle: false,
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(111),
@@ -195,13 +196,7 @@ class _KidProgressScreenState extends State<KidProgressScreen> with SingleTicker
       body: StreamBuilder<List<TaskModel>>(
         stream: _tasksStream,
         builder: (context, snapshot) {
-          // if (snapshot.connectionState == ConnectionState.waiting || !snapshot.hasData) {
-          //   return const Center(child: CircularProgressIndicator());
-          // }
-          // if (snapshot.hasError) {
-          //   return Center(child: Text('Ошибка: ${snapshot.error}'));
-          // }
-
+       
           final tasks = snapshot.data ?? [];
           return SingleChildScrollView(
             padding: const EdgeInsets.all(24),
@@ -259,10 +254,10 @@ class _KidProgressHeader extends StatelessWidget {
             ),
             child: TabBar(
               controller: tabController,
-              tabs: const [
-                Tab(text: 'Неделя'),
-                Tab(text: 'Месяц'),
-                Tab(text: 'Год'),
+              tabs:  [
+                Tab(text: 'week'.tr()),
+                Tab(text: 'month'.tr()),
+                Tab(text: 'year'.tr()),
               ],
               dividerHeight: 0,
               dividerColor: greyscale100,
@@ -344,9 +339,9 @@ class _TaskCountsInfo extends StatelessWidget {
                     borderRadius: BorderRadius.vertical(top: Radius.circular(7)),
                     color: primary900,
                   ),
-                  child: const Center(
+                  child:  Center(
                     child: AppText(
-                      text: 'Задания выполнены',
+                      text: 'tasksCompleted'.tr(),
                       size: 14,
                       fw: FontWeight.w700,
                       color: white,
@@ -391,9 +386,9 @@ class _TaskCountsInfo extends StatelessWidget {
                     borderRadius: BorderRadius.vertical(top: Radius.circular(7)),
                     color: red,
                   ),
-                  child: const Center(
+                  child:  Center(
                     child: AppText(
-                      text: 'Задания отменены',
+                      text: 'taskCanceled'.tr(),
                       size: 14,
                       fw: FontWeight.w700,
                       color: white,
@@ -692,7 +687,7 @@ class _ProgressCompletePercentageState extends State<_ProgressCompletePercentage
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const AppText(text: 'Процент выполнения', size: 20, fw: FontWeight.w700),
+           AppText(text: 'completeProsent'.tr(), size: 20, fw: FontWeight.w700),
           const Divider(height: 32, thickness: 1, color: greyscale200),
           SizedBox(
             width: double.infinity,
@@ -832,17 +827,17 @@ class _ProgressCompletePercentageState extends State<_ProgressCompletePercentage
   String _gerYearTabTitle(int i) {
     switch (i) {
       case 0:
-        return 'Янв-\nФев';
+        return 'y1'.tr();
       case 1:
-        return 'Март-\nАпр';
+        return  'y2'.tr();
       case 2:
-        return 'Май-\nИюн';
+        return  'y3'.tr();
       case 3:
-        return 'Июль-\nАвг';
+        return  'y4'.tr();
       case 4:
-        return 'Сент-\nОкт';
+        return  'y5'.tr();
       case 5:
-        return 'Ноя-\nДек';
+        return  'y6'.tr();
       default:
         return '';
     }
@@ -1112,7 +1107,7 @@ class _ProgressCompleteCountState extends State<_ProgressCompleteCount> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const AppText(text: 'Процент выполнения', size: 20, fw: FontWeight.w700),
+           AppText(text: 'completeProsent'.tr(), size: 20, fw: FontWeight.w700),
           const Divider(height: 32, thickness: 1, color: greyscale200),
           SizedBox(
             width: double.infinity,
@@ -1251,17 +1246,17 @@ class _ProgressCompleteCountState extends State<_ProgressCompleteCount> {
   String _gerYearTabTitle(int i) {
     switch (i) {
       case 0:
-        return 'Янв-\nФев';
+        return 'y1'.tr();
       case 1:
-        return 'Март-\nАпр';
+        return  'y2'.tr();
       case 2:
-        return 'Май-\nИюн';
+        return  'y3'.tr();
       case 3:
-        return 'Июль-\nАвг';
+        return  'y4'.tr();
       case 4:
-        return 'Сент-\nОкт';
+        return  'y5'.tr();
       case 5:
-        return 'Ноя-\nДек';
+        return  'y6'.tr();
       default:
         return '';
     }

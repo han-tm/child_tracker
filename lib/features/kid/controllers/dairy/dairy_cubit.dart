@@ -1,5 +1,6 @@
 import 'package:child_tracker/index.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,7 +18,7 @@ class DairyCubit extends Cubit<DairyState> {
   void createDairy(String text, DairyEmotion em, DateTime time) async {
     final user = _userCubit.state;
     if (user == null) {
-      emit(state.copyWith(errorMessage: 'Пользователь не найден', status: DairyStateStatus.createError));
+      emit(state.copyWith(errorMessage: 'userNotFound'.tr(), status: DairyStateStatus.createError));
       return;
     }
 
@@ -44,7 +45,7 @@ class DairyCubit extends Cubit<DairyState> {
   void editDairy(DairyModel dairy, String text, DairyEmotion em, DateTime time) async {
     final user = _userCubit.state;
     if (user == null) {
-      emit(state.copyWith(errorMessage: 'Пользователь не найден', status: DairyStateStatus.editError));
+      emit(state.copyWith(errorMessage: 'userNotFound'.tr(), status: DairyStateStatus.editError));
       return;
     }
 

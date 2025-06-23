@@ -1,4 +1,5 @@
 import 'package:child_tracker/index.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -18,9 +19,9 @@ class KidSignupSuccessScreen extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const BottomArrowBubleShape(
+                   BottomArrowBubleShape(
                     child: AppText(
-                      text: 'Ура!',
+                      text: 'accountReadyTitle'.tr(),
                       size: 24,
                       fw: FontWeight.w700,
                       textAlign: TextAlign.center,
@@ -32,16 +33,16 @@ class KidSignupSuccessScreen extends StatelessWidget {
                     width: 280,
                   ),
                   const SizedBox(height: 16),
-                  const AppText(
-                    text: 'Ваш аккаунт готов!',
+                   AppText(
+                    text: 'accountReadySubtitle'.tr(),
                     size: 32,
                     fw: FontWeight.w700,
                     color: primary900,
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 8),
-                  const AppText(
-                    text: 'Давайте начнем ваш путь в нашем приложении!',
+                   AppText(
+                    text: 'accountReadyDescription'.tr(),
                     size: 16,
                     fw: FontWeight.w400,
                     color: greyscale800,
@@ -61,7 +62,7 @@ class KidSignupSuccessScreen extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: FilledAppButton(
-                    text: 'Начать',
+                    text: 'buttonStart'.tr(),
                     onTap: () {
                       context.read<FillDataCubit>().reset();
                       context.go('/kid_bonus');

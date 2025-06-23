@@ -1,4 +1,5 @@
 import 'package:child_tracker/index.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -39,10 +40,10 @@ class KidTaskEditStartDateScreen extends StatelessWidget {
           final valid = state.startData != null;
           return Column(
             children: [
-              const Padding(
-                padding: EdgeInsets.only(left: 34, right: 24),
+              Padding(
+                padding: const EdgeInsets.only(left: 34, right: 24),
                 child: MaskotMessage(
-                  message: 'Когда нужно начать задание?',
+                  message: 'when_to_start_task_prompt'.tr(),
                   maskot: '2177-min',
                   flip: true,
                 ),
@@ -54,14 +55,16 @@ class KidTaskEditStartDateScreen extends StatelessWidget {
                   child: Column(
                     children: [
                       CustomDateInput(
-                        label: 'Дата начала',
+                        label: 'start_date'.tr(),
+                        hint: 'selectDataHint'.tr(),
                         date: state.startData,
                         onTap: () => onDatePick(context),
                       ),
                       const SizedBox(height: 16),
                       CustomTimeInput(
                         onTap: () => onTimePick(context),
-                        label: 'Время начала (опц.)',
+                        hint: 'selectTime'.tr(),
+                        label: 'start_time_optional'.tr(),
                         time: getTimeFromDate(state.startData),
                       ),
                     ],
@@ -77,7 +80,7 @@ class KidTaskEditStartDateScreen extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 24),
                       child: FilledAppButton(
-                        text: 'Применить',
+                        text: 'apply'.tr(),
                         isActive: valid,
                         onTap: () {
                           if (valid) {

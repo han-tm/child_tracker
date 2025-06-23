@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:child_tracker/index.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:path_provider/path_provider.dart';
@@ -42,7 +43,7 @@ class __ShowQRModalContentState extends State<_ShowQRModalContent> {
       ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
       return byteData?.buffer.asUint8List();
     } catch (e) {
-      print("Ошибка при захвате QR-кода: $e");
+      print("QR capture error: $e");
       return null;
     }
   }
@@ -50,7 +51,7 @@ class __ShowQRModalContentState extends State<_ShowQRModalContent> {
   Future<void> _shareQrCode() async {
     final Uint8List? qrImageBytes = await _capturePng();
     if (qrImageBytes == null) {
-      SnackBarSerive.showErrorSnackBar('Произошла ошибка при попытке поделиться QR-кодом.');
+      SnackBarSerive.showErrorSnackBar('share_qr_code_error'.tr());
       return;
     }
 
@@ -59,13 +60,13 @@ class __ShowQRModalContentState extends State<_ShowQRModalContent> {
       final file = await File('${tempDir.path}/qr_code.png').create();
       await file.writeAsBytes(qrImageBytes);
       final param = ShareParams(
-        title: 'Мой QR-код',
+        title: 'myQrCodeTitle'.tr(),
         files: [XFile(file.path)],
       );
       await SharePlus.instance.share(param);
     } catch (e) {
-      print("Ошибка при обмене QR-кодом: $e");
-      SnackBarSerive.showErrorSnackBar('Произошла ошибка при попытке поделиться QR-кодом.');
+      print("QR share error: $e");
+      SnackBarSerive.showErrorSnackBar('share_qr_code_error'.tr());
     }
   }
 
@@ -96,7 +97,7 @@ class __ShowQRModalContentState extends State<_ShowQRModalContent> {
             ],
           ),
           const SizedBox(height: 24),
-          const AppText(text: 'Поделиться QR кодом', size: 24, fw: FontWeight.w700),
+           AppText(text: 'share_qr_code'.tr(), size: 24, fw: FontWeight.w700),
           const Divider(height: 48, thickness: 1, color: greyscale200),
           Container(
             padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
@@ -118,7 +119,7 @@ class __ShowQRModalContentState extends State<_ShowQRModalContent> {
           ),
           const Divider(height: 48, thickness: 1, color: greyscale200),
           FilledAppButton(
-            text: 'Поделиться',
+            text: 'share'.tr(),
             onTap: () {
               _shareQrCode();
             },

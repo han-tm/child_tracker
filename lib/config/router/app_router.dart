@@ -45,7 +45,7 @@ Future<UserInitialStatus> getUserStatus(BuildContext context) async {
       return userModel.isKid ? UserInitialStatus.fillProfileKid : UserInitialStatus.fillProfileMentor;
     }
   } catch (e) {
-    print('Произошла ошибка {getUserStatus}: $e');
+    print('$defaultErrorText {getUserStatus}: $e');
     SnackBarSerive.showErrorSnackBar(defaultErrorText);
     return UserInitialStatus.noFound;
   }
@@ -122,7 +122,7 @@ final GoRouter router = GoRouter(
       builder: (context, state) => const SplashScreen(),
     ),
 
-    // Маршруты авторизации
+    
     GoRoute(
       path: '/auth',
       builder: (context, state) => const LoginScreen(),
@@ -154,7 +154,7 @@ final GoRouter router = GoRouter(
       ],
     ),
 
-    // Маршруты ребенка
+    
     ShellRoute(
       builder: (context, state, child) => KidMainScreen(state: state, child: child),
       routes: [

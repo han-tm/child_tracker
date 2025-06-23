@@ -1,7 +1,8 @@
 import 'package:child_tracker/index.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+
 import 'package:table_calendar/table_calendar.dart';
 
 Future<DateTime?> showDatePickerModalBottomSheet(BuildContext context) async {
@@ -53,7 +54,7 @@ class __CalendarContentState extends State<_CalendarContent> {
             ],
           ),
           const SizedBox(height: 24),
-          const AppText(text: 'Дата', size: 24, fw: FontWeight.w700),
+          AppText(text: 'date'.tr(), size: 24, fw: FontWeight.w700),
           const SizedBox(height: 12),
           const Divider(height: 1, thickness: 1, color: greyscale200),
           const SizedBox(height: 20),
@@ -176,14 +177,14 @@ class __CalendarContentState extends State<_CalendarContent> {
             children: [
               Expanded(
                 child: FilledSecondaryAppButton(
-                  text: 'Отмена',
+                  text: 'cancel'.tr(),
                   onTap: () => Navigator.of(context).pop(),
                 ),
               ),
               const SizedBox(width: 16),
               Expanded(
                 child: FilledAppButton(
-                  text: 'Ок',
+                  text: 'ok'.tr(),
                   isActive: _selectedDay != null,
                   onTap: _selectedDay == null ? null : () => Navigator.of(context).pop(_selectedDay),
                 ),

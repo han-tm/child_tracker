@@ -1,4 +1,5 @@
 import 'package:child_tracker/index.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
@@ -24,16 +25,16 @@ class EmptyNotificationsWidget extends StatelessWidget {
                   width: 270,
                 ),
                 const SizedBox(height: 16),
-                const AppText(
-                  text: 'Нет уведомлений!',
+                 AppText(
+                  text: 'noNotifications'.tr(),
                   size: 32,
                   fw: FontWeight.w700,
                   color: primary900,
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 12),
-                const AppText(
-                  text: 'Отдохни, а я сообщу, как только появится что-то важное',
+                 AppText(
+                  text: 'restMessage'.tr(),
                   size: 16,
                   fw: FontWeight.normal,
                   color: greyscale800,
@@ -52,7 +53,7 @@ class EmptyNotificationsWidget extends StatelessWidget {
               children: [
                 const SizedBox(height: 20),
                 FilledAppButton(
-                  text: 'Ок',
+                  text: 'ok'.tr(),
                   onTap: () => context.pop(),
                 ),
                 const SizedBox(height: 20),

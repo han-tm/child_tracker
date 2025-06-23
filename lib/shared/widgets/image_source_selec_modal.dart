@@ -1,4 +1,5 @@
 import 'package:child_tracker/index.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
@@ -35,8 +36,8 @@ Future<ImageSource?> showImageSourceSelectModalBottomSheet(BuildContext context)
               ],
             ),
             const SizedBox(height: 24),
-            const AppText(
-              text: 'Загрузить фото',
+             AppText(
+              text: 'uploadPhoto'.tr(),
               size: 24,
               fw: FontWeight.w700,
             ),
@@ -46,7 +47,7 @@ Future<ImageSource?> showImageSourceSelectModalBottomSheet(BuildContext context)
               children: [
                 _buildIconButton(
                   icon: 'picker_gallery',
-                  label: 'Галерея',
+                  label: 'gallery'.tr(),
                   onPressed: () {
                     Navigator.pop(context, ImageSource.gallery);
                   },
@@ -54,7 +55,7 @@ Future<ImageSource?> showImageSourceSelectModalBottomSheet(BuildContext context)
                 const SizedBox(width: 40),
                 _buildIconButton(
                   icon: 'picker_camera',
-                  label: 'Камера',
+                  label: 'camera'.tr(),
                   onPressed: () {
                     Navigator.pop(context, ImageSource.camera);
                   },

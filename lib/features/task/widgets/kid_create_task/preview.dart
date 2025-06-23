@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:child_tracker/index.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,10 +30,10 @@ class KidCreateTaskPreview extends StatelessWidget {
                   child: IntrinsicHeight(
                     child: Column(
                       children: [
-                        const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 24),
+                         Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 24),
                           child: MaskotMessage(
-                            message: 'Проверим\nдетали\nзадания?',
+                            message: 'check_task_details_prompt'.tr(),
                             maskot: '2177-min',
                             flip: true,
                           ),
@@ -109,9 +110,9 @@ class KidCreateTaskPreview extends StatelessWidget {
                                 onTap: () => onChangeMode(context, 2),
                                 child: Row(
                                   children: [
-                                    const Expanded(
+                                    Expanded(
                                       child: AppText(
-                                        text: 'Начало',
+                                        text: 'start'.tr(),
                                         size: 16,
                                         fw: FontWeight.w500,
                                         color: greyscale800,
@@ -133,9 +134,9 @@ class KidCreateTaskPreview extends StatelessWidget {
                                 onTap: () => onChangeMode(context, 3),
                                 child: Row(
                                   children: [
-                                    const Expanded(
+                                    Expanded(
                                       child: AppText(
-                                        text: 'Окончание (опц.)',
+                                        text: 'end_optional'.tr(),
                                         size: 16,
                                         fw: FontWeight.w500,
                                         color: greyscale800,
@@ -157,9 +158,9 @@ class KidCreateTaskPreview extends StatelessWidget {
                                 onTap: () => onChangeMode(context, 4),
                                 child: Row(
                                   children: [
-                                    const Expanded(
+                                    Expanded(
                                       child: AppText(
-                                        text: 'Напоминание (опц.)',
+                                        text: 'reminder_optional'.tr(),
                                         size: 16,
                                         fw: FontWeight.w500,
                                         color: greyscale800,
@@ -192,7 +193,7 @@ class KidCreateTaskPreview extends StatelessWidget {
                               Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 24),
                                 child: FilledAppButton(
-                                  text: 'Создать',
+                                  text: 'create'.tr(),
                                   isLoading: state.status == KidTaskCreateStatus.loading,
                                   onTap: () {
                                     if (state.status == KidTaskCreateStatus.loading) return;

@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:child_tracker/index.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -82,12 +83,12 @@ class TaskCard extends StatelessWidget {
                           final user = snapshot.data;
                           late String text;
                           if (isKidTask) {
-                            text = 'Создал(а): ${me.name} (я)';
+                            text = '${"createFrom".tr()}: ${me.name} (${"amI".tr()})';
                           } else {
                             if (me.isKid) {
-                              text = 'Наставник: ${user?.name ?? '...'}';
+                              text = '${"mentor".tr()} ${user?.name ?? '...'}';
                             } else {
-                              text = 'Ребёнок: ${user?.name ?? '...'}';
+                              text = '${"child".tr()}: ${user?.name ?? '...'}';
                             }
                           }
                           return AppText(
@@ -181,7 +182,7 @@ class TaskCard extends StatelessWidget {
     } else if (task.reminderType == ReminderType.single && task.reminderDate != null) {
       return dateToHHmm(task.reminderDate!);
     } else {
-      return 'нет';
+      return 'no'.tr();
     }
   }
 }

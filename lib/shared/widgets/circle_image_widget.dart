@@ -36,7 +36,7 @@ class CachedClickableImage extends StatelessWidget {
     this.emojiFontSize = 50,
     this.emojiWidget,
   }) : assert(!(borderRadius != null && circularRadius != null),
-            'Нельзя одновременно указывать borderRadius и circularRadius.');
+            'Either borderRadius or circularRadius can be set, but not both.');
 
   @override
   Widget build(BuildContext context) {

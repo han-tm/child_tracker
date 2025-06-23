@@ -1,4 +1,5 @@
 import 'package:child_tracker/index.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,17 +14,17 @@ class SetQRView extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Padding(
-              padding: EdgeInsets.only(left: 34, right: 24),
+             Padding(
+              padding: const EdgeInsets.only(left: 34, right: 24),
               child: MaskotMessage(
-                message: 'Давай сделаем QR-код — так тебя найдёт наставник!',
+                message: 'qrCodeGenerateQuestion'.tr(),
                 maskot: '2182-min',
                 align: TextAlign.start,
                 flip: false,
               ),
             ),
             const SizedBox(height: 40),
-            const AppText(text: 'Мой QR-код', fw: FontWeight.w700),
+            AppText(text: 'myQrCodeTitle'.tr(), fw: FontWeight.w700),
             const SizedBox(height: 20),
             Expanded(
               child: GenerateQrCard(
@@ -40,7 +41,7 @@ class SetQRView extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24),
                     child: FilledAppButton(
-                      text: 'Далее',
+                      text: 'buttonNext'.tr(),
                       onTap: () {
                         if (state.status == FillDataStatus.loading) return;
                         context.read<FillDataCubit>().nextPage();

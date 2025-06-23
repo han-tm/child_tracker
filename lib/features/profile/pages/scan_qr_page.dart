@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:child_tracker/index.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
@@ -32,7 +33,7 @@ class _ScanQRScreenState extends State<ScanQRScreen> {
   }
 
   Future<void> validateAndFetchDocument(String documentId) async {
-    // Валидация ID
+    
     if (documentId.isEmpty || documentId.length < 20) {
       return;
     }
@@ -43,17 +44,17 @@ class _ScanQRScreenState extends State<ScanQRScreen> {
       if (doc.exists) {
         final user = UserModel.fromFirestore(doc);
         if (!user.isKid) {
-          SnackBarSerive.showErrorSnackBar('Сканируйте QR-код ребенка');
+          SnackBarSerive.showErrorSnackBar('scanKidQR'.tr());
         } else {
           controller.stop();
           if (mounted) context.pop(user);
         }
       } else {
-        SnackBarSerive.showErrorSnackBar('Пользователь не найден');
+        SnackBarSerive.showErrorSnackBar('userNotFound'.tr());
         return;
       }
     } catch (e) {
-      SnackBarSerive.showErrorSnackBar('Ошибка при получении данных: $e');
+      SnackBarSerive.showErrorSnackBar('${'defaultErrorText'.tr()}: $e');
 
       return;
     }
@@ -123,9 +124,9 @@ class _ScanQRScreenState extends State<ScanQRScreen> {
               icon: const Icon(Icons.clear, size: 30, color: white),
               onPressed: () => context.pop(),
             ),
-            const Expanded(
+             Expanded(
               child: AppText(
-                text: 'Сканируйте QR-код',
+                text: 'scan_qr_code'.tr(),
                 size: 24,
                 fw: FontWeight.w700,
                 color: white,
@@ -149,10 +150,10 @@ class CornerOverlayPainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.square;
 
-    const double cornerLength = 60; // Длина угловых линий
-    const double cornerRadius = 10; // Радиус скругления углов
+    const double cornerLength = 60; 
+    const double cornerRadius = 10; 
 
-    // Левый верхний угол
+    
     canvas.drawPath(
       Path()
         ..moveTo(0, cornerLength)
@@ -162,7 +163,7 @@ class CornerOverlayPainter extends CustomPainter {
       paint,
     );
 
-    // Правый верхний угол
+  
     canvas.drawPath(
       Path()
         ..moveTo(size.width - cornerLength, 0)
@@ -172,7 +173,7 @@ class CornerOverlayPainter extends CustomPainter {
       paint,
     );
 
-    // Правый нижний угол
+
     canvas.drawPath(
       Path()
         ..moveTo(size.width, size.height - cornerLength)
@@ -182,7 +183,7 @@ class CornerOverlayPainter extends CustomPainter {
       paint,
     );
 
-    // Левый нижний угол
+   
     canvas.drawPath(
       Path()
         ..moveTo(cornerLength, size.height)

@@ -1,4 +1,5 @@
 import 'package:child_tracker/index.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -12,10 +13,10 @@ class SetAgeView extends StatelessWidget {
         final valid = state.age != null;
         return Column(
           children: [
-            const Padding(
-              padding: EdgeInsets.only(left: 34, right: 24),
+            Padding(
+              padding: const EdgeInsets.only(left: 34, right: 24),
               child: MaskotMessage(
-                message: 'Сколько тебе лет?',
+                message: 'ageInputQuestion'.tr(),
                 maskot: '2186-min',
                 flip: true,
               ),
@@ -36,7 +37,7 @@ class SetAgeView extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24),
                     child: FilledAppButton(
-                      text: 'Далее',
+                      text: 'buttonNext'.tr(),
                       isActive: valid,
                       onTap: () {
                         if (valid) {

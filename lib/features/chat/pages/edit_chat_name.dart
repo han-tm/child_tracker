@@ -1,4 +1,5 @@
 import 'package:child_tracker/index.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -23,8 +24,8 @@ class _EditChatNameScreenState extends State<EditChatNameScreen> {
           icon: const Icon(CupertinoIcons.arrow_left),
           onPressed: () => context.pop(),
         ),
-        title: const AppText(
-          text: 'Название чата',
+        title:  AppText(
+          text: 'chat_name'.tr(),
           size: 24,
           fw: FontWeight.w700,
         ),
@@ -43,10 +44,10 @@ class _EditChatNameScreenState extends State<EditChatNameScreen> {
         }),
         child: Column(
           children: [
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 24),
+             Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
               child: MaskotMessage(
-                message: 'Как назовём\nчат?',
+                message: 'how_to_name_chat'.tr(),
                 maskot: '2186-min',
                 flip: true,
               ),
@@ -56,16 +57,16 @@ class _EditChatNameScreenState extends State<EditChatNameScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: ReactiveCustomInput(
                 formName: 'name',
-                label: 'Название',
-                hint: 'Введите название',
+                label: 'name'.tr(),
+                hint: 'enter_name'.tr(),
                 inputType: TextInputType.text,
                 textCapitalization: TextCapitalization.sentences,
                 textInputAction: TextInputAction.done,
                 maxLenght: 60,
                 validationMessages: {
-                  'required': (error) => 'Заполните поле',
-                  'minLength': (error) => 'Минимум 3 символа',
-                  'maxLength': (error) => 'Максимум 60 символов',
+                  'required': (error) => 'fill_field'.tr(),
+                  'minLength': (error) => 'min_length_3'.tr(),
+                  'maxLength': (error) => 'max_length_60'.tr(),
                 },
               ),
             ),
@@ -82,7 +83,7 @@ class _EditChatNameScreenState extends State<EditChatNameScreen> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 24),
                         child: FilledAppButton(
-                          text: 'Сохранить',
+                          text: 'save'.tr(),
                           isActive: valid,
                           onTap: () async {
                             if (valid) {
@@ -92,7 +93,7 @@ class _EditChatNameScreenState extends State<EditChatNameScreen> {
                                   widget.chat.name = formGroup.control('name').value;
                                 });
 
-                                SnackBarSerive.showSuccessSnackBar('Название обновлено');
+                                SnackBarSerive.showSuccessSnackBar('name_updated'.tr());
                                 if (context.mounted) context.pop();
                               }
                             } else {

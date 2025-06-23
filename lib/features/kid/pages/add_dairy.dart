@@ -1,5 +1,6 @@
 import 'package:child_tracker/index.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -83,11 +84,11 @@ class _AddDairyScreenState extends State<AddDairyScreen> {
                               child: IntrinsicHeight(
                                 child: Column(
                                   children: [
-                                    const Padding(
-                                      padding: EdgeInsets.only(left: 40, right: 24, top: 16),
+                                     Padding(
+                                      padding: const EdgeInsets.only(left: 40, right: 24, top: 16),
                                       child: MaskotMessage(
                                         maskot: '2185-min',
-                                        message: 'Как твой день сегодня?',
+                                        message: 'how_was_your_day'.tr(),
                                       ),
                                     ),
                                     const SizedBox(height: 40),
@@ -152,12 +153,12 @@ class _AddDairyScreenState extends State<AddDairyScreen> {
                                       ),
                                     ),
                                     const SizedBox(height: 24),
-                                    const Padding(
-                                      padding: EdgeInsets.symmetric(horizontal: 24),
+                                     Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 24),
                                       child: ReactiveCustomInput(
                                         formName: 'text',
-                                        label: 'Отзыв',
-                                        hint: 'Расскажи о своем дне',
+                                        label: 'review'.tr(),
+                                        hint: 'tell_about_your_day'.tr(),
                                         maxLines: 6,
                                         minLines: 5,
                                       ),
@@ -171,7 +172,7 @@ class _AddDairyScreenState extends State<AddDairyScreen> {
                                         children: [
                                           Expanded(
                                             child: FilledSecondaryAppButton(
-                                              text: 'Может позже',
+                                              text: 'maybe_later'.tr(),
                                               onTap: () => context.pop(),
                                             ),
                                           ),
@@ -191,7 +192,7 @@ class _AddDairyScreenState extends State<AddDairyScreen> {
                                                   builder: (context, formGroup, child) {
                                                     final valid = formGroup.valid && selectedEmotion != null;
                                                     return FilledAppButton(
-                                                      text: 'Добавить  отзыв',
+                                                      text: 'add_review'.tr(),
                                                       onTap:
                                                           state.status == DairyStateStatus.creating ? null : onSubmit,
                                                       isActive: valid,

@@ -1,4 +1,5 @@
 import 'package:child_tracker/index.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -44,10 +45,10 @@ class KidTaskEditReminderScreen extends StatelessWidget {
             length: 2,
             child: Column(
               children: [
-                const Padding(
-                  padding: EdgeInsets.only(left: 34, right: 24),
+                Padding(
+                  padding: const EdgeInsets.only(left: 34, right: 24),
                   child: MaskotMessage(
-                    message: 'Добавить напоминание?',
+                    message: 'add_reminder_prompt'.tr(),
                     maskot: '2182-min',
                     flip: true,
                   ),
@@ -87,9 +88,9 @@ class KidTaskEditReminderScreen extends StatelessWidget {
                     labelPadding: EdgeInsets.zero,
                     padding: EdgeInsets.zero,
                     splashBorderRadius: BorderRadius.circular(6),
-                    tabs: const [
-                      Text('Однократно'),
-                      Text('Повторять'),
+                    tabs: [
+                      Text('one_time'.tr()),
+                      Text('repeat'.tr()),
                     ],
                   ),
                 ),
@@ -104,12 +105,14 @@ class KidTaskEditReminderScreen extends StatelessWidget {
                           children: [
                             CustomDateInput(
                               date: state.reminderDate,
+                              label: 'date'.tr(),
+                              hint: 'selectDataHint'.tr(),
                               onTap: () => onDatePick(context),
                             ),
                             const SizedBox(height: 16),
                             CustomTimeInput(
-                              onTap: () => onTimePick(context),
-                              label: 'Время напоминания',
+                              onTap: () => onTimePick(context), hint: 'selectTime'.tr(),
+                              label: 'reminder_time'.tr(),
                               enable: state.reminderDate != null,
                               time: getTimeFromDate(state.reminderDate),
                             ),
@@ -121,7 +124,7 @@ class KidTaskEditReminderScreen extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const AppText(text: 'Дни повторения'),
+                            AppText(text: 'repeat_days'.tr()),
                             const SizedBox(height: 16),
                             LayoutBuilder(builder: (context, constraints) {
                               final double maxWidth = constraints.maxWidth;
@@ -161,8 +164,8 @@ class KidTaskEditReminderScreen extends StatelessWidget {
                             }),
                             const SizedBox(height: 32),
                             CustomTimeInput(
-                              onTap: () => onTimePick(context),
-                              label: 'Время напоминания',
+                              onTap: () => onTimePick(context), hint: 'selectTime'.tr(),
+                              label: 'reminder_time'.tr(),
                               time: state.reminderTime,
                             ),
                           ],
@@ -183,7 +186,7 @@ class KidTaskEditReminderScreen extends StatelessWidget {
                           children: [
                             Expanded(
                               child: FilledAppButton(
-                                text: 'Применить',
+                                text: 'apply'.tr(),
                                 isActive: valid,
                                 onTap: () {
                                   if (valid) {

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:child_tracker/index.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -46,7 +47,7 @@ class _EditChatPhotoScreenState extends State<EditChatPhotoScreen> {
           uid: widget.chat.id,
         );
         if (photoUrl == null) {
-          SnackBarSerive.showErrorSnackBar('Произошла ошибка при загрузке фото');
+          SnackBarSerive.showErrorSnackBar('photoUploadError'.tr());
           return;
         } else {
           photo = photoUrl;
@@ -62,7 +63,7 @@ class _EditChatPhotoScreenState extends State<EditChatPhotoScreen> {
         isLoading = false;
       });
       if (mounted) {
-        SnackBarSerive.showSuccessSnackBar('Фото обновлено');
+        SnackBarSerive.showSuccessSnackBar('photo_updated'.tr());
         context.pop();
       }
     }
@@ -79,8 +80,8 @@ class _EditChatPhotoScreenState extends State<EditChatPhotoScreen> {
           icon: const Icon(CupertinoIcons.arrow_left),
           onPressed: () => context.pop(),
         ),
-        title: const AppText(
-          text: 'Фото чата',
+        title: AppText(
+          text: 'chatPhoto'.tr(),
           size: 24,
           fw: FontWeight.w700,
         ),
@@ -88,10 +89,10 @@ class _EditChatPhotoScreenState extends State<EditChatPhotoScreen> {
       ),
       body: Column(
         children: [
-          const Padding(
-            padding: EdgeInsets.only(left: 34, right: 24),
+          Padding(
+            padding: const EdgeInsets.only(left: 34, right: 24),
             child: MaskotMessage(
-              message: 'Добавим картинку?',
+              message: 'add_a_picture_prompt'.tr(),
               maskot: '2177-min',
               flip: true,
             ),
@@ -145,7 +146,7 @@ class _EditChatPhotoScreenState extends State<EditChatPhotoScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: FilledAppButton(
-                    text: 'Сохранить',
+                    text: 'save'.tr(),
                     isActive: valid,
                     onTap: valid ? onSave : null,
                   ),

@@ -1,5 +1,6 @@
 import 'package:child_tracker/index.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,8 +21,8 @@ class EditChatMembersScreen extends StatelessWidget {
           icon: const Icon(CupertinoIcons.arrow_left),
           onPressed: () => context.pop(),
         ),
-        title: const AppText(
-          text: 'Участники чата',
+        title:  AppText(
+          text: 'chat_members'.tr(),
           size: 24,
           fw: FontWeight.w700,
         ),
@@ -45,7 +46,7 @@ class EditChatMembersScreen extends StatelessWidget {
                         child: FilledSecondaryAppButton(
                           onTap: () => context.push('/chat_room/add_member', extra: chat),
                           icon: const Icon(CupertinoIcons.add, size: 18, color: primary900),
-                          text: '  Добавить участника',
+                          text: '  ${"add_member".tr()}',
                         ),
                       ),
                       const SizedBox(height: 20),
@@ -74,9 +75,10 @@ class _ChatMemebersListState extends State<_ChatMemebersList> {
     final result = await showConfirmModalBottomSheet(
       context,
       isDestructive: true,
-      confirmText: 'Да, удалить',
-      title: 'Удалить участника',
-      message: 'Вы уверены, что хотите удалить участника?',
+      confirmText: 'yes_delete'.tr(),
+      title: 'delete_member'.tr(),
+      message: 'confirm_delete_member'.tr(),
+      cancelText: 'cancel'.tr(),
     );
 
     if (result == true && context.mounted) {

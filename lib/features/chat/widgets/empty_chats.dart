@@ -1,4 +1,5 @@
 import 'package:child_tracker/index.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class EmptyChatsWidget extends StatelessWidget {
@@ -22,15 +23,15 @@ class EmptyChatsWidget extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 12),
-          const AppText(
-            text: 'Нет чатов',
+          AppText(
+            text: 'no_chats'.tr(),
             size: 24,
             fw: FontWeight.w600,
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),
-          const AppText(
-            text: 'Добавьте чат,\nнажав кнопку (+) выше',
+           AppText(
+            text: 'add_chat_button'.tr(),
             fw: FontWeight.normal,
             color: greyscale700,
             textAlign: TextAlign.center,

@@ -1,5 +1,6 @@
 import 'package:child_tracker/index.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,10 +29,10 @@ class _MyConnectionsScreenState extends State<MyConnectionsScreen> {
     final confirm = await showConfirmModalBottomSheet(
       context,
       isDestructive: true,
-      title: 'Удалить ${me.isKid ? 'наставника' : 'ребенка'}',
-      message: 'Вы уверены, что хотите удалить ${me.isKid ? 'наставника' : 'ребенка'}?',
-      confirmText: 'Да, удалить',
-      cancelText: 'Отмена',
+      title: '${"delete".tr()} ${me.isKid ? 'mentorA'.tr() : 'kidsA'.tr()}',
+      message: '${'confirmDeleteConnection'.tr()} ${me.isKid ? 'mentorA'.tr() : 'kidsA'.tr()}',
+      confirmText: 'yesDelete'.tr(),
+      cancelText: 'cancel'.tr(),
     );
 
     if (confirm == true && mounted) {
@@ -43,9 +44,9 @@ class _MyConnectionsScreenState extends State<MyConnectionsScreen> {
         loading = false;
       });
       if (result) {
-        SnackBarSerive.showSuccessSnackBar('${me.isKid ? 'Наставник' : 'Ребенок'} удален');
+        SnackBarSerive.showSuccessSnackBar('${me.isKid ? 'roleSelectionMentor'.tr() : 'roleSelectionKid'.tr()} ${"deleted".tr()}');
       } else {
-        SnackBarSerive.showErrorSnackBar('Произошла ошибка');
+        SnackBarSerive.showErrorSnackBar('defaultErrorText'.tr());
       }
     }
   }
@@ -77,7 +78,7 @@ class _MyConnectionsScreenState extends State<MyConnectionsScreen> {
           icon: const Icon(CupertinoIcons.arrow_left),
           onPressed: () => context.pop(),
         ),
-        title: AppText(text: widget.user.isKid ? 'Мои наставники' : 'Мои дети', size: 24, fw: FontWeight.w700),
+        title: AppText(text: widget.user.isKid ? 'myMentors'.tr() : 'myKids'.tr(), size: 24, fw: FontWeight.w700),
         centerTitle: true,
       ),
       body: Stack(
@@ -94,7 +95,7 @@ class _MyConnectionsScreenState extends State<MyConnectionsScreen> {
                       if (streamUser.connections.isEmpty) {
                         return Center(
                           child: AppText(
-                            text: streamUser.isKid ? 'Нет наставников' : 'Нет детей',
+                            text: streamUser.isKid ? 'no_mentors'.tr() : 'no_kids'.tr(),
                             color: greyscale500,
                             fw: FontWeight.w400,
                           ),
@@ -130,7 +131,7 @@ class _MyConnectionsScreenState extends State<MyConnectionsScreen> {
                       children: [
                         const SizedBox(height: 20),
                         FilledSecondaryAppButton(
-                          text: widget.user.isKid ? 'Добавить наставника': 'Добавить ребёнка',
+                          text: widget.user.isKid ? 'add_mentor'.tr() : 'add_kid'.tr(),
                           onTap: () => context.push('/connections/add_connection'),
                           icon: const Padding(
                             padding: EdgeInsets.only(right: 12),
@@ -153,14 +154,14 @@ class _MyConnectionsScreenState extends State<MyConnectionsScreen> {
                   width: 200,
                   height: 200,
                   decoration: BoxDecoration(borderRadius: BorderRadius.circular(16), color: white),
-                  child: const Center(
+                  child:  Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        AppText(text: 'Загрузка...', size: 18, fw: FontWeight.w700),
-                        SizedBox(height: 16),
-                        CircularProgressIndicator(),
+                        AppText(text: 'loading'.tr(), size: 18, fw: FontWeight.w700),
+                        const SizedBox(height: 16),
+                        const CircularProgressIndicator(),
                       ],
                     ),
                   ),

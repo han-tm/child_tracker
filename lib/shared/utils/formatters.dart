@@ -1,27 +1,35 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 String dateToStringDDMMYYYY(DateTime? date) =>
-    date == null ? 'Неизвестно' : DateFormat('dd.MM.yyyy', 'ru').format(date);
+    date == null ? 'undefined'.tr() : DateFormat('dd.MM.yyyy', 'ru').format(date);
 
-String dateToHHmm(DateTime? date) => date == null ? 'Неизвестно' : DateFormat('HH:mm', 'ru').format(date);
+String dateToHHmm(DateTime? date) => date == null ? 'undefined'.tr() : DateFormat('HH:mm', 'ru').format(date);
 
-const Map<int, String> _russianMonthsNominative = {
-  1: 'Январь',
-  2: 'Февраль',
-  3: 'Март',
-  4: 'Апрель',
-  5: 'Май',
-  6: 'Июнь',
-  7: 'Июль',
-  8: 'Август',
-  9: 'Сентябрь',
-  10: 'Октябрь',
-  11: 'Ноябрь',
-  12: 'Декабрь',
+Map<int, String> _russianMonthsNominative = {
+  1: 'january'.tr(),
+  2: 'february'.tr(),
+  3: 'march'.tr(),
+  4: 'april'.tr(),
+  5: 'may'.tr(),
+  6: 'june'.tr(),
+  7: 'july'.tr(),
+  8: 'august'.tr(),
+  9: 'september'.tr(),
+  10: 'october'.tr(),
+  11: 'november'.tr(),
+  12: 'december'.tr(),
 };
 
-const List<String> russianWeekdaysNominative = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
+List<String> russianWeekdaysNominative = [
+  'mon'.tr(),
+  'tue'.tr(),
+  'wed'.tr(),
+  'thu'.tr(),
+  'fri'.tr(),
+  'sat'.tr(),
+  'sun'.tr(),
+];
 
 String getMonthYearInNominative(DateTime date) {
   final String month = _russianMonthsNominative[date.month]!;
@@ -32,9 +40,9 @@ String getMonthYearInNominative(DateTime date) {
 String dateToChatDivider(DateTime date) {
   DateTime now = DateTime.now();
   if (date.year == now.year && date.month == now.month && date.day == now.day) {
-    return 'Сегодня';
+    return 'today'.tr();
   } else if (date.year == now.year && date.month == now.month && date.day == now.day - 1) {
-    return 'Вчера';
+    return 'yesterday'.tr();
   } else {
     return DateFormat('d MMMM', 'ru').format(date);
   }

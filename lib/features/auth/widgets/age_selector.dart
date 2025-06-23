@@ -1,4 +1,5 @@
 import 'package:child_tracker/index.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -44,7 +45,7 @@ class _AgeSelectorState extends State<AgeSelector> {
                 ),
                 child: Row(
                   children: [
-                    Expanded(child: AppText(text: '$age лет', size: 20, fw: FontWeight.w700)),
+                    Expanded(child: AppText(text: '$age ${'ageInputYearsOld'.tr()}', size: 20, fw: FontWeight.w700)),
                     const SizedBox(width: 10),
                     if ( age == (widget.selectedAge ?? selectedAge)) SvgPicture.asset('assets/images/checkmark.svg', width: 24, height: 24),
                   ],

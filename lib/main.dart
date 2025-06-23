@@ -1,11 +1,12 @@
 import 'package:child_tracker/app.dart';
 import 'package:child_tracker/index.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 @pragma('vm:entry-point')
@@ -17,22 +18,24 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  await EasyLocalization.ensureInitialized();
   await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   initializeDependencies();
 
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((_) {
-    runApp(
-      const MaterialApp(
-        localizationsDelegates: [
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: [Locale('ru', 'RU')],
-        debugShowCheckedModeBanner: false,
-        home: App(),
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((_) async {
+    final localeCubit = sl<LocaleCubit>();
+    await localeCubit.initCurrentLocale();
+
+    runApp(EasyLocalization(
+      supportedLocales: LocaleCubit.supportedLocales,
+      path: 'assets/translations',
+      fallbackLocale: const Locale('ru'),
+      startLocale: localeCubit.state,
+      child: BlocProvider.value(
+        value: localeCubit,
+        child: const App(),
       ),
-    );
+    ));
   });
 }

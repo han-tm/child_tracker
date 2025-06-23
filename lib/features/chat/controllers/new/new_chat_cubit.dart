@@ -1,6 +1,7 @@
 import 'package:child_tracker/index.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collection/collection.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
@@ -21,11 +22,11 @@ class NewChatCubit extends Cubit<NewChatState> {
 
   Future<DocumentReference?> createOrReturnPrivateChat(DocumentReference user) async {
     if (_userCubit.state == null) {
-      throw Exception('Пользователь не найден');
+      throw Exception('userNotFound'.tr());
     }
 
     if (_userCubit.state!.ref.id == user.id) {
-      throw Exception('Нельзя писать самому себе');
+      throw Exception('cantWriteYourself'.tr());
     }
 
     final DocumentReference kidRef = _userCubit.state!.isKid ? _userCubit.state!.ref : user;
@@ -44,11 +45,11 @@ class NewChatCubit extends Cubit<NewChatState> {
       if (query.docs.isNotEmpty) {
         return query.docs.first.reference;
       } else {
-        //создаем новый приватный чат
+        
         final newChatRef = _fs.collection('chats').doc();
 
         final newMessage = LastMessage(
-          text: 'Напишите первое сообщение',
+          text: 'writeFirstMessage'.tr(),
           senderId: _userCubit.state!.ref.id,
           timestamp: DateTime.now(),
         );
@@ -81,7 +82,7 @@ class NewChatCubit extends Cubit<NewChatState> {
 
   Future<void> createGroupChat() async {
     if (_userCubit.state == null) {
-      emit(state.copyWith(status: NewChatStatus.error, errorMessage: 'Пользователь не найден'));
+      emit(state.copyWith(status: NewChatStatus.error, errorMessage: 'userNotFound'.tr()));
       return;
     }
 
@@ -91,7 +92,7 @@ class NewChatCubit extends Cubit<NewChatState> {
       final newChatRef = _fs.collection('chats').doc();
 
       final newMessage =
-          LastMessage(text: 'Напишите первое сообщение', senderId: _userCubit.state!.id, timestamp: DateTime.now());
+          LastMessage(text: 'writeFirstMessage'.tr(), senderId: _userCubit.state!.id, timestamp: DateTime.now());
 
       final members = [_userCubit.state!.ref, ...state.members];
       final unreads = {for (var member in members) member.id: 0};
@@ -117,7 +118,7 @@ class NewChatCubit extends Cubit<NewChatState> {
           uid: newChatRef.id,
         );
         if (photoUrl == null) {
-          emit(state.copyWith(status: NewChatStatus.error, errorMessage: 'Ошибка загрузки фото'));
+          emit(state.copyWith(status: NewChatStatus.error, errorMessage: 'photoUploadError'.tr()));
           return;
         } else {
           newChatData['photo'] = photoUrl;
@@ -125,7 +126,7 @@ class NewChatCubit extends Cubit<NewChatState> {
       } else if (state.emoji != null) {
         newChatData['photo'] = 'emoji:${state.emoji}';
       } else {
-        emit(state.copyWith(status: NewChatStatus.error, errorMessage: 'Ошибка загрузки фото'));
+        emit(state.copyWith(status: NewChatStatus.error, errorMessage: 'photoUploadError'.tr()));
       }
 
       await newChatRef.set(newChatData);

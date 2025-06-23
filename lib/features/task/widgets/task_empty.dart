@@ -1,4 +1,5 @@
 import 'package:child_tracker/index.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class TaskEmptyWidget extends StatelessWidget {
@@ -36,14 +37,14 @@ class TaskEmptyWidget extends StatelessWidget {
                   fit: BoxFit.contain,
                 ),
                 const SizedBox(height: 8),
-                const AppText(
-                  text: 'Нет заданий на сегодня',
+                AppText(
+                  text: 'no_tasks_for_today'.tr(),
                   size: 24,
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 16),
-                const AppText(
-                  text: 'Добавьте задание,\nнажав кнопку (+) ниже',
+                AppText(
+                  text: 'add_task_by_pressing_button'.tr(),
                   fw: FontWeight.normal,
                   textAlign: TextAlign.center,
                   color: greyscale700,

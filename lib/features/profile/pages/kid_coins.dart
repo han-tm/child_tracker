@@ -1,5 +1,6 @@
 import 'package:child_tracker/index.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -19,7 +20,7 @@ class KidCoinsScreen extends StatelessWidget {
           icon: const Icon(CupertinoIcons.arrow_left),
           onPressed: () => context.pop(),
         ),
-        title: const AppText(text: 'Баллы по заданиям', size: 24, fw: FontWeight.w700),
+        title: AppText(text: 'taskPoints'.tr(), size: 24, fw: FontWeight.w700),
         centerTitle: true,
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(125),
@@ -29,10 +30,10 @@ class KidCoinsScreen extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
-            padding: EdgeInsets.all(24.0),
+          Padding(
+            padding: const EdgeInsets.all(24.0),
             child: AppText(
-              text: 'История изменений',
+              text: 'changeHistory'.tr(),
               size: 20,
               fw: FontWeight.w700,
             ),
@@ -44,9 +45,9 @@ class KidCoinsScreen extends StatelessWidget {
                 if (!snapshot.hasData) return const Center(child: CircularProgressIndicator());
                 final data = snapshot.data!;
                 if (data.isEmpty) {
-                  return const Center(
+                  return  Center(
                     child: AppText(
-                      text: 'Нет изменений',
+                      text: 'noChanges'.tr(),
                       fw: FontWeight.normal,
                       color: greyscale500,
                     ),
@@ -85,9 +86,9 @@ class KidCoinsHeader extends StatelessWidget {
               borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
               color: orange,
             ),
-            child: const Center(
+            child:  Center(
               child: AppText(
-                text: 'Текущий баланс',
+                text: 'currentBalance'.tr(),
                 color: white,
                 fw: FontWeight.w700,
               ),

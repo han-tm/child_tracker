@@ -1,4 +1,5 @@
 import 'package:child_tracker/index.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -34,7 +35,7 @@ class CoinChangeCard extends StatelessWidget {
                       final mentor = snapshot.data;
 
                       return AppText(
-                        text: 'Наставник: ${mentor?.name ?? '...'}',
+                        text: '${'mentor'.tr()} ${mentor?.name ?? '...'}',
                         size: 12,
                         fw: FontWeight.normal,
                         color: greyscale700,
@@ -44,7 +45,7 @@ class CoinChangeCard extends StatelessWidget {
                 const SizedBox(height: 4),
                 if (coinChange.name != null)
                   AppText(
-                    text: 'Причина: ${coinChange.name}',
+                    text: '${"reason".tr()} ${coinChange.name}',
                     size: 12,
                     fw: FontWeight.normal,
                     color: greyscale700,
@@ -53,7 +54,7 @@ class CoinChangeCard extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 12),
-          AppText(text: '${coinChange.coin.isNegative ? '' : '+'}${coinChange.coin} баллов', size: 16, fw: FontWeight.w700),
+          AppText(text: '${coinChange.coin.isNegative ? '' : '+'}${coinChange.coin} ${"points".tr()}', size: 16, fw: FontWeight.w700),
         ],
       ),
     );

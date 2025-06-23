@@ -1,5 +1,6 @@
 import 'package:child_tracker/index.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -39,11 +40,11 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
   void onCancel() async {
     final confrim = await showConfirmModalBottomSheet(
       context,
-      title: 'Отменить',
+      title: 'cancelIt'.tr(),
       isDestructive: true,
-      cancelText: 'Нет, не отменять',
-      confirmText: 'Да, отменить',
-      message: 'Хм… передумал? Бывает!',
+      cancelText: 'no_dont_cancel'.tr(),
+      confirmText: 'yes_cancel'.tr(),
+      message: 'changed_your_mind'.tr(),
     );
     if (confrim == true && mounted) {
       context.push('/task_cancel_reason', extra: task);
@@ -63,18 +64,18 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
   void onDelete() async {
     final confrim = await showConfirmModalBottomSheet(
       context,
-      title: 'Удалить',
+      title: 'cancel'.tr(),
       isDestructive: true,
-      cancelText: 'Отмена',
-      confirmText: 'Да, удалить',
-      message: 'Ой... точно удаляем?',
+      cancelText: 'cancel'.tr(),
+      confirmText: 'yes_delete'.tr(),
+      message: 'are_you_sure_delete'.tr(),
     );
     if (confrim == true && mounted) {
       final result = await context.read<TaskCubit>().deleteTask(task);
       if (result && mounted) {
         context.replace('/task_delete_success');
       } else {
-        SnackBarSerive.showErrorSnackBar('Не удалось удалить задачу');
+        SnackBarSerive.showErrorSnackBar('failed_to_delete_task'.tr());
       }
     }
   }
@@ -84,11 +85,11 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
       // kids task
       final confrim = await showConfirmModalBottomSheet(
         context,
-        title: 'Задание выполнено',
+        title: 'task_completed'.tr(),
         isDestructive: false,
-        cancelText: 'Отмена',
-        confirmText: 'Да, подтвердить',
-        message: 'Ну что, всё готово? Жми подтвердить!',
+        cancelText: 'cancel'.tr(),
+        confirmText: 'yesConfirm'.tr(),
+        message: 'is_everything_ready_confirm'.tr(),
       );
       if (confrim == true && mounted) {
         final result = await context.read<TaskCubit>().completeTask(task);
@@ -96,7 +97,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
           final data = {'name': me.name};
           context.replace('/task_complete_success', extra: data);
         } else {
-          SnackBarSerive.showErrorSnackBar('Не удалось выполнить задачу');
+          SnackBarSerive.showErrorSnackBar('failed_to_complete_task'.tr());
         }
       }
     }
@@ -249,7 +250,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                                     children: [
                                       Expanded(
                                         child: AppText(
-                                          text: 'Ребёнок ${task.owner?.id == me.id ? '(создал)' : ''}',
+                                          text: '${"roleSelectionKid".tr()} ${task.owner?.id == me.id ? "creator".tr() : ''}',
                                           size: 16,
                                           fw: FontWeight.w500,
                                           color: greyscale800,
@@ -279,7 +280,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                                           Expanded(
                                             flex: 2,
                                             child: AppText(
-                                              text: 'Наставник ${task.owner?.id == me.id ? '(создал)' : ''}',
+                                              text: '${"roleSelectionMentor".tr()} ${task.owner?.id == me.id ? 'creator'.tr() : ''}',
                                               size: 16,
                                               fw: FontWeight.w500,
                                               color: greyscale800,
@@ -308,10 +309,10 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                                       padding: const EdgeInsets.only(top: 16),
                                       child: Row(
                                         children: [
-                                          const Expanded(
+                                           Expanded(
                                             flex: 2,
                                             child: AppText(
-                                              text: 'Баллы (опц.)',
+                                              text: 'points_optional'.tr(),
                                               size: 16,
                                               fw: FontWeight.w500,
                                               color: greyscale800,
@@ -343,9 +344,9 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                                   const SizedBox(height: 16),
                                   Row(
                                     children: [
-                                      const Expanded(
+                                       Expanded(
                                         child: AppText(
-                                          text: 'Начало',
+                                          text: 'start'.tr(),
                                           size: 16,
                                           fw: FontWeight.w500,
                                           color: greyscale800,
@@ -362,9 +363,9 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                                   const SizedBox(height: 16),
                                   Row(
                                     children: [
-                                      const Expanded(
+                                       Expanded(
                                         child: AppText(
-                                          text: 'Окончание (опц.)',
+                                          text: 'end_optional'.tr(),
                                           size: 16,
                                           fw: FontWeight.w500,
                                           color: greyscale800,
@@ -381,9 +382,9 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                                   const SizedBox(height: 16),
                                   Row(
                                     children: [
-                                      const Expanded(
+                                       Expanded(
                                         child: AppText(
-                                          text: 'Напоминание (опц.)',
+                                          text: 'reminder_optional'.tr(),
                                           size: 16,
                                           fw: FontWeight.w500,
                                           color: greyscale800,
@@ -408,8 +409,8 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                                             flex: 2,
                                             child: Row(
                                               children: [
-                                                const AppText(
-                                                  text: 'Приоритет',
+                                                 AppText(
+                                                  text: 'priority'.tr(),
                                                   size: 16,
                                                   fw: FontWeight.w500,
                                                   color: greyscale800,
@@ -435,8 +436,8 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                                                   height: 24,
                                                 ),
                                                 const SizedBox(width: 10),
-                                                const AppText(
-                                                  text: 'Задание дня',
+                                                 AppText(
+                                                  text: 'task_of_the_day'.tr(),
                                                   size: 16,
                                                   textAlign: TextAlign.end,
                                                 ),
@@ -463,7 +464,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                                   Padding(
                                     padding: const EdgeInsets.symmetric(horizontal: 24),
                                     child: FilledAppButton(
-                                      text: 'Задание выполнено',
+                                      text: 'task_completed_exclamation'.tr(),
                                       onTap: () {
                                         onComplete(me);
                                       },
