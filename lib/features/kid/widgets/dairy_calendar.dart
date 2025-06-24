@@ -1,6 +1,6 @@
 import 'package:child_tracker/index.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class CustomDairyCalendar extends StatefulWidget {
@@ -34,6 +34,7 @@ class _CustomDairyCalendarState extends State<CustomDairyCalendar> {
 
   @override
   Widget build(BuildContext context) {
+    final currentLocale = context.locale.languageCode;
     return Container(
       decoration: const BoxDecoration(color: white, border: Border(bottom: BorderSide(color: greyscale200))),
       child: Column(
@@ -41,7 +42,7 @@ class _CustomDairyCalendarState extends State<CustomDairyCalendar> {
           Stack(
             children: [
               TableCalendar(
-                locale: 'ru',
+                locale: currentLocale,
                 headerStyle: const HeaderStyle(
                   formatButtonVisible: false,
                   titleCentered: true,

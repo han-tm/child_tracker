@@ -11,7 +11,7 @@
     "welcome_title": "Welcome!",
     "welcomeScreenDescription1": "This is not just an app — it's your assistant in raising, motivating, and communicating with your child.\nCreate tasks, track progress, and encourage success!",
     "welcomeScreenTasksAndRewards": "Tasks and rewards",
-    "welcomeScreenDescription2": "Set goals: from household chores to school achievements.\nFor completing tasks, the child receives points that can be exchanged for pleasant bonuses",
+    "welcomeScreenDescription2": "Set goals: from household chores\nto school achievements.\nFor completing tasks, the child receives points that can be exchanged for pleasant bonuses",
     "welcomeScreenConvenientTools": "Magic assistant",
     "welcomeScreenDescription3": "Our {} is always there - he will give advice, support and congratulate.\nHe will make learning and motivation fun and understandable for the child!",
     "buttonSkip": "Skip",
@@ -198,7 +198,8 @@
         "other": "{} reviews"
     },
     "buy_premium": "Buy premium",
-    "fremium_period": "Free period of validity",
+    "fremium_period": "Free period up to",
+    "premium_period": "Valid until",
     "share_qr_code_error": "Error sharing the QR code",
     "share": "Share",
     "task_created": "Task created!",
@@ -348,5 +349,13 @@
     "createFrom": "Created by",
     "no": "no",
     "play": "Play",
-    "learn": "Learn"
+    "learn": "Learn",
+    "invalidCode": "Invalid code",
+    "cantSendToPhone": "Cannot send to phone",
+    "no_subscription": "No subscription",
+    "yourPlan": "Your plan",
+    "byCity": "By city",
+    "byWorld": "By world",
+    "noRaitingParticipants": "No participants",
+    "noRaiting": "No rating"
 }

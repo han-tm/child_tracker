@@ -121,8 +121,6 @@ final GoRouter router = GoRouter(
       path: '/splash',
       builder: (context, state) => const SplashScreen(),
     ),
-
-    
     GoRoute(
       path: '/auth',
       builder: (context, state) => const LoginScreen(),
@@ -153,8 +151,6 @@ final GoRouter router = GoRouter(
         ),
       ],
     ),
-
-    
     ShellRoute(
       builder: (context, state, child) => KidMainScreen(state: state, child: child),
       routes: [
@@ -186,7 +182,6 @@ final GoRouter router = GoRouter(
         ),
       ],
     ),
-
     ShellRoute(
       builder: (context, state, child) => MentorMainScreen(state: state, child: child),
       routes: [
@@ -213,6 +208,10 @@ final GoRouter router = GoRouter(
           ],
         ),
       ],
+    ),
+    GoRoute(
+      path: '/current_subscription',
+      builder: (context, state) => const CurrentSubscriptionScreen(),
     ),
     GoRoute(
       path: '/edit_profile',
@@ -251,7 +250,6 @@ final GoRouter router = GoRouter(
         ),
       ],
     ),
-
     GoRoute(
       path: '/city_search',
       builder: (context, state) => CitySearchScreen(onSelected: state.extra as Function(String)),
@@ -408,13 +406,21 @@ final GoRouter router = GoRouter(
               path: 'add_member',
               builder: (context, state) => const AddMemberToDairyScreen(),
             ),
-             GoRoute(
+            GoRoute(
               path: 'dairy_success',
               builder: (context, state) => const AddDairySuccessScreen(),
             ),
           ],
         ),
       ],
+    ),
+    GoRoute(
+      path: '/game_raiting',
+      builder: (context, state) => const GameRaitingScreen(),
+    ),
+    GoRoute(
+      path: '/game_level',
+      builder: (context, state) => const GameLevelScreen(),
     ),
   ],
   errorBuilder: (context, state) => ErrorScreen(error: state.error.toString()),

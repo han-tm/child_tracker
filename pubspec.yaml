@@ -51,6 +51,7 @@ dependencies:
   mobile_scanner: ^6.0.10
   fl_chart: 0.69.0
   easy_localization: ^3.0.7+1
+  confetti: ^0.8.0
   
 
 

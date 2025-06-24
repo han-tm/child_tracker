@@ -34,7 +34,11 @@ class _ScanQRScreenState extends State<ScanQRScreen> {
 
   Future<void> validateAndFetchDocument(String documentId) async {
     
-    if (documentId.isEmpty || documentId.length < 20) {
+    if (documentId.isEmpty || documentId.length < 15) {
+      return;
+    }
+
+    if(!documentId.startsWith('phone_')){
       return;
     }
 

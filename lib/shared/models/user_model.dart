@@ -1,5 +1,6 @@
 import 'package:child_tracker/index.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 
 class UserModel {
   final String id;
@@ -18,6 +19,8 @@ class UserModel {
   final List<DocumentReference> connections;
   final List<DocumentReference> connectionRequests;
   final List<DocumentReference> dairyMembers;
+  final DateTime? trialSubscriptionPlan;
+  final DateTime? premiumSubscriptionPlan;
 
   UserModel({
     required this.name,
@@ -36,6 +39,8 @@ class UserModel {
     this.connections = const [],
     this.connectionRequests = const [],
     this.dairyMembers = const [],
+    this.trialSubscriptionPlan,
+    this.premiumSubscriptionPlan,
   });
 
   factory UserModel.fromFirestore(DocumentSnapshot doc) {
@@ -55,8 +60,13 @@ class UserModel {
       notification: data['notification'] ?? true,
       dairyNotification: data['dairy_notification'] ?? true,
       connections: (data['connections'] as List<dynamic>? ?? []).map((e) => e as DocumentReference).toList(),
-      connectionRequests: (data['connection_requests'] as List<dynamic>? ?? []).map((e) => e as DocumentReference).toList(),
+      connectionRequests:
+          (data['connection_requests'] as List<dynamic>? ?? []).map((e) => e as DocumentReference).toList(),
       dairyMembers: (data['dairy_members'] as List<dynamic>? ?? []).map((e) => e as DocumentReference).toList(),
+      trialSubscriptionPlan:
+          data['trial_subscription'] != null ? (data['trial_subscription'] as Timestamp).toDate() : null,
+      premiumSubscriptionPlan:
+          data['premium_subscription'] != null ? (data['premium_subscription'] as Timestamp).toDate() : null,
     );
   }
 
@@ -65,6 +75,38 @@ class UserModel {
   DocumentReference get ref => FirebaseFirestore.instance.collection('users').doc(id);
 
   bool hasInConnections(DocumentReference ref) => connections.contains(ref);
+
+  bool hasSubscription() {
+    final now = DateTime.now();
+    if (trialSubscriptionPlan != null && trialSubscriptionPlan!.isAfter(now)) {
+      return true;
+    }
+    if (premiumSubscriptionPlan != null && premiumSubscriptionPlan!.isAfter(now)) {
+      return true;
+    }
+    return false;
+  }
+
+  bool isSubscriptionTrial() {
+    final now = DateTime.now();
+    if (trialSubscriptionPlan != null && trialSubscriptionPlan!.isAfter(now)) {
+      return true;
+    }
+    return false;
+  }
+
+  String currentSubscriptionValidDate(String currentLocale) {
+    if (!hasSubscription()) return '-';
+    final now = DateTime.now();
+
+    if (trialSubscriptionPlan != null && trialSubscriptionPlan!.isAfter(now)) {
+      return DateFormat('dd MMMM yyyy', currentLocale).format(trialSubscriptionPlan!);
+    }
+    if (premiumSubscriptionPlan != null && premiumSubscriptionPlan!.isAfter(now)) {
+      return DateFormat('dd MMMM yyyy', currentLocale).format(premiumSubscriptionPlan!);
+    }
+    return '-';
+  }
 
   UserModel copyWith({
     String? id,
@@ -83,6 +125,8 @@ class UserModel {
     List<DocumentReference>? connections,
     List<DocumentReference>? connectionRequests,
     List<DocumentReference>? dairyMembers,
+    DateTime? trialSubscriptionPlan,
+    DateTime? premiumSubscriptionPlan,
   }) {
     return UserModel(
       id: id ?? this.id,
@@ -101,6 +145,8 @@ class UserModel {
       connections: connections ?? this.connections,
       connectionRequests: connectionRequests ?? this.connectionRequests,
       dairyMembers: dairyMembers ?? this.dairyMembers,
+      trialSubscriptionPlan: trialSubscriptionPlan ?? this.trialSubscriptionPlan,
+      premiumSubscriptionPlan: premiumSubscriptionPlan ?? this.premiumSubscriptionPlan,
     );
   }
 }

@@ -44,11 +44,19 @@ class MentorProfileWidget extends StatelessWidget {
             ),
           ),
           const Divider(height: 48, thickness: 1, color: greyscale200),
-          ProfileMenuCard(
-            onTap: () => {},
-            icon: 'crown',
-            title: 'buy_premium'.tr(),
-            description: '${"fremium_period".tr()} 22 апреля 2025 г',
+          Builder(
+            builder: (context) {
+              bool hasSubscription = user.hasSubscription();
+              bool isTrial = user.isSubscriptionTrial();
+              return ProfileMenuCard(
+                onTap: () => context.push('/current_subscription'),
+                icon: 'crown',
+                title: 'buy_premium'.tr(),
+                description: !hasSubscription
+                    ? 'no_subscription'.tr()
+                    : '${isTrial ? "fremium_period".tr() : "premium_period".tr()} ${user.currentSubscriptionValidDate(context.locale.languageCode)}',
+              );
+            },
           ),
           const SizedBox(height: 24),
           ProfileMenuCard(

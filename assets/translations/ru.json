@@ -198,7 +198,8 @@
         "other": "{} отзывов"
     },
     "buy_premium": "Оформите премиум!",
-    "fremium_period": "Срок бесплатного периода\nпо",
+    "fremium_period": "Срок бесплатного периода\nдо",
+    "premium_period": "Срок действия до",
     "share_qr_code_error": "Произошла ошибка при попытке поделиться QR-кодом.",
     "share": "Поделиться",
     "task_created": "Задание создано!",
@@ -348,5 +349,13 @@
     "createFrom": "Создал(а)",
     "no": "нет",
     "play": "Играй",
-    "learn": "Изучай"
+    "learn": "Изучай",
+    "invalidCode": "Неверный код",
+    "cantSendToPhone": "Не удалось отправить на этот номер",
+    "no_subscription": "У вас нет активной подписки",
+    "yourPlan": "Ваш план",
+    "byCity": "По городу",
+    "byWorld": "По миру",
+    "noRaitingParticipants": "Нет участников",
+    "noRaiting": "Нет рейтинга"
 }

@@ -54,8 +54,9 @@ class SnackBarSerive {
           margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
           decoration: BoxDecoration(
-            color: const Color(0x00000000).withOpacity(0.8),
+            color: Colors.white,
             borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: greyscale200),
             boxShadow: [
               BoxShadow(
                 blurRadius: 32,
@@ -72,7 +73,8 @@ class SnackBarSerive {
                   text: title,
                   size: 16,
                   fw: FontWeight.w600,
-                  color: secondary900,
+                  color: greyscale900,
+                  maxLine: 3,
                 ),
               ),
             ],

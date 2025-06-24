@@ -54,56 +54,68 @@ class _KidMainScreenState extends State<KidMainScreen> {
     return Scaffold(
       body: widget.child,
       backgroundColor: greyscale100,
-      bottomNavigationBar: BottomNavigationBar(
-        elevation: 0,
-        type: BottomNavigationBarType.fixed,
-        currentIndex: _calculateSelectedIndex(context),
-        onTap: onTapTab,
-        enableFeedback: true,
-        backgroundColor: white,
-        selectedItemColor: secondary900,
-        unselectedItemColor: greyscale500,
-        selectedLabelStyle: const TextStyle(
-          fontSize: 10,
-          fontWeight: FontWeight.w700,
-          fontFamily: Involve,
-          height: 1.6,
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: white,
+          boxShadow: [
+            BoxShadow(
+              blurRadius: 60,
+              offset: const Offset(0, 4),
+              color: const Color(0xFF04060F).withOpacity(0.08),
+            )
+          ],
         ),
-        unselectedLabelStyle: const TextStyle(
-          fontSize: 10,
-          fontWeight: FontWeight.w500,
-          fontFamily: Involve,
-          height: 1.6,
+        child: BottomNavigationBar(
+          elevation: 0,
+          type: BottomNavigationBarType.fixed,
+          currentIndex: _calculateSelectedIndex(context),
+          onTap: onTapTab,
+          enableFeedback: true,
+          backgroundColor: white,
+          selectedItemColor: secondary900,
+          unselectedItemColor: greyscale500,
+          selectedLabelStyle: const TextStyle(
+            fontSize: 10,
+            fontWeight: FontWeight.w700,
+            fontFamily: Involve,
+            height: 1.6,
+          ),
+          unselectedLabelStyle: const TextStyle(
+            fontSize: 10,
+            fontWeight: FontWeight.w500,
+            fontFamily: Involve,
+            height: 1.6,
+          ),
+          showUnselectedLabels: true,
+          iconSize: 24,
+          items: [
+            BottomNavigationBarItem(
+              activeIcon: SvgPicture.asset('assets/images/bonus_filled_tab.svg'),
+              icon: SvgPicture.asset('assets/images/bonus_tab.svg'),
+              label: 'bonuses'.tr(),
+            ),
+            BottomNavigationBarItem(
+              activeIcon: SvgPicture.asset('assets/images/tracker_filled_tab.svg'),
+              icon: SvgPicture.asset('assets/images/tracker_tab.svg'),
+              label: 'tasks'.tr(),
+            ),
+            BottomNavigationBarItem(
+              activeIcon: SvgPicture.asset('assets/images/game_filled_tab.svg'),
+              icon: SvgPicture.asset('assets/images/game_tab.svg'),
+              label: 'games'.tr(),
+            ),
+            BottomNavigationBarItem(
+              activeIcon: SvgPicture.asset('assets/images/chat_filled_tab.svg'),
+              icon: SvgPicture.asset('assets/images/chat_tab.svg'),
+              label: 'chats'.tr(),
+            ),
+            BottomNavigationBarItem(
+              activeIcon: SvgPicture.asset('assets/images/profile_filled_tab.svg'),
+              icon: SvgPicture.asset('assets/images/profile_tab.svg'),
+              label: 'profile'.tr(),
+            ),
+          ],
         ),
-        showUnselectedLabels: true,
-        iconSize: 24,
-        items: [
-          BottomNavigationBarItem(
-            activeIcon: SvgPicture.asset('assets/images/bonus_filled_tab.svg'),
-            icon: SvgPicture.asset('assets/images/bonus_tab.svg'),
-            label: 'bonuses'.tr(),
-          ),
-          BottomNavigationBarItem(
-            activeIcon: SvgPicture.asset('assets/images/tracker_filled_tab.svg'),
-            icon: SvgPicture.asset('assets/images/tracker_tab.svg'),
-            label: 'tasks'.tr(),
-          ),
-          BottomNavigationBarItem(
-            activeIcon: SvgPicture.asset('assets/images/game_filled_tab.svg'),
-            icon: SvgPicture.asset('assets/images/game_tab.svg'),
-            label: 'games'.tr(),
-          ),
-          BottomNavigationBarItem(
-            activeIcon: SvgPicture.asset('assets/images/chat_filled_tab.svg'),
-            icon: SvgPicture.asset('assets/images/chat_tab.svg'),
-            label: 'chats'.tr(),
-          ),
-          BottomNavigationBarItem(
-            activeIcon: SvgPicture.asset('assets/images/profile_filled_tab.svg'),
-            icon: SvgPicture.asset('assets/images/profile_tab.svg'),
-            label: 'profile'.tr(),
-          ),
-        ],
       ),
     );
   }

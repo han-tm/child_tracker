@@ -50,7 +50,6 @@ class _MentorMainScreenState extends State<MentorMainScreen> {
       body: widget.child,
       backgroundColor: greyscale100,
       bottomNavigationBar: Container(
-        height: 56,
         decoration: BoxDecoration(
           color: white,
           boxShadow: [

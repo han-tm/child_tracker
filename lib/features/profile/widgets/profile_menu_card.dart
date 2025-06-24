@@ -55,6 +55,7 @@ class ProfileMenuCard extends StatelessWidget {
                     size: 12,
                     fw: FontWeight.w500,
                     color: greyscale700,
+                    maxLine: 2,
                   ),
               ],
             ),

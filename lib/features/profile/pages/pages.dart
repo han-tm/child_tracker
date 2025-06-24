@@ -8,3 +8,6 @@ export './scan_qr_page.dart';
 export './kid_detail.dart';
 export './kid_coins.dart';
 export './kid_progress.dart';
+export './current_subscription.dart';
+export './game_level.dart';
+export './game_raiting.dart';

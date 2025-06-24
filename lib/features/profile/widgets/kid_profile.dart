@@ -45,7 +45,7 @@ class KidProfileWidget extends StatelessWidget {
           ),
           const SizedBox(height: 24),
           ProfileMenuCard(
-            onTap:  () => context.push('/dairy', extra: user),
+            onTap: () => context.push('/dairy', extra: user),
             icon: 'diary',
             title: 'myDiary'.tr(),
             color: const Color(0xFF246BFD).withOpacity(0.08),
@@ -66,7 +66,7 @@ class KidProfileWidget extends StatelessWidget {
           ),
           const Divider(height: 48, thickness: 1, color: greyscale200),
           ProfileMenuCard(
-            onTap: () => {},
+            onTap: () => context.push('/game_raiting'),
             icon: 'game_filled_tab',
             title: 'gameRating'.tr(),
             iconColor: green,
@@ -74,7 +74,7 @@ class KidProfileWidget extends StatelessWidget {
           ),
           const SizedBox(height: 24),
           ProfileMenuCard(
-            onTap: () => {},
+            onTap: () => context.push('/game_level'),
             icon: 'star',
             title: 'gameLevel'.tr(),
             color: yellow.withOpacity(0.08),

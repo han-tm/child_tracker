@@ -42,7 +42,8 @@ class PhoneAuthCubit extends Cubit<PhoneAuthState> {
       }
     } on FirebaseFunctionsException catch (e) {
       print('Firebase Functions Error: ${e.code} - ${e.message} - ${e.details}');
-      emit(PhoneAuthFailure(errorMessage: e.message?.toString() ?? defaultErrorText));
+      String message = e.message == 'Failed to send code due to an internal server error.' ? 'cantSendToPhone'.tr() : e.message ?? e.code;
+      emit(PhoneAuthFailure(errorMessage: message));
     } catch (e) {
       print('Error {sendCode}: $e');
       emit(PhoneAuthFailure(errorMessage: e.toString()));
@@ -68,7 +69,8 @@ class PhoneAuthCubit extends Cubit<PhoneAuthState> {
       _signInWithCredential(token, phone);
     } on FirebaseFunctionsException catch (e) {
       print('Firebase Functions Error: ${e.code} - ${e.message} - ${e.details}');
-      emit(PhoneAuthFailure(errorMessage: e.message?.toString() ?? defaultErrorText));
+      String message = e.message == 'Invalid code provided.' ? 'invalidCode'.tr() : e.message ?? e.code;
+      emit(PhoneAuthFailure(errorMessage: message));
     } catch (e) {
       print('Error {verifyOTP}: $e');
       emit(PhoneAuthFailure(errorMessage: e.toString()));

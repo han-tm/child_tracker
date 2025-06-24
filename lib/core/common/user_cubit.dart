@@ -125,6 +125,8 @@ class UserCubit extends Cubit<UserModel?> {
       'type': null,
       'email': null,
       'phone': null,
+      'profile_filled': false,
+      'name': null,
     });
   }
 }
