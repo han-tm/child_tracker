@@ -1,5 +1,7 @@
+
 import 'package:child_tracker/index.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class ArticleTabWidget extends StatelessWidget {
   const ArticleTabWidget({super.key});
@@ -36,7 +38,9 @@ class ArticleTabWidget extends StatelessWidget {
               mainAxisSpacing: 12,
               childAspectRatio: 0.84,
             ),
-            itemBuilder: (context, index) => ArticleCard(article: articles[index]),
+            itemBuilder: (context, index) => GestureDetector(
+              onTap: () => context.push('/level_detail', extra: articles[index]),
+              child: ArticleCard(article: articles[index])),
           );
         });
   }
@@ -45,7 +49,7 @@ class ArticleTabWidget extends StatelessWidget {
 Stream<List<ArticleModel>> getArticles() {
   return ArticleModel.collection
       .where('status', isEqualTo: ArticleStatus.active.name)
-      .orderBy('index', descending: true)
+      .orderBy('index', descending: false)
       .snapshots()
       .map((event) => event.docs.map((e) => ArticleModel.fromFirestore(e)).toList());
 }

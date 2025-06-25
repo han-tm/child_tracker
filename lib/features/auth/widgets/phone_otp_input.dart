@@ -22,6 +22,8 @@ class _PhoneOtpInputState extends State<PhoneOtpInput> {
           context.go('/auth/role');
         } else if (state is PhoneAuthSuccess) {
           context.go('/${state.type}_bonus');
+        } else if (state is PhoneAuthResendOTPSuccess) {
+          SnackBarSerive.showNewCodeSendNotification();
         }
       },
       builder: (context, state) {
@@ -54,7 +56,7 @@ class _PhoneOtpInputState extends State<PhoneOtpInput> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                         Padding(
+                        Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 24),
                           child: MaskotMessage(
                             message: 'checkSmsMessage'.tr(),
@@ -95,7 +97,7 @@ class _PhoneOtpInputState extends State<PhoneOtpInput> {
                               Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 24),
                                 child: FilledAppButton(
-                                  text: 'buttonNext'.tr(),
+                                  text: 'apply'.tr(),
                                   isActive: ((otp ?? '').trim()).length == 6,
                                   onTap: (!isValid || state is PhoneAuthLoading)
                                       ? null

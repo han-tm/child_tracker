@@ -2,6 +2,7 @@
 
 import 'package:bot_toast/bot_toast.dart';
 import 'package:child_tracker/index.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -154,6 +155,59 @@ class SnackBarSerive {
                               color: primary900,
                             ),
                         ],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  static showNewCodeSendNotification() {
+    BotToast.showCustomNotification(
+      duration: const Duration(seconds: 3),
+      align: Alignment.bottomCenter,
+      crossPage: true,
+      toastBuilder: (cancelFunc) {
+        return GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          child: Container(
+            margin: const EdgeInsets.fromLTRB(24, 0, 24, 114),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            decoration: BoxDecoration(
+              color: white,
+              borderRadius: BorderRadius.circular(6),
+              border: Border.all(color: greyscale200),
+              boxShadow: [
+                BoxShadow(
+                  blurRadius: 32,
+                  color: const Color(0xFF04060F).withOpacity(0.08),
+                ),
+              ],
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    SvgPicture.asset(
+                      'assets/images/done_fill.svg',
+                      width: 28,
+                      height: 28,
+                      color: orange,
+                      fit: BoxFit.contain,
+                    ),
+                    const SizedBox(width: 16),
+                     Expanded(
+                      child: AppText(
+                        text: 'newCodeSent'.tr(),
+                        size: 20,
+                        fw: FontWeight.w500,
                       ),
                     ),
                   ],

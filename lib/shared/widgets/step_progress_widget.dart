@@ -4,10 +4,14 @@ import 'package:flutter/material.dart';
 class StepProgressWidget extends StatelessWidget {
   final int currentStep;
   final int totalSteps;
+  final bool showStepCount;
+  final int plusStep;
   const StepProgressWidget({
     super.key,
     this.currentStep = 0,
     this.totalSteps = 1,
+    this.plusStep = 1,
+    this.showStepCount = true,
   });
 
   @override
@@ -16,7 +20,7 @@ class StepProgressWidget extends StatelessWidget {
       children: [
         Expanded(
           child: LinearProgressIndicator(
-            value: (currentStep +1 ) / totalSteps,
+            value: (currentStep + plusStep) / totalSteps,
             backgroundColor: greyscale200,
             color: primary900,
             minHeight: 12,
@@ -24,10 +28,11 @@ class StepProgressWidget extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 30),
-        AppText(
-          text: '0${currentStep + 1}/0$totalSteps',
-          size: 20,
-        ),
+        if (showStepCount)
+          AppText(
+            text: '0${currentStep + 1}/0$totalSteps',
+            size: 20,
+          ),
       ],
     );
   }

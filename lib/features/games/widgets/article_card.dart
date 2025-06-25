@@ -44,7 +44,7 @@ class ArticleCard extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
               child: AppText(
-                text: article.name,
+                text: getTextByLocale(context, article.name, article.nameEng),
                 maxLine: 3,
               ),
             ),

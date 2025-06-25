@@ -110,14 +110,14 @@ class _KidDetailScreenState extends State<KidDetailScreen> {
               },
             ),
             ProfileMenuCard(
-              onTap: () => {},
+              onTap: () => context.push('/kid_progress', extra: kid),
               icon: 'progress',
               title: 'taskProgress'.tr(),
               color: const Color(0xFF246BFD).withOpacity(0.08),
             ),
             const SizedBox(height: 24),
             ProfileMenuCard(
-              onTap: () => {},
+              onTap: () => context.push('/kid_coins', extra: kid),
               icon: 'coin',
               title: 'taskPoints'.tr(),
               color: orange.withOpacity(0.08),

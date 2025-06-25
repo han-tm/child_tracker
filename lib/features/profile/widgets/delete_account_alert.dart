@@ -22,7 +22,7 @@ void showDeleteAccountDialog(BuildContext context) async {
       if (context.mounted) await context.read<UserCubit>().markAsDeleted();
       final StorageService storageService = sl();
       await storageService.clearAllStorage();
-      if (context.mounted) context.go('/auth');
+      if (context.mounted)  context.go('/logout_result', extra: 'accountDeleted'.tr());
     } on FirebaseAuthException catch (e) {
       print('Error deleting account: $e');
       if (e.code == 'requires-recent-login') {

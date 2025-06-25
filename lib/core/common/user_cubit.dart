@@ -118,6 +118,14 @@ class UserCubit extends Cubit<UserModel?> {
   }
 
   Future<void> markAsDeleted() async {
+    final myConnections = state?.connections ?? [];
+    for (final connection in myConnections) {
+      await connection.update({
+        'connections': FieldValue.arrayRemove([state!.ref]),
+        'connection_requests': FieldValue.arrayRemove([state!.ref]),
+      });
+    }
+
     await state?.ref.update({
       'deleted': true,
       'banned': null,
@@ -127,6 +135,7 @@ class UserCubit extends Cubit<UserModel?> {
       'phone': null,
       'profile_filled': false,
       'name': null,
+      'connections': null,
     });
   }
 }

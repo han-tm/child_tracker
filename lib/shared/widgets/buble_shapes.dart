@@ -2,16 +2,18 @@ import 'package:flutter/material.dart';
 
 class LeftArrowBubleShape extends StatelessWidget {
   final Widget child;
-  const LeftArrowBubleShape({super.key, required this.child});
+  final EdgeInsets padding;
+  const LeftArrowBubleShape({
+    super.key,
+    required this.child,
+    this.padding = const EdgeInsets.fromLTRB(30, 15, 10, 15),
+  });
 
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
       painter: _LeftArrowCustomPainter(),
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(30, 15, 10, 15),
-        child: child,
-      ),
+      child: Padding(padding: padding, child: child),
     );
   }
 }

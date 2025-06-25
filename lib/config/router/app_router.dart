@@ -422,6 +422,20 @@ final GoRouter router = GoRouter(
       path: '/game_level',
       builder: (context, state) => const GameLevelScreen(),
     ),
+    GoRoute(
+      path: '/level_detail',
+      builder: (context, state) => ArticleDetailScreen(article: state.extra as ArticleModel),
+    ),
+    GoRoute(
+      path: '/game_play',
+      builder: (context, state) {
+        final data = state.extra as Map<String, dynamic>;
+        final gameRef = data['gameRef'] as DocumentReference;
+        final level = data['level'] as LevelModel;
+
+        return GamePlayScreen(gameRef: gameRef, level: level);
+      },
+    ),
   ],
   errorBuilder: (context, state) => ErrorScreen(error: state.error.toString()),
 );

@@ -1,6 +1,7 @@
 import 'package:child_tracker/index.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class GamesTabScreen extends StatelessWidget {
@@ -29,7 +30,7 @@ class GamesTabScreen extends StatelessWidget {
               fit: BoxFit.contain,
             ),
           ),
-          title:  AppText(text: 'games'.tr(), size: 24, fw: FontWeight.w700),
+          title: AppText(text: 'games'.tr(), size: 24, fw: FontWeight.w700),
           centerTitle: true,
           bottom: PreferredSize(
             preferredSize: const Size.fromHeight(66),
@@ -70,7 +71,7 @@ class GamesTabScreen extends StatelessWidget {
                 labelPadding: EdgeInsets.zero,
                 padding: EdgeInsets.zero,
                 splashBorderRadius: BorderRadius.circular(6),
-                tabs:  [
+                tabs: [
                   Text('play'.tr()),
                   Text('learn'.tr()),
                 ],
@@ -78,7 +79,12 @@ class GamesTabScreen extends StatelessWidget {
             ),
           ),
         ),
-        body: const TabBarView(children: [GameTabWidget(), ArticleTabWidget()]),
+        body: BlocBuilder<UserCubit, UserModel?>(
+          builder: (context, me) {
+            if(me == null) return const SizedBox();
+            return  TabBarView(children: [GameTabWidget(me: me), const ArticleTabWidget()]);
+          },
+        ),
       ),
     );
   }

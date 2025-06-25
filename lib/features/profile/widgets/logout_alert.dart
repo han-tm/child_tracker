@@ -21,7 +21,7 @@ void showLogoutDialog(BuildContext context) async {
     if (context.mounted) await context.read<UserCubit>().onDeleteFcmToken();
     await FirebaseAuth.instance.signOut();
     if (context.mounted) {
-      context.go('/auth');
+      context.go('/logout_result', extra: 'loggingOut'.tr());
     }
   }
 }

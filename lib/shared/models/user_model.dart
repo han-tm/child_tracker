@@ -21,6 +21,8 @@ class UserModel {
   final List<DocumentReference> dairyMembers;
   final DateTime? trialSubscriptionPlan;
   final DateTime? premiumSubscriptionPlan;
+  final int points;
+  final List<DocumentReference> completedLevels;
 
   UserModel({
     required this.name,
@@ -41,6 +43,8 @@ class UserModel {
     this.dairyMembers = const [],
     this.trialSubscriptionPlan,
     this.premiumSubscriptionPlan,
+    this.points = 0,
+    this.completedLevels = const [],
   });
 
   factory UserModel.fromFirestore(DocumentSnapshot doc) {
@@ -67,12 +71,18 @@ class UserModel {
           data['trial_subscription'] != null ? (data['trial_subscription'] as Timestamp).toDate() : null,
       premiumSubscriptionPlan:
           data['premium_subscription'] != null ? (data['premium_subscription'] as Timestamp).toDate() : null,
+      points: data['points'] ?? 0,
+      completedLevels: (data['completed_levels'] as List<dynamic>? ?? []).map((e) => e as DocumentReference).toList(),
     );
   }
 
   bool get isKid => userType == UserType.kid;
 
-  DocumentReference get ref => FirebaseFirestore.instance.collection('users').doc(id);
+  CollectionReference get collection => FirebaseFirestore.instance.collection('users');
+
+  DocumentReference get ref => collection.doc(id);
+
+  CollectionReference get userGamesCollection => collection.doc(id).collection('games');
 
   bool hasInConnections(DocumentReference ref) => connections.contains(ref);
 
@@ -108,6 +118,10 @@ class UserModel {
     return '-';
   }
 
+  bool isLevelCompleted(DocumentReference levelRef) {
+    return completedLevels.any((ref) => ref.id == levelRef.id);
+  }
+
   UserModel copyWith({
     String? id,
     String? name,
@@ -127,6 +141,8 @@ class UserModel {
     List<DocumentReference>? dairyMembers,
     DateTime? trialSubscriptionPlan,
     DateTime? premiumSubscriptionPlan,
+    int? points,
+    List<DocumentReference>? completedLevels,
   }) {
     return UserModel(
       id: id ?? this.id,
@@ -147,6 +163,32 @@ class UserModel {
       dairyMembers: dairyMembers ?? this.dairyMembers,
       trialSubscriptionPlan: trialSubscriptionPlan ?? this.trialSubscriptionPlan,
       premiumSubscriptionPlan: premiumSubscriptionPlan ?? this.premiumSubscriptionPlan,
+      points: points ?? this.points,
+      completedLevels: completedLevels ?? this.completedLevels,
+    );
+  }
+}
+
+class UserGameModel {
+  final String id;
+  final int points;
+  final DocumentReference? gameRef;
+  final bool isCompleted;
+
+  UserGameModel({
+    required this.id,
+    this.points = 0,
+    this.gameRef,
+    this.isCompleted = false,
+  });
+
+  factory UserGameModel.fromFirestore(DocumentSnapshot snapshot) {
+    final json = snapshot.data()! as Map<String, dynamic>;
+    return UserGameModel(
+      id: snapshot.id,
+      points: json['points'] as int? ?? 0,
+      gameRef: json['game'] as DocumentReference?,
+      isCompleted: json['is_completed'] as bool? ?? false,
     );
   }
 }
