@@ -397,5 +397,21 @@
     "congratulations": "Congratulations!",
     "congratulationsText": "You worked hard and can get an offline reward token ",
     "requestGift": "Request\na reward",
-    "trophey_requested": "Reward request sent"
+    "trophey_requested": "Reward request sent",
+    "increase": "Increase",
+    "decrease": "Decrease",
+    "howMuchIncrease": "How many points to increase the balance by?",
+    "howMuchDecrease": "By how many points should I reduce my balance?",
+    "pointCount": "Number of points",
+    "pointCountMax": "Number of points (max.",
+    "optionalCouse": "Reason (opt.)",
+    "pointsIncreased": "Balance increased",
+    "pointsDecreased": "Balance has been reduced",
+    "balance": "Balance",
+    "increased": "increased by",
+    "decreased": "reduced by",
+    "information": "Information",
+    "decreaseMaxCouseText": "You can write off no more than {} points - this is your current accrual limit for this child",
+    "min1": "Minimum 1 point",
+    "maxAmountError": "Maximum quantity exceeded"
 }

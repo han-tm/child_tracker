@@ -11,3 +11,5 @@ export './kid_progress.dart';
 export './current_subscription.dart';
 export './game_level.dart';
 export './game_raiting.dart';
+export './change_kid_point.dart';
+export './point_change_success.dart';

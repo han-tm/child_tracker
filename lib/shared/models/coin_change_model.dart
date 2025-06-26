@@ -11,7 +11,7 @@ class CoinChangeModel {
   CoinChangeModel({
     required this.id,
     this.name,
-    this.mentor,
+    this.mentor,  
     this.kid,
     this.createdAt,
     this.coin = 0,

@@ -397,5 +397,21 @@
     "congratulations": "Поздравляю!",
     "congratulationsText": "Ты хорошо потрудился и можешь получить офлайн награду жетон ",
     "requestGift": "Запросить\nнаграду",
-    "trophey_requested": "Запрос на награду отправлен"
+    "trophey_requested": "Запрос на награду отправлен",
+    "increase": "Увеличить",
+    "decrease": "Уменьшить",
+    "howMuchIncrease": "На сколько баллов увеличить баланс?",
+    "howMuchDecrease": "На сколько баллов уменьшить баланс?",
+    "pointCount": "Количество баллов",
+    "pointCountMax": "Количество баллов (макс. ",
+    "optionalCouse": "Причина (опц.)",
+    "pointsIncreased": "Баланс увеличен",
+    "pointsDecreased": "Баланс уменьшен",
+    "balance": "Баланс",
+    "increased": "увеличен на",
+    "decreased": "уменьшен на",
+    "information": "Информация",
+    "decreaseMaxCouseText": "Вы можете списать не более {} баллов — это ваш текущий лимит начислений этому ребёнку",
+    "min1": "Минимум 1 балл",
+    "maxAmountError": "Превышено максимальное количество"
 }

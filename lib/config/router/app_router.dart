@@ -372,6 +372,26 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: '/kid_coins',
       builder: (context, state) => KidCoinsScreen(kid: state.extra as UserModel),
+      routes: [
+        GoRoute(
+          path: 'change',
+          builder: (context, state) {
+            final data = state.extra as Map<String, dynamic>;
+            bool isIncrease = data['isIncrease'] as bool;
+            UserModel kid = data['kid'] as UserModel;
+            return ChangeKidPointScreen(isIncrease: isIncrease, kid: kid);
+          },
+        ),
+         GoRoute(
+          path: 'success',
+          builder: (context, state) {
+            final data = state.extra as Map<String, dynamic>;
+            int amount = data['amount'] as int;
+            String kidName = data['kidName'] as String;
+            return CoinChangeSuccessScreen(kidName: kidName, coinAmount: amount);
+          },
+        ),
+      ],
     ),
     GoRoute(
       path: '/kid_progress',

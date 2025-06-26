@@ -117,6 +117,19 @@ class UserCubit extends Cubit<UserModel?> {
     }
   }
 
+  Future<void> onChangePoint(int amount) async {
+    if (state == null) return;
+    try {
+      await state?.ref.update({'points': FieldValue.increment(amount)});
+
+      emit(state!.copyWith(
+        points: state!.points + amount,
+      ));
+    } catch (e) {
+      print('error: {onChangePoint}: ${e.toString()}');
+    }
+  }
+
   Future<void> onGameComplete(
     Map<String, dynamic> newGameDoc,
     int points,
