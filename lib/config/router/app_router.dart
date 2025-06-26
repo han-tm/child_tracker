@@ -432,9 +432,29 @@ final GoRouter router = GoRouter(
         final data = state.extra as Map<String, dynamic>;
         final gameRef = data['gameRef'] as DocumentReference;
         final level = data['level'] as LevelModel;
+        final nextLevel = data['next_level'] as LevelModel?;
 
-        return GamePlayScreen(gameRef: gameRef, level: level);
+        return GamePlayScreen(gameRef: gameRef, level: level, nextLevel: nextLevel);
       },
+    ),
+    GoRoute(
+      path: '/game_complete',
+      builder: (context, state) {
+        final data = state.extra as Map<String, dynamic>;
+        final game = data['game'] as GameModel;
+        final level = data['level'] as LevelModel;
+        final correctAnswers = data['correctAnswers'] as int;
+
+        return GameCompleteScreen(game: game, level: level, correctAnswers: correctAnswers);
+      },
+    ),
+    GoRoute(
+      path: '/level_up',
+      builder: (context, state) => LevelUpScreen(level: state.extra as LevelModel),
+    ),
+    GoRoute(
+      path: '/level_trophey_up',
+      builder: (context, state) => LevelTokenUpScreen(level: state.extra as LevelModel),
     ),
   ],
   errorBuilder: (context, state) => ErrorScreen(error: state.error.toString()),

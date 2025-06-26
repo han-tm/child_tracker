@@ -45,24 +45,27 @@ class GameTabWidget extends StatelessWidget {
         if (myPoints < minLevelPoint) return LevelNotAvailableWidget(points: minLevelPoint - myPoints);
 
         final reversedLevels = levels.reversed.toList();
+
         return SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           reverse: true,
           child: Column(
             children: [
               for (int i = 0; i < reversedLevels.length; i++)
-                Builder(
-                  builder: (context) {
-                    final level = reversedLevels[i];
-                    // print('level: ${level.name} - $i');
-                    return LevelWidget(
-                      level: level,
-                      index: i,
-                      me: me,
-                      available: (i == reversedLevels.length - 1) ? true : me.isLevelCompleted(reversedLevels[i+1].ref)
-                    );
-                  }
-                ),
+                Builder(builder: (context) {
+                  final level = reversedLevels[i];
+
+                  bool isFirstLevel = (i == reversedLevels.length - 1);
+
+                  return LevelWidget(
+                    level: level,
+                    index: i,
+                    me: me,
+                    available: isFirstLevel
+                        ? true
+                        : (me.isLevelCompleted(reversedLevels[i + 1].ref) && me.isLevelAvailable(level)),
+                  );
+                }),
             ],
           ),
         );

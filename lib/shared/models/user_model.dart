@@ -22,6 +22,7 @@ class UserModel {
   final DateTime? trialSubscriptionPlan;
   final DateTime? premiumSubscriptionPlan;
   final int points;
+  final int gamePoints;
   final List<DocumentReference> completedLevels;
 
   UserModel({
@@ -44,6 +45,7 @@ class UserModel {
     this.trialSubscriptionPlan,
     this.premiumSubscriptionPlan,
     this.points = 0,
+    this.gamePoints = 0,
     this.completedLevels = const [],
   });
 
@@ -71,8 +73,9 @@ class UserModel {
           data['trial_subscription'] != null ? (data['trial_subscription'] as Timestamp).toDate() : null,
       premiumSubscriptionPlan:
           data['premium_subscription'] != null ? (data['premium_subscription'] as Timestamp).toDate() : null,
-      points: data['points'] ?? 0,
       completedLevels: (data['completed_levels'] as List<dynamic>? ?? []).map((e) => e as DocumentReference).toList(),
+      points: data['points'] ?? 0,
+      gamePoints: data['game_points'] ?? 0,
     );
   }
 
@@ -122,6 +125,10 @@ class UserModel {
     return completedLevels.any((ref) => ref.id == levelRef.id);
   }
 
+  bool isLevelAvailable(LevelModel level) {
+    return (level.pointFrom ?? 0) <= points;
+  }
+
   UserModel copyWith({
     String? id,
     String? name,
@@ -142,6 +149,7 @@ class UserModel {
     DateTime? trialSubscriptionPlan,
     DateTime? premiumSubscriptionPlan,
     int? points,
+    int? gamePoints,
     List<DocumentReference>? completedLevels,
   }) {
     return UserModel(
@@ -164,6 +172,7 @@ class UserModel {
       trialSubscriptionPlan: trialSubscriptionPlan ?? this.trialSubscriptionPlan,
       premiumSubscriptionPlan: premiumSubscriptionPlan ?? this.premiumSubscriptionPlan,
       points: points ?? this.points,
+      gamePoints: gamePoints ?? this.gamePoints,
       completedLevels: completedLevels ?? this.completedLevels,
     );
   }
@@ -191,4 +200,10 @@ class UserGameModel {
       isCompleted: json['is_completed'] as bool? ?? false,
     );
   }
+
+  Map<String, dynamic> toFirestore() => {
+        'points': points,
+        'game': gameRef,
+        'is_completed': isCompleted,
+      };
 }

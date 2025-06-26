@@ -203,7 +203,7 @@ class SnackBarSerive {
                       fit: BoxFit.contain,
                     ),
                     const SizedBox(width: 16),
-                     Expanded(
+                    Expanded(
                       child: AppText(
                         text: 'newCodeSent'.tr(),
                         size: 20,
@@ -212,6 +212,118 @@ class SnackBarSerive {
                     ),
                   ],
                 ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  static showCorrectAnswerAlert(VoidCallback onClose) {
+    BotToast.showCustomNotification(
+      duration: const Duration(seconds: 2),
+      align: Alignment.bottomCenter,
+      crossPage: true,
+      onClose: onClose,
+      toastBuilder: (cancelFunc) {
+        return GestureDetector(
+          onTap: cancelFunc,
+          behavior: HitTestBehavior.translucent,
+          child: Container(
+            height: 98,
+            margin: EdgeInsets.zero,
+            padding: const EdgeInsets.all(24),
+            color: success,
+            child: Row(
+              children: [
+                SvgPicture.asset(
+                  'assets/images/done_fill.svg',
+                  width: 28,
+                  height: 28,
+                  color: white,
+                  fit: BoxFit.contain,
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: AppText(
+                    text: 'correct'.tr(),
+                    size: 24,
+                    fw: FontWeight.w700,
+                    color: white,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  static showWrongAnswerAlert(VoidCallback onClose, String correctAnswer) {
+    BotToast.showCustomNotification(
+      duration: const Duration(seconds: 60),
+      animationReverseDuration: const Duration(milliseconds: 100),
+      align: Alignment.bottomCenter,
+      crossPage: true,
+      onClose: onClose,
+      toastBuilder: (cancelFunc) {
+        return GestureDetector(
+          onTap: cancelFunc,
+          behavior: HitTestBehavior.translucent,
+          child: Container(
+            // height: 98,
+            margin: EdgeInsets.zero,
+            padding: const EdgeInsets.all(24),
+            color: error,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                        width: 36,
+                        height: 36,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: white,
+                        ),
+                        child: const Center(child: Icon(Icons.close, color: red))),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: AppText(
+                        text: 'littleFail'.tr(),
+                        size: 24,
+                        fw: FontWeight.w700,
+                        color: white,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 24),
+                AppText(
+                  text: 'correctAnswerIs'.tr(),
+                  size: 20,
+                  fw: FontWeight.w700,
+                  color: white,
+                ),
+                const SizedBox(height: 8),
+                AppText(
+                  text: correctAnswer,
+                  size: 18,
+                  fw: FontWeight.w500,
+                  color: white,
+                ),
+                const SizedBox(height: 24),
+                FilledAppButton(
+                  onTap: cancelFunc,
+                  activeColor: white,
+                  text: 'ok'.tr(),
+                  fontColor: error,
+                ),
+                const SizedBox(height: 8),
               ],
             ),
           ),

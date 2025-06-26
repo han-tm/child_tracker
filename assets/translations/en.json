@@ -374,7 +374,7 @@
     "level": "Level",
     "exitGame": "Exit game",
     "exitGameConfirm": "Are you leaving already? You play so well! Maybe we should see it through to the end?",
-    "exitWithoutSave": "Exit without saving",
+    "exitWithoutSave": "Exit without\nsaving",
     "continueGame": "Continue game",
     "selectCorrectAnswer": "Select the correct answer",
     "correct": "Right!",
@@ -384,5 +384,18 @@
     "youHaveWon": "You're doing great - your knowledge is growing and your points are accumulating! Are you ready for the next challenge?",
     "youHaveWon2": "You're doing great - your knowledge is growing and your points are accumulating!",
     "newCodeSent": "New code sent!",
-    "accountDeleted": "Account deleted"
+    "accountDeleted": "Account deleted",
+    "startGame": "Let's start\na new adventure!",
+    "hoorayYouLelelUp": "Wow, you leveled up!\nYou're now a ",
+    "hoorayYouLelelUpDesc": "Keep up the good work!",
+    "continue": "Continue",
+    "ohYouLose": "Oh..., it didn't work out",
+    "ohYouLoseText": "You'll win next time.",
+    "chevron": "Token",
+    "takeLevelAndGetChevron": "Complete the level and get a token ",
+    "get": "Get",
+    "congratulations": "Congratulations!",
+    "congratulationsText": "You worked hard and can get an offline reward token ",
+    "requestGift": "Request\na reward",
+    "trophey_requested": "Reward request sent"
 }

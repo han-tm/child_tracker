@@ -9,6 +9,8 @@ class FilledAppButton extends StatelessWidget {
   final bool isActive;
   final double fontSize;
   final FontWeight fw;
+  final Color fontColor;
+  final Color activeColor;
   const FilledAppButton({
     super.key,
     this.height = 58,
@@ -18,6 +20,8 @@ class FilledAppButton extends StatelessWidget {
     this.isActive = true,
     this.fontSize = 16,
     this.fw = FontWeight.w700,
+    this.fontColor = white,
+    this.activeColor = primary900,
   });
 
   @override
@@ -28,7 +32,7 @@ class FilledAppButton extends StatelessWidget {
         height: height,
         width: double.infinity,
         decoration: BoxDecoration(
-          color: isActive ? primary900 : disabledColor,
+          color: isActive ? activeColor : disabledColor,
           borderRadius: BorderRadius.circular(100),
         ),
         child: Center(
@@ -38,7 +42,9 @@ class FilledAppButton extends StatelessWidget {
                   text: text,
                   size: fontSize,
                   fw: fw,
-                  color: white,
+                  color: fontColor,
+                  maxLine: 2,
+                  textAlign: height > 58 ? TextAlign.center : TextAlign.start,
                 ),
         ),
       ),
@@ -58,7 +64,7 @@ class FilledSecondaryAppButton extends StatelessWidget {
   const FilledSecondaryAppButton({
     super.key,
     this.height = 58,
-     required this.text,
+    required this.text,
     this.onTap,
     this.isLoading = false,
     this.isActive = true,
@@ -92,6 +98,7 @@ class FilledSecondaryAppButton extends StatelessWidget {
                         fw: fw,
                         color: primary900,
                         textAlign: TextAlign.center,
+                        maxLine: 2,
                       ),
                     ),
                   ],
@@ -152,7 +159,7 @@ class OutlinedAppButton extends StatelessWidget {
   const OutlinedAppButton({
     super.key,
     this.height = 58,
-       required this.text,
+    required this.text,
     this.onPress,
     this.isLoading = false,
     this.fontSize = 16,

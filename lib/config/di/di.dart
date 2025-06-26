@@ -13,6 +13,8 @@ Future<void> initializeDependencies() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   sl.registerSingleton<StorageService>(StorageService(prefs: prefs));
 
+  sl.registerSingleton<SoundPlayerService>(SoundPlayerService());
+
   final fs = FirebaseFirestore.instance;
   final fa = FirebaseAuth.instance;
   // final fcm = FirebaseMessaging.instance;

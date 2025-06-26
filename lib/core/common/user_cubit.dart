@@ -117,6 +117,34 @@ class UserCubit extends Cubit<UserModel?> {
     }
   }
 
+  Future<void> onGameComplete(
+    Map<String, dynamic> newGameDoc,
+    int points,
+    DocumentReference? level,
+  ) async {
+    await state?.userGamesCollection.add(newGameDoc);
+
+    final newDoc = {
+      'game_points': FieldValue.increment(points),
+    };
+
+    if (level != null) {
+      newDoc['completed_levels'] = FieldValue.arrayUnion([level]);
+    }
+
+    await state?.ref.update(newDoc);
+
+    final completedLevels = state?.completedLevels ?? [];
+    if (level != null) {
+      completedLevels.add(level);
+    }
+
+    emit(state?.copyWith(
+      gamePoints: state!.gamePoints + points,
+      completedLevels: completedLevels,
+    ));
+  }
+
   Future<void> markAsDeleted() async {
     final myConnections = state?.connections ?? [];
     for (final connection in myConnections) {
