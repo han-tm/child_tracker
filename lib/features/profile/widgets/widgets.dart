@@ -11,3 +11,5 @@ export './show_qr_modal.dart';
 export './coin_change_card.dart';
 export './game_raiting_by_city.dart';
 export './game_raiting_by_world.dart';
+export './game_raiting_card.dart';
+export './level_detail_modal_bottom.dart';

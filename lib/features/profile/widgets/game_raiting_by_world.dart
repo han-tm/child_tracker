@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 
 class GameRaitingByWorld extends StatelessWidget {
   final List<UserModel> kids;
-  const GameRaitingByWorld({super.key, required this.kids});
+  final UserModel me;
+  const GameRaitingByWorld({super.key, required this.kids, required this.me});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +24,9 @@ class GameRaitingByWorld extends StatelessWidget {
       itemCount: kids.length,
       separatorBuilder: (context, index) => const Divider(color: greyscale200, thickness: 1, height: 32),
       itemBuilder: (context, index) {
-        return const SizedBox();
+        final kid = kids[index];
+        final isMe = kid.id == me.id;
+        return GameRaitingCard(index: index, kid: kid, isMe: isMe);
       },
     );
   }

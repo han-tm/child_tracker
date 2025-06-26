@@ -1,7 +1,9 @@
 import 'package:child_tracker/index.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class GameRaitingScreen extends StatelessWidget {
@@ -70,15 +72,43 @@ class GameRaitingScreen extends StatelessWidget {
             ),
           ),
         ),
-        body: const TabBarView(children: [
-          GameRaitingByCity(
-            kids: [],
-          ),
-          GameRaitingByWorld(
-            kids: [],
-          ),
-        ]),
+        body: BlocBuilder<UserCubit, UserModel?>(
+          builder: (context, me) {
+            if (me == null) return const SizedBox();
+            return StreamBuilder<List<UserModel>>(
+              stream: getAllKids(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting || snapshot.data == null) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                final kids = snapshot.data ?? [];
+                String city = me.city ?? '';
+                return TabBarView(
+                  children: [
+                    GameRaitingByCity(
+                      kids: kids.where((u) => u.city == city).toList(),
+                      me: me,
+                    ),
+                    GameRaitingByWorld(kids: kids, me: me),
+                  ],
+                );
+              },
+            );
+          },
+        ),
       ),
     );
+  }
+
+  Stream<List<UserModel>> getAllKids() {
+    final query = FirebaseFirestore.instance
+        .collection('users')
+        .where('type', isEqualTo: 'kid')
+        .where('profile_filled', isEqualTo: true)
+        .where('deleted', isEqualTo: false)
+        .where('banned', isEqualTo: false)
+        .orderBy('game_points', descending: true);
+
+    return query.snapshots().map((event) => event.docs.map((e) => UserModel.fromFirestore(e)).toList());
   }
 }

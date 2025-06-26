@@ -182,12 +182,16 @@ class UserGameModel {
   final String id;
   final int points;
   final DocumentReference? gameRef;
+  final DocumentReference? levelRef;
+  final DateTime? createdAt;
   final bool isCompleted;
 
   UserGameModel({
     required this.id,
     this.points = 0,
     this.gameRef,
+    this.levelRef,
+    this.createdAt,
     this.isCompleted = false,
   });
 
@@ -197,13 +201,17 @@ class UserGameModel {
       id: snapshot.id,
       points: json['points'] as int? ?? 0,
       gameRef: json['game'] as DocumentReference?,
+      levelRef: json['level'] as DocumentReference?,
       isCompleted: json['is_completed'] as bool? ?? false,
+      createdAt: (json['created_at'] as Timestamp?)?.toDate(),
     );
   }
 
   Map<String, dynamic> toFirestore() => {
         'points': points,
         'game': gameRef,
+        'level': levelRef,
         'is_completed': isCompleted,
+        'created_at': FieldValue.serverTimestamp(),
       };
 }

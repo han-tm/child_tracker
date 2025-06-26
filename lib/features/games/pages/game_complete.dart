@@ -103,6 +103,7 @@ class _GameCompleteScreenState extends State<GameCompleteScreen> {
       points: winPoints,
       gameRef: widget.game.ref,
       isCompleted: true,
+      levelRef: hasNextGame ? null : widget.level.ref,
     );
     final newGameDoc = gameModel.toFirestore();
 

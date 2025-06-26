@@ -12,14 +12,17 @@ class LevelTokenUpScreen extends StatefulWidget {
   State<LevelTokenUpScreen> createState() => _LevelTokenUpScreenState();
 }
 
-class _LevelTokenUpScreenState extends State<LevelTokenUpScreen> {
+class _LevelTokenUpScreenState extends State<LevelTokenUpScreen> with AutomaticKeepAliveClientMixin {
   late ConfettiController _controllerTopCenter;
+  late final SoundPlayerService _soundPlayer;
 
   @override
   void initState() {
     super.initState();
     _controllerTopCenter = ConfettiController(duration: const Duration(seconds: 5));
     _controllerTopCenter.play();
+    _soundPlayer = sl<SoundPlayerService>();
+    _soundPlayer.playWinLevel();
   }
 
   void onExit() => context.pop();
@@ -32,11 +35,15 @@ class _LevelTokenUpScreenState extends State<LevelTokenUpScreen> {
   @override
   void dispose() {
     _controllerTopCenter.dispose();
+    _soundPlayer.dispose();
     super.dispose();
   }
 
   @override
+  bool get wantKeepAlive => true;
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     final levelName = getTextByLocale(context, widget.level.name, widget.level.nameEng);
     return Scaffold(
       body: Stack(
