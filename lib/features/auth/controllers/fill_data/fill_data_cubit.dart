@@ -109,6 +109,8 @@ class FillDataCubit extends Cubit<FillDataState> {
       'name': state.name!,
       'profile_filled': true,
       'trial_subscription': DateTime.now().add(const Duration(days: 30)),
+      'deleted': false,
+      'banned': false,
     };
     return userData;
   }
@@ -120,6 +122,8 @@ class FillDataCubit extends Cubit<FillDataState> {
       'profile_filled': true,
       'age': state.age,
       'city': state.city,
+      'deleted': false,
+      'banned': false,
     };
     return userData;
   }

@@ -413,5 +413,6 @@
     "information": "Information",
     "decreaseMaxCouseText": "You can write off no more than {} points - this is your current accrual limit for this child",
     "min1": "Minimum 1 point",
-    "maxAmountError": "Maximum quantity exceeded"
+    "maxAmountError": "Maximum quantity exceeded",
+    "waitForResend": "Wait before requesting another code."
 }

@@ -42,11 +42,10 @@ class LevelWidget extends StatelessWidget {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const SizedBox(height: 32),
+              const SizedBox(height: 22),
               for (int i = 0; i < reversedGames.length; i++) ...[
                 Builder(
                   builder: (context) {
-                    
                     final gameRef = reversedGames[i];
                     final userGame = userGames.firstWhereOrNull((g) => g.gameRef == gameRef);
                     bool isFirst = reversedGames.last.id == gameRef.id;
@@ -55,19 +54,23 @@ class LevelWidget extends StatelessWidget {
                     if (reversedGames.length > i + 1) {
                       isPrevCompleted = userGames.any((g) => g.gameRef == reversedGames[i + 1]);
                     }
-                    // bool isPrevCompleted = userGames.any((g) => g.gameRef == reversedGames[i + 1]);
 
                     bool canPlay = (available && isFirst) || (available && isPrevCompleted);
                     final reversedIndex = reversedGames.length - 1 - i;
-                    return CustomRow(
-                      allGamesCount: reversedGames.length,
-                      index: reversedIndex,
-                      showPlay: !completed && canPlay,
-                      circle: _GameCircle(
-                        level: level,
-                        gameRef: gameRef,
-                        canPlay: canPlay,
-                        isCompleted: completed,
+                    bool isNeedSpace = (reversedIndex == reversedGames.length - 1) && canPlay && !completed;
+
+                    return Padding(
+                      padding: EdgeInsets.only(top: isNeedSpace ? 30 : 0),
+                      child: CustomRow(
+                        allGamesCount: reversedGames.length,
+                        index: reversedIndex,
+                        showPlay: !completed && canPlay,
+                        circle: _GameCircle(
+                          level: level,
+                          gameRef: gameRef,
+                          canPlay: canPlay,
+                          isCompleted: completed,
+                        ),
                       ),
                     );
                   },

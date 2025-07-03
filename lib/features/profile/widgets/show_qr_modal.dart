@@ -34,7 +34,7 @@ class _ShowQRModalContent extends StatefulWidget {
 class __ShowQRModalContentState extends State<_ShowQRModalContent> {
   final GlobalKey _qrKey = GlobalKey();
 
-  void onTapShare() {}
+  // void onTapShare() {}
 
   Future<Uint8List?> _capturePng() async {
     try {
@@ -61,6 +61,7 @@ class __ShowQRModalContentState extends State<_ShowQRModalContent> {
       await file.writeAsBytes(qrImageBytes);
       final param = ShareParams(
         title: 'myQrCodeTitle'.tr(),
+        previewThumbnail: XFile(file.path),
         files: [XFile(file.path)],
       );
       await SharePlus.instance.share(param);
@@ -97,22 +98,25 @@ class __ShowQRModalContentState extends State<_ShowQRModalContent> {
             ],
           ),
           const SizedBox(height: 24),
-           AppText(text: 'share_qr_code'.tr(), size: 24, fw: FontWeight.w700),
+          AppText(text: 'share_qr_code'.tr(), size: 24, fw: FontWeight.w700),
           const Divider(height: 48, thickness: 1, color: greyscale200),
-          Container(
-            padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(6.0),
-              border: Border.all(color: greyscale200),
-            ),
-            child: RepaintBoundary(
-              key: _qrKey,
+          RepaintBoundary(
+            key: _qrKey,
+            child: Container(
+              padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: white,
+                borderRadius: BorderRadius.circular(6.0),
+                border: Border.all(color: greyscale200),
+              ),
               child: QrImageView(
                 key: ValueKey(widget.id),
                 data: widget.id,
                 padding: EdgeInsets.zero,
                 version: QrVersions.auto,
+                backgroundColor: white,
+                
                 size: qrSize,
               ),
             ),

@@ -29,10 +29,12 @@ class _AddDairyScreenState extends State<AddDairyScreen> {
   void onSubmit() async {
     final valid = form.valid && selectedEmotion != null;
     if (valid) {
+      final DateTime now = DateTime.now();
+      final finalDate = DateTime(selectedDate.year, selectedDate.month, selectedDate.day, now.hour, now.minute);
       context.read<DairyCubit>().createDairy(
             form.value['text'] as String,
             selectedEmotion!,
-            selectedDate,
+            finalDate,
           );
     }
   }
@@ -84,7 +86,7 @@ class _AddDairyScreenState extends State<AddDairyScreen> {
                               child: IntrinsicHeight(
                                 child: Column(
                                   children: [
-                                     Padding(
+                                    Padding(
                                       padding: const EdgeInsets.only(left: 40, right: 24, top: 16),
                                       child: MaskotMessage(
                                         maskot: '2185-min',
@@ -153,7 +155,7 @@ class _AddDairyScreenState extends State<AddDairyScreen> {
                                       ),
                                     ),
                                     const SizedBox(height: 24),
-                                     Padding(
+                                    Padding(
                                       padding: const EdgeInsets.symmetric(horizontal: 24),
                                       child: ReactiveCustomInput(
                                         formName: 'text',

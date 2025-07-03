@@ -177,6 +177,18 @@ class UserCubit extends Cubit<UserModel?> {
       'profile_filled': false,
       'name': null,
       'connections': null,
+      'connection_requests': null,
+      'game_points': 0,
+      'points': 0,
+      'age': null,
+      'city': null,
+      'completed_levels': null,
+      'dairy_members': null,
+      'dairy_notification': null,
+      'notification': null,
+      'trial_subscription': null,
+      'premium_subscription': null,
+      'fcm_token': null,
     });
   }
 }

@@ -42,7 +42,11 @@ class PhoneAuthCubit extends Cubit<PhoneAuthState> {
       }
     } on FirebaseFunctionsException catch (e) {
       print('Firebase Functions Error: ${e.code} - ${e.message} - ${e.details}');
-      String message = e.message == 'Failed to send code due to an internal server error.' ? 'cantSendToPhone'.tr() : e.message ?? e.code;
+      String message = e.message == 'Failed to send code due to an internal server error.'
+          ? 'cantSendToPhone'.tr()
+          : e.message == 'Wait before requesting another code.'
+              ? 'waitForResend'.tr()
+              : e.message ?? e.code;
       emit(PhoneAuthFailure(errorMessage: message));
     } catch (e) {
       print('Error {sendCode}: $e');

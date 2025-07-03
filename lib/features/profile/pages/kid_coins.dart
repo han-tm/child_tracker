@@ -115,7 +115,7 @@ class KidCoinsHeader extends StatelessWidget {
                   children: [
                     SvgPicture.asset('assets/images/coin.svg', width: 32, height: 32),
                     const SizedBox(width: 8),
-                    const AppText(text: '80', size: 20, fw: FontWeight.w700),
+                     AppText(text: kid.points.toString(), size: 20, fw: FontWeight.w700),
                   ],
                 ),
                 if (!me.isKid)

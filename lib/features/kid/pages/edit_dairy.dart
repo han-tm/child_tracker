@@ -38,11 +38,13 @@ class _EditDairyScreenState extends State<EditDairyScreen> {
   void onSubmit() async {
     final valid = form.valid && selectedEmotion != null;
     if (valid) {
+      final DateTime now = DateTime.now();
+      final finalDate = DateTime(selectedDate.year, selectedDate.month, selectedDate.day, now.hour, now.minute);
       context.read<DairyCubit>().editDairy(
             widget.dairy,
             form.value['text'] as String,
             selectedEmotion!,
-            selectedDate,
+            finalDate,
           );
     }
   }

@@ -24,6 +24,7 @@ class UserModel {
   final int points;
   final int gamePoints;
   final List<DocumentReference> completedLevels;
+  final bool deleted;
 
   UserModel({
     required this.name,
@@ -47,6 +48,7 @@ class UserModel {
     this.points = 0,
     this.gamePoints = 0,
     this.completedLevels = const [],
+    this.deleted = false,
   });
 
   factory UserModel.fromFirestore(DocumentSnapshot doc) {
@@ -76,6 +78,7 @@ class UserModel {
       completedLevels: (data['completed_levels'] as List<dynamic>? ?? []).map((e) => e as DocumentReference).toList(),
       points: data['points'] ?? 0,
       gamePoints: data['game_points'] ?? 0,
+      deleted: data['deleted'] ?? false,
     );
   }
 

@@ -20,7 +20,7 @@ class ChangeKidPointScreen extends StatefulWidget {
 
 class _ChangeKidPointScreenState extends State<ChangeKidPointScreen> {
   bool loading = false;
-  bool determineLoading = true;
+  bool determineLoading = false;
   int maxAmount = 0;
   final form = FormGroup({
     'text': FormControl<String>(

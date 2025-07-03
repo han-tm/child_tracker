@@ -57,9 +57,11 @@ class GameTabWidget extends StatelessWidget {
 
                   bool isFirstLevel = (i == reversedLevels.length - 1);
 
+                  final reversedIndex = reversedLevels.length - 1 - i;
+
                   return LevelWidget(
                     level: level,
-                    index: i,
+                    index: reversedIndex,
                     me: me,
                     available: isFirstLevel
                         ? true

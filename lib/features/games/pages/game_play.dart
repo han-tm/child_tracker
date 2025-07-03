@@ -1,4 +1,3 @@
-
 import 'package:child_tracker/index.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -212,6 +211,7 @@ class _GamePlayScreenState extends State<GamePlayScreen> with AutomaticKeepAlive
                         text: 'selectCorrectAnswer'.tr(),
                         size: 16,
                         fw: FontWeight.w500,
+                        maxLine: 2,
                         color: greyscale800,
                       ),
                     ),
