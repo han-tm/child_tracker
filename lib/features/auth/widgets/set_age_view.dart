@@ -6,11 +6,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class SetAgeView extends StatelessWidget {
   const SetAgeView({super.key});
 
+  void onDatePick(BuildContext context, {DateTime? birthDate}) async {
+    final selectedDate = await showWheelDatePickerModalBottomSheet(context, selectedDate: birthDate);
+    if (selectedDate != null && context.mounted) {
+      context.read<FillDataCubit>().onChangeBirthDate(selectedDate);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<FillDataCubit, FillDataState>(
       builder: (context, state) {
-        final valid = state.age != null;
+        final valid = state.birthDate != null;
         return Column(
           children: [
             Padding(
@@ -21,11 +28,16 @@ class SetAgeView extends StatelessWidget {
                 flip: true,
               ),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 40),
             Expanded(
-              child: AgeSelector(
-                onSelect: context.read<FillDataCubit>().onChangeAge,
-                selectedAge: state.age,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: CustomDateInput(
+                  label: 'birthday'.tr(),
+                  hint: 'selectDataHint'.tr(),
+                  date: state.birthDate,
+                  onTap: () => onDatePick(context, birthDate: state.birthDate),
+                ),
               ),
             ),
             Container(

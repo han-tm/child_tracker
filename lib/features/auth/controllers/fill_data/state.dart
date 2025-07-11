@@ -8,7 +8,7 @@ class FillDataState extends Equatable {
   final UserType? userType;
   final String? name;
   final XFile? photo;
-  final int? age;
+  final DateTime? birthDate;
   final String? city;
   final int step;
 
@@ -18,7 +18,7 @@ class FillDataState extends Equatable {
     this.userType,
     this.name,
     this.photo,
-    this.age,
+    this.birthDate,
     this.city,
     this.step = 0,
   });
@@ -29,7 +29,7 @@ class FillDataState extends Equatable {
     UserType? userType,
     String? name,
     XFile? photo,
-    int? age,
+    DateTime? birthDate,
     String? city,
     int? step,
   }) {
@@ -39,7 +39,7 @@ class FillDataState extends Equatable {
       userType: userType ?? this.userType,
       name: name ?? this.name,
       photo: photo ?? this.photo,
-      age: age ?? this.age,
+      birthDate: birthDate ?? this.birthDate,
       city: city ?? this.city,
       step: step ?? this.step,
     );
@@ -52,7 +52,7 @@ class FillDataState extends Equatable {
         userType,
         name,
         photo,
-        age,
+        birthDate,
         city,
         step,
       ];

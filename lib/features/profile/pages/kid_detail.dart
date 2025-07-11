@@ -79,7 +79,7 @@ class _KidDetailScreenState extends State<KidDetailScreen> {
                       ),
                       const SizedBox(height: 4),
                       AppText(
-                        text: '${kid.age} ${"ageInputYearsOld".tr()}, ${kid.city}',
+                        text: '${kid.getAge} ${"ageInputYearsOld".tr()}, ${kid.city}',
                         size: 16,
                         fw: FontWeight.w500,
                         color: greyscale700,

@@ -186,7 +186,7 @@ class _GameCompleteScreenState extends State<GameCompleteScreen> {
   }
 
   Future<List<LevelModel>> _getLevels(UserModel? me) async {
-    final myAge = me?.age ?? 0;
+    final myAge = me?.getAge ?? 0;
     final query = LevelModel.collection
         .where('status', isEqualTo: LevelStatus.active.name)
         .where('age_from', isLessThanOrEqualTo: myAge)

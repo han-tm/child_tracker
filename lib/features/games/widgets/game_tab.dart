@@ -77,7 +77,7 @@ class GameTabWidget extends StatelessWidget {
 }
 
 Stream<List<LevelModel>> getLevels(UserModel me) {
-  final myAge = me.age ?? 0;
+  final myAge = me.getAge;
   final query = LevelModel.collection
       .where('status', isEqualTo: LevelStatus.active.name)
       .where('age_from', isLessThanOrEqualTo: myAge)

@@ -79,7 +79,7 @@ class _ProfileTabScreenState extends State<ProfileTabScreen> {
                 fit: BoxFit.contain,
               ),
             ),
-            title:  AppText(text: 'profileTitle'.tr(), size: 24, fw: FontWeight.w700),
+            title:  AppText(text: context.tr('profileTitle'),  size: 24, fw: FontWeight.w700),
             centerTitle: true,
             actions: [
               Padding(

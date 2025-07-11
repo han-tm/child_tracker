@@ -476,6 +476,10 @@ final GoRouter router = GoRouter(
       path: '/level_trophey_up',
       builder: (context, state) => LevelTokenUpScreen(level: state.extra as LevelModel),
     ),
+    GoRoute(
+      path: '/change_lang',
+      builder: (context, state) => const ChangeLangScreen(),
+    ),
   ],
   errorBuilder: (context, state) => ErrorScreen(error: state.error.toString()),
 );

@@ -7,7 +7,6 @@ import 'package:child_tracker/index.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
@@ -36,13 +35,22 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   );
   String? city;
   XFile? selectedFile;
+  DateTime? birthDate;
+  String? birthDateError;
 
   void onSaveTap(BuildContext context) {
     form.markAllAsTouched();
 
     if (form.valid) {
+      if (birthDate == null) {
+        setState(() {
+          birthDateError = 'fill_field'.tr();
+        });
+        return;
+      }
       Map<String, dynamic> newForm = form.value.map((key, value) => MapEntry(key, value.toString()));
       newForm['city'] = city;
+      newForm['birth_date'] = birthDate;
       context.read<ProfileCubit>().updateProfile(newForm, selectedFile);
     }
   }
@@ -61,16 +69,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     final user = context.read<UserCubit>().state;
     if (user == null) return;
     if (user.isKid) {
-      form.addAll({
-        'age': FormControl<int>(
-          validators: [
-            Validators.required,
-            Validators.min(5),
-            Validators.max(18),
-          ],
-        ),
-      });
-      form.value = {'name': user.name, 'age': user.age};
+      form.value = {'name': user.name};
+      birthDate = user.birthDate;
       city = user.city;
     } else {
       form.value = {'name': user.name};
@@ -84,6 +84,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   void onSetCity(String city) => setState(() => this.city = city);
+
+  void onDatePick(BuildContext context) async {
+    final selectedDate = await showWheelDatePickerModalBottomSheet(context, selectedDate: birthDate);
+    if (selectedDate != null && context.mounted) {
+      setState(() => birthDate = selectedDate);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -165,19 +172,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           const SizedBox(height: 28),
-                                          ReactiveCustomInput(
-                                            formName: 'age',
-                                            label: 'age'.tr(),
-                                            hint: 'enterAge'.tr(),
-                                            inputType: TextInputType.number,
-                                            textCapitalization: TextCapitalization.none,
-                                            textInputAction: TextInputAction.done,
-                                            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                                            validationMessages: {
-                                              'required': (error) => 'fill_field'.tr(),
-                                              'min': (error) => 'min5Age'.tr(),
-                                              'max': (error) => 'max18Age'.tr(),
-                                            },
+                                        
+                                          CustomDateInput(
+                                            label: 'birthday'.tr(),
+                                            hint: 'selectDataHint'.tr(),
+                                            date: birthDate,
+                                            onTap: () => onDatePick(context),
+                                            errorText: birthDateError,
                                           ),
                                           const SizedBox(height: 28),
                                           AppText(text: 'cityInputPlaceholder'.tr()),

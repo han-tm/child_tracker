@@ -97,6 +97,14 @@ class KidProfileWidget extends StatelessWidget {
           ),
           const SizedBox(height: 24),
           ProfileMenuCard(
+            onTap: () => context.push('/change_lang'),
+            icon: 'lang',
+            title: context.tr('lang'),
+            iconColor: greyscale900,
+            color: greyscale100,
+          ),
+          const SizedBox(height: 24),
+          ProfileMenuCard(
             onTap: () => context.push('/notification'),
             icon: 'bell_fill',
             title: 'notifications'.tr(),

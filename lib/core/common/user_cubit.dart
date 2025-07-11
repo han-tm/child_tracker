@@ -180,7 +180,7 @@ class UserCubit extends Cubit<UserModel?> {
       'connection_requests': null,
       'game_points': 0,
       'points': 0,
-      'age': null,
+      'birth_date': null,
       'city': null,
       'completed_levels': null,
       'dairy_members': null,

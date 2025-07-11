@@ -24,7 +24,7 @@
     "nameInputMentorQuestion": "What should I call you? Your name is very important!",
     "nameInputPlaceholder": "Name",
     "nameInputHint": "Enter your name",
-    "ageInputQuestion": "How old are you?",
+    "ageInputQuestion": "When is your birthday?",
     "ageInputYearsOld": "years",
     "cityInputQuestion": "Specify your city!",
     "cityInputPlaceholder": "City",
@@ -414,5 +414,7 @@
     "decreaseMaxCouseText": "You can write off no more than {} points - this is your current accrual limit for this child",
     "min1": "Minimum 1 point",
     "maxAmountError": "Maximum quantity exceeded",
-    "waitForResend": "Wait before requesting another code."
+    "waitForResend": "Wait before requesting another code.",
+    "lang": "Language",
+    "birthday": "Birthday"
 }

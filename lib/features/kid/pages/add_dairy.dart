@@ -161,8 +161,13 @@ class _AddDairyScreenState extends State<AddDairyScreen> {
                                         formName: 'text',
                                         label: 'review'.tr(),
                                         hint: 'tell_about_your_day'.tr(),
+                                        maxLenght: 300,
                                         maxLines: 6,
                                         minLines: 5,
+                                        validationMessages: {
+                                          'required': (error) => 'fill_field'.tr(),
+                                          'minLength': (error) => 'min_length_3'.tr(),
+                                        },
                                       ),
                                     ),
                                     const Spacer(),

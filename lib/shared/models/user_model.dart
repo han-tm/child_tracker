@@ -13,7 +13,7 @@ class UserModel {
   final String? phone;
   final String? fcmToken;
   final String? city;
-  final int? age;
+
   final bool notification;
   final bool dairyNotification;
   final List<DocumentReference> connections;
@@ -25,6 +25,7 @@ class UserModel {
   final int gamePoints;
   final List<DocumentReference> completedLevels;
   final bool deleted;
+  final DateTime? birthDate;
 
   UserModel({
     required this.name,
@@ -37,7 +38,6 @@ class UserModel {
     this.phone,
     this.fcmToken,
     this.city,
-    this.age,
     this.notification = true,
     this.dairyNotification = true,
     this.connections = const [],
@@ -49,6 +49,7 @@ class UserModel {
     this.gamePoints = 0,
     this.completedLevels = const [],
     this.deleted = false,
+    this.birthDate,
   });
 
   factory UserModel.fromFirestore(DocumentSnapshot doc) {
@@ -64,7 +65,6 @@ class UserModel {
       phone: data['phone'],
       fcmToken: data['fcm_token'],
       city: data['city'],
-      age: data['age'],
       notification: data['notification'] ?? true,
       dairyNotification: data['dairy_notification'] ?? true,
       connections: (data['connections'] as List<dynamic>? ?? []).map((e) => e as DocumentReference).toList(),
@@ -79,6 +79,7 @@ class UserModel {
       points: data['points'] ?? 0,
       gamePoints: data['game_points'] ?? 0,
       deleted: data['deleted'] ?? false,
+      birthDate: data['birth_date'] != null ? (data['birth_date'] as Timestamp).toDate() : null,
     );
   }
 
@@ -132,6 +133,8 @@ class UserModel {
     return (level.pointFrom ?? 0) <= points;
   }
 
+  int get getAge => DateTime.now().year - (birthDate?.year ?? 0);
+
   UserModel copyWith({
     String? id,
     String? name,
@@ -143,7 +146,6 @@ class UserModel {
     DateTime? createdAt,
     String? fcmToken,
     String? city,
-    int? age,
     bool? notification,
     bool? dairyNotification,
     List<DocumentReference>? connections,
@@ -154,6 +156,8 @@ class UserModel {
     int? points,
     int? gamePoints,
     List<DocumentReference>? completedLevels,
+    bool? deleted,
+    DateTime? birthDate,
   }) {
     return UserModel(
       id: id ?? this.id,
@@ -166,7 +170,6 @@ class UserModel {
       phone: phone ?? this.phone,
       fcmToken: fcmToken ?? this.fcmToken,
       city: city ?? this.city,
-      age: age ?? this.age,
       notification: notification ?? this.notification,
       dairyNotification: dairyNotification ?? this.dairyNotification,
       connections: connections ?? this.connections,
@@ -177,6 +180,8 @@ class UserModel {
       points: points ?? this.points,
       gamePoints: gamePoints ?? this.gamePoints,
       completedLevels: completedLevels ?? this.completedLevels,
+      deleted: deleted ?? this.deleted,
+      birthDate: birthDate ?? this.birthDate,
     );
   }
 }

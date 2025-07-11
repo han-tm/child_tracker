@@ -55,7 +55,7 @@ class ConnectionCard extends StatelessWidget {
                         text: user == null
                             ? '...'
                             : user.isKid
-                                ? '${user.age} ${"ageInputYearsOld".tr()}, ${user.city}'
+                                ? '${user.getAge} ${"ageInputYearsOld".tr()}, ${user.city}'
                                 : 'roleSelectionMentor'.tr(),
                         size: 14,
                         color: greyscale700,

@@ -205,6 +205,10 @@ class _EditDairyScreenState extends State<EditDairyScreen> {
                                         hint: 'tell_about_your_day'.tr(),
                                         maxLines: 6,
                                         minLines: 5,
+                                        validationMessages: {
+                                          'required': (error) => 'fill_field'.tr(),
+                                          'minLength': (error) => 'min_length_3'.tr(),
+                                        },
                                       ),
                                     ),
                                     const Spacer(),

@@ -33,8 +33,8 @@ class FillDataCubit extends Cubit<FillDataState> {
     emit(state.copyWith(name: name));
   }
 
-  void onChangeAge(int age) {
-    emit(state.copyWith(age: age));
+  void onChangeBirthDate(DateTime birthDate) {
+    emit(state.copyWith(birthDate: birthDate));
   }
 
   void onChangeCity(String city) {
@@ -120,7 +120,7 @@ class FillDataCubit extends Cubit<FillDataState> {
       'type': state.userType!.name,
       'name': state.name!,
       'profile_filled': true,
-      'age': state.age,
+      'birth_date': state.birthDate,
       'city': state.city,
       'deleted': false,
       'banned': false,

@@ -53,6 +53,7 @@ dependencies:
   easy_localization: ^3.0.7+1
   confetti: ^0.8.0
   audioplayers: ^6.4.0
+  scroll_date_picker: ^3.8.0
   
 
 

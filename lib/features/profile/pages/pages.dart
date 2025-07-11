@@ -13,3 +13,4 @@ export './game_level.dart';
 export './game_raiting.dart';
 export './change_kid_point.dart';
 export './point_change_success.dart';
+export './change_lang.dart';
