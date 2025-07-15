@@ -416,5 +416,15 @@
     "maxAmountError": "Maximum quantity exceeded",
     "waitForResend": "Wait before requesting another code.",
     "lang": "Language",
-    "birthday": "Birthday"
+    "birthday": "Birthday",
+    "support": "Support",
+    "supportText": "If you have any questions, please contact us:",
+    "gamePointsCount": {
+        "zero": "{} points",
+        "one": "{} point",
+        "two": "{} points",
+        "few": "{} points",
+        "many": "{} points",
+        "other": "{} points"
+    }
 }

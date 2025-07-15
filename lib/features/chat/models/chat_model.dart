@@ -7,10 +7,10 @@ class ChatModel {
   final DateTime? lastEditTime;
   final LastMessage? lastMessage;
   final List<DocumentReference> members;
-   String? name;
+  String? name;
   final Map<String, bool> notification;
   final DocumentReference? owner;
-   String? photo;
+  String? photo;
   final ChatType type;
   final List<DocumentReference> unmodifiedMembers;
   final Map<String, int> unreads;
@@ -95,7 +95,8 @@ class ChatModel {
 
   DocumentReference get ref => FirebaseFirestore.instance.collection('chats').doc(id);
 
-  DocumentReference? secondUserRef(String me) => isGroup ? null : members.firstWhereOrNull((element) => element.id != me); 
+  DocumentReference? secondUserRef(String me) =>
+      isGroup ? null : members.firstWhereOrNull((element) => element.id != me);
 
   int getUnreadCount(String userId) => unreads[userId] ?? 0;
   bool getNotificationStatus(String userId) => notification[userId] ?? true;

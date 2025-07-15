@@ -66,7 +66,7 @@ class GameRaitingCard extends StatelessWidget {
         ),
         const SizedBox(width: 16),
         AppText(
-          text: 'pointsCount'.plural(kid.gamePoints),
+          text: 'gamePointsCount'.plural(kid.gamePoints),
           color: isMe ? primary900 : greyscale900,
         ),
       ],

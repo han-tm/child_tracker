@@ -81,6 +81,14 @@ class MentorProfileWidget extends StatelessWidget {
             iconColor: red,
             color: const Color(0xFFFF5A5F).withOpacity(0.08),
           ),
+          const SizedBox(height: 24),
+          ProfileMenuCard(
+            onTap: () => context.push('/change_lang'),
+            icon: 'lang',
+            title: context.tr('lang'),
+            iconColor: success,
+            color: success.withOpacity(0.08),
+          ),
         ],
       ),
     );

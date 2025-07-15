@@ -81,104 +81,110 @@ class KidCoinsHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      margin: const EdgeInsets.fromLTRB(24, 0, 24, 12),
-      child: Column(
-        children: [
-          Container(
+    return StreamBuilder<UserModel>(
+        stream: context.read<UserCubit>().getStreamUserByRef(kid.ref),
+        initialData: kid,
+        builder: (context, snapshot) {
+          final kidStream = snapshot.data ?? kid;
+          return Container(
             width: double.infinity,
-            height: 45,
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
-              color: orange,
-            ),
-            child: Center(
-              child: AppText(
-                text: 'currentBalance'.tr(),
-                color: white,
-                fw: FontWeight.w700,
-              ),
-            ),
-          ),
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              borderRadius: const BorderRadius.vertical(bottom: Radius.circular(10)),
-              border: Border.all(color: orange, width: 2),
-            ),
+            margin: const EdgeInsets.fromLTRB(24, 0, 24, 12),
             child: Column(
               children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SvgPicture.asset('assets/images/coin.svg', width: 32, height: 32),
-                    const SizedBox(width: 8),
-                     AppText(text: kid.points.toString(), size: 20, fw: FontWeight.w700),
-                  ],
-                ),
-                if (!me.isKid)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 24),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {
-                              final data = {"kid": kid, "isIncrease": true};
-                              context.push('/kid_coins/change', extra: data);
-                            },
-                            child: Container(
-                              width: double.infinity,
-                              height: 24,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(4),
-                                color: success,
-                              ),
-                              child: Center(
-                                child: AppText(
-                                  text: 'increase'.tr(),
-                                  size: 10,
-                                  color: white,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: GestureDetector(
-                             onTap: () {
-                              final data = {"kid": kid, "isIncrease": false};
-                              context.push('/kid_coins/change', extra: data);
-                            },
-                            child: Container(
-                              width: double.infinity,
-                              height: 24,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(4),
-                                color: error,
-                              ),
-                              child: Center(
-                                child: AppText(
-                                  text: 'decrease'.tr(),
-                                  size: 10,
-                                  color: white,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+                Container(
+                  width: double.infinity,
+                  height: 45,
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
+                    color: orange,
+                  ),
+                  child: Center(
+                    child: AppText(
+                      text: 'currentBalance'.tr(),
+                      color: white,
+                      fw: FontWeight.w700,
                     ),
                   ),
+                ),
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.vertical(bottom: Radius.circular(10)),
+                    border: Border.all(color: orange, width: 2),
+                  ),
+                  child: Column(
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SvgPicture.asset('assets/images/coin.svg', width: 32, height: 32),
+                          const SizedBox(width: 8),
+                          AppText(text: kidStream.points.toString(), size: 20, fw: FontWeight.w700),
+                        ],
+                      ),
+                      if (!me.isKid)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 24),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: GestureDetector(
+                                  onTap: () {
+                                    final data = {"kid": kid, "isIncrease": true};
+                                    context.push('/kid_coins/change', extra: data);
+                                  },
+                                  child: Container(
+                                    width: double.infinity,
+                                    height: 24,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(4),
+                                      color: success,
+                                    ),
+                                    child: Center(
+                                      child: AppText(
+                                        text: 'increase'.tr(),
+                                        size: 10,
+                                        color: white,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: GestureDetector(
+                                  onTap: () {
+                                    final data = {"kid": kid, "isIncrease": false};
+                                    context.push('/kid_coins/change', extra: data);
+                                  },
+                                  child: Container(
+                                    width: double.infinity,
+                                    height: 24,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(4),
+                                      color: error,
+                                    ),
+                                    child: Center(
+                                      child: AppText(
+                                        text: 'decrease'.tr(),
+                                        size: 10,
+                                        color: white,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
               ],
             ),
-          ),
-        ],
-      ),
-    );
+          );
+        });
   }
 }
 

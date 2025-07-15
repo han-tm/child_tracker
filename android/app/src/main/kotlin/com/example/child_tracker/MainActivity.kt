@@ -1,4 +1,4 @@
-package com.example.child_tracker
+package com.kidscult.app
 
 import io.flutter.embedding.android.FlutterActivity
 

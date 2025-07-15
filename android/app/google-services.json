@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "864285389296",
-    "project_id": "externalproject-d904d",
-    "storage_bucket": "externalproject-d904d.firebasestorage.app"
+    "project_number": "419315761443",
+    "project_id": "kidscult-a5d7e",
+    "storage_bucket": "kidscult-a5d7e.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:864285389296:android:682f88324dbdf745a6ed35",
+        "mobilesdk_app_id": "1:419315761443:android:6c30eeee9668eb1fb78c96",
         "android_client_info": {
-          "package_name": "com.example.child_tracker"
+          "package_name": "com.kidscult.app"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCKZkum_QJHjaaHVEmPz-RaectgXPPsFvY"
+          "current_key": "AIzaSyBRCanvg0-mpxH4YONsoxBhOmupl-q0MwA"
         }
       ],
       "services": {

@@ -1,4 +1,3 @@
-
 import 'package:child_tracker/index.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collection/collection.dart';
@@ -9,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-
 
 class ChatRoomScreen extends StatefulWidget {
   final DocumentReference chatRef;
@@ -75,27 +73,33 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                 onPressed: () => context.pop(),
               ),
               title: AppText(
-                text: chat.isGroup ? chat.name ?? '-' : state.members.firstWhere((m) => m.id != senderRef!.id).name,
+                text: chat.type == ChatType.support
+                    ? 'support'.tr()
+                    : chat.isGroup
+                        ? chat.name ?? '-'
+                        : state.members.firstWhere((m) => m.id != senderRef!.id).name,
                 size: 24,
                 fw: FontWeight.w700,
               ),
               centerTitle: true,
-              actions: [
-                Padding(
-                  padding: const EdgeInsets.only(right: 12),
-                  child: IconButton(
-                    icon: SvgPicture.asset(
-                      'assets/images/setting.svg',
-                      width: 24,
-                      height: 24,
-                      fit: BoxFit.contain,
-                    ),
-                    onPressed: () {
-                      context.push('/chat_room/edit_chat', extra: chat);
-                    },
-                  ),
-                ),
-              ],
+              actions: chat.type == ChatType.support
+                  ? []
+                  :  [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 12),
+                        child: IconButton(
+                          icon: SvgPicture.asset(
+                            'assets/images/setting.svg',
+                            width: 24,
+                            height: 24,
+                            fit: BoxFit.contain,
+                          ),
+                          onPressed: () {
+                            context.push('/chat_room/edit_chat', extra: chat);
+                          },
+                        ),
+                      ),
+                    ],
             ),
             body: GestureDetector(
               behavior: HitTestBehavior.translucent,
@@ -110,12 +114,12 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                         //   return const Center(child: CircularProgressIndicator());
                         // }
                         if (snapshot.hasError) {
-                          return  Center(
+                          return Center(
                             child: AppText(text: defaultErrorText, color: secondary900),
                           );
                         }
                         if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                          return  Center(
+                          return Center(
                             child: AppText(
                               text: 'writeFirstMessage'.tr(),
                               color: greyscale400,

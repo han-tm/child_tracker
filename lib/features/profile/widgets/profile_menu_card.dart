@@ -35,8 +35,8 @@ class ProfileMenuCard extends StatelessWidget {
             child: Center(
               child: SvgPicture.asset(
                 'assets/images/$icon.svg',
-                width: icon == 'lang' ? 20 : 24,
-                height: icon == 'lang' ? 20 : 24,
+                width: 24,
+                height: 24,
                 color: iconColor,
                 fit: BoxFit.contain,
               ),

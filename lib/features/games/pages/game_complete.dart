@@ -275,10 +275,11 @@ class _WinGameWidgetState extends State<_WinGameWidget> with AutomaticKeepAliveC
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SvgPicture.asset('assets/images/coin.svg'),
+                  SvgPicture.asset('assets/images/points.svg'),
                   const SizedBox(width: 6),
                   AppText(
-                    text: widget.winCoins.toString(),
+                    // text: widget.winCoins.toString(),
+                    text: 'gamePointsCount'.plural(widget.winCoins),
                     size: 20,
                     fw: FontWeight.w700,
                     textAlign: TextAlign.center,

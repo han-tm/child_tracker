@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 enum UserType { kid, mentor }
 
-enum ChatType { private, group }
+enum ChatType { private, group, support }
 
 enum BonusStatus { needApprove, active, canceled, readyToReceive, received }
 

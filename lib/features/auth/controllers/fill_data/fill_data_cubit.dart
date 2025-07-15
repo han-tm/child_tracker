@@ -51,7 +51,7 @@ class FillDataCubit extends Cubit<FillDataState> {
       createUser();
     } else if (state.step == 1 && state.userType == UserType.mentor) {
       print('createUser mentor');
-        createUser();
+      createUser();
     } else {
       pageController.nextPage(duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
       emit(state.copyWith(step: state.step + 1));
@@ -93,9 +93,10 @@ class FillDataCubit extends Cubit<FillDataState> {
         data['photo'] = photoUrl;
       }
 
-      final orderRef = _fs.collection('users').doc(_auth.currentUser!.uid);
-      await orderRef.update(data);
+      final userRef = _fs.collection('users').doc(_auth.currentUser!.uid);
+      await userRef.update(data);
       await _userCubit.getAndSet(_auth.currentUser!);
+      await _createSupportChat(userRef);
       emit(state.copyWith(status: FillDataStatus.success));
     } catch (e) {
       print('Error {createUser}: $e');
@@ -126,6 +127,29 @@ class FillDataCubit extends Cubit<FillDataState> {
       'banned': false,
     };
     return userData;
+  }
+
+  Future<void> _createSupportChat(DocumentReference userRef) async {
+    try {
+      final newChatRef = _fs.collection('chats').doc();
+
+      final members = [userRef];
+      final unreads = {userRef.id: 0, 'support': 0};
+      final notification = {userRef.id: true};
+
+      final Map<String, dynamic> newChatData = {
+        'members': members,
+        'unmodified_members': members,
+        'type': ChatType.support.name,
+        'last_edit_time': FieldValue.serverTimestamp(),
+        'unreads': unreads,
+        'notification': notification,
+      };
+
+      await newChatRef.set(newChatData);
+    } catch (e) {
+      rethrow;
+    }
   }
 
   void reset() => emit(state.reset());

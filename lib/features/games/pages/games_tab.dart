@@ -32,6 +32,22 @@ class GamesTabScreen extends StatelessWidget {
           ),
           title: AppText(text: 'games'.tr(), size: 24, fw: FontWeight.w700),
           centerTitle: true,
+          actions: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SvgPicture.asset('assets/images/points.svg'),
+                const SizedBox(width: 8),
+                BlocBuilder<UserCubit, UserModel?>(
+                  builder: (context, me) {
+                    final points = me?.gamePoints ?? 0;
+                    return AppText(text: points.toString(), size: 20, fw: FontWeight.w700);
+                  },
+                ),
+                const SizedBox(width: 24),
+              ],
+            ),
+          ],
           bottom: PreferredSize(
             preferredSize: const Size.fromHeight(66),
             child: Container(
@@ -81,8 +97,8 @@ class GamesTabScreen extends StatelessWidget {
         ),
         body: BlocBuilder<UserCubit, UserModel?>(
           builder: (context, me) {
-            if(me == null) return const SizedBox();
-            return  TabBarView(children: [GameTabWidget(me: me), const ArticleTabWidget()]);
+            if (me == null) return const SizedBox();
+            return TabBarView(children: [GameTabWidget(me: me), const ArticleTabWidget()]);
           },
         ),
       ),

@@ -61,6 +61,10 @@ class UserCubit extends Cubit<UserModel?> {
     return UserModel.fromFirestore(doc);
   }
 
+  Stream<UserModel> getStreamUserByRef(DocumentReference ref) {
+    return ref.snapshots().map((doc) => UserModel.fromFirestore(doc));
+  }
+
   Future<bool> addRequestToConnection(DocumentReference kidRef) async {
     if (state == null) return false;
     try {

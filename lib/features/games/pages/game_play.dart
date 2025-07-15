@@ -170,19 +170,7 @@ class _GamePlayScreenState extends State<GamePlayScreen> with AutomaticKeepAlive
               padding: const EdgeInsets.only(right: 20),
               child: ExitGamePopupMenuButton(onExit: onExitGame),
             ),
-            IconButton(
-              onPressed: () {
-                context.replace(
-                  '/game_complete',
-                  extra: {
-                    'level': widget.level,
-                    'game': game,
-                    'correctAnswers': correctAnswers,
-                  },
-                );
-              },
-              icon: const Icon(CupertinoIcons.info_circle),
-            ),
+          
           ],
         ),
         body: Column(
