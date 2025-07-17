@@ -426,5 +426,25 @@
         "few": "{} points",
         "many": "{} points",
         "other": "{} points"
-    }
+    },
+    "all_kids": "All kids",
+    "who_assign_task": "Who should we assign the task to?",
+    "info": "Information",
+    "task_type_message": "I'll tell you what tasks you can create",
+    "task_without_point": "Task without points",
+    "task_without_point_desc": "Suitable for everyday or minor tasks",
+    "task_with_point": "Task with points",
+    "task_with_point_desc": "For this, the child will receive points and can accumulate them. The more important the task, the higher the points",
+    "task_of_day": "Task of the day",
+    "task_of_day_desc": "Mandatory tasks of the day, until the child completes them, no points for other tasks will be awarded that day",
+    "popular_tasks": "Popular tasks",
+    "most_popular_tasks": "Most popular",
+    "assign_point_to_task?": "Award points for completion?",
+    "assign_point_to_task_desc": "Enter the points or skip if you want the task without points",
+    "assign_point_to_task_error": "Make sure the number you enter does not exceed 10 points.",
+    "assign": "Accrue",
+    "task_of_day_desc_info": "Completing the Daily Task is mandatory - without it, you cannot complete other important tasks",
+    "send_to_do": "Submit for execution",
+    "min_1": "Minimum 1 point",
+    "max_10": "Maximum 10 points"
 }

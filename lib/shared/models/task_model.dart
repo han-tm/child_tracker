@@ -20,6 +20,7 @@ class TaskModel {
   final DateTime? createdAt;
   final DateTime? actionDate;
   final int? coin;
+  final int usedCounter;
 
   TaskModel({
     required this.id,
@@ -39,6 +40,7 @@ class TaskModel {
     this.createdAt,
     this.actionDate,
     this.coin,
+    this.usedCounter = 0,
   });
 
   factory TaskModel.fromFirestore(DocumentSnapshot doc) {
@@ -63,6 +65,7 @@ class TaskModel {
       createdAt: data['created_at'] != null ? (data['created_at'] as Timestamp).toDate() : null,
       actionDate: data['action_date'] != null ? (data['action_date'] as Timestamp).toDate() : null,
       coin: data['coin'],
+      usedCounter: data['used_counter'],
     );
   }
 

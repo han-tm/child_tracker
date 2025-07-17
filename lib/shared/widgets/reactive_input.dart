@@ -21,6 +21,7 @@ class ReactiveCustomInput extends StatelessWidget {
   final Color? color;
   final bool hasAsyncValidator;
   final int maxLenght;
+  final FocusNode? focus;
 
   const ReactiveCustomInput({
     super.key,
@@ -41,6 +42,7 @@ class ReactiveCustomInput extends StatelessWidget {
     this.color,
     this.hasAsyncValidator = false,
     this.maxLenght = 200,
+    this.focus,
   });
 
   @override
@@ -56,6 +58,7 @@ class ReactiveCustomInput extends StatelessWidget {
           readOnly: !enabled,
           showErrors: (control) => control.invalid && control.touched && enabled,
           formControlName: formName,
+          focusNode: focus,
           validationMessages: validationMessages,
           maxLines: maxLines,
           minLines: minLines,

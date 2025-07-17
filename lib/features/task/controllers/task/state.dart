@@ -16,12 +16,14 @@ class TaskState extends Equatable {
   final List<TaskModel> tasks;
   final KidTaskChip selectedKidChip;
   final DateTime currentDay;
+  final UserModel? selectedKid;
   const TaskState({
     this.errorMessage,
     this.status = TaskStateStatus.initial,
     this.tasks = const [],
     this.selectedKidChip = KidTaskChip.all,
     required this.currentDay,
+    this.selectedKid,
   });
 
   TaskState copyWith({
@@ -30,6 +32,7 @@ class TaskState extends Equatable {
     List<TaskModel>? tasks,
     KidTaskChip? selectedKidChip,
     DateTime? currentDay,
+    UserModel? selectedKid,
   }) {
     return TaskState(
       errorMessage: errorMessage ?? this.errorMessage,
@@ -37,6 +40,7 @@ class TaskState extends Equatable {
       tasks: tasks ?? this.tasks,
       selectedKidChip: selectedKidChip ?? this.selectedKidChip,
       currentDay: currentDay ?? this.currentDay,
+      selectedKid: selectedKid ?? this.selectedKid,
     );
   }
 
@@ -47,7 +51,19 @@ class TaskState extends Equatable {
         tasks,
         selectedKidChip,
         currentDay,
+        selectedKid,
       ];
 
   TaskState reset() => TaskState(currentDay: currentDay);
+
+  TaskState resetSelectedKid() {
+    return TaskState(
+      errorMessage: errorMessage,
+      status: status,
+      tasks: tasks,
+      selectedKidChip: selectedKidChip,
+      currentDay: currentDay,
+      selectedKid: null,
+    );
+  }
 }

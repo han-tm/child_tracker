@@ -1,16 +1,14 @@
-part of 'create_kid_task_cubit.dart';
+part of 'edit_mentor_task_cubit.dart';
 
-enum KidTaskCreateStatus { initial, loading, success, error }
+enum MentorTaskEditStatus { initial, loading, success, error }
 
-
-
-class KidTaskCreateState extends Equatable {
+class MentorTaskEditState extends Equatable {
   final String? errorMessage;
-  final KidTaskCreateStatus status;
-  final bool isEditMode;
+  final MentorTaskEditStatus status;
   final String? name;
   final String? description;
   final String? emoji;
+  final String? photoUrl;
   final XFile? photo;
   final DateTime? startData;
   final DateTime? endData;
@@ -19,45 +17,40 @@ class KidTaskCreateState extends Equatable {
   final TimeOfDay? reminderTime;
   final List<int> reminderDays;
 
-  final int step;
-
-  const KidTaskCreateState({
+  const MentorTaskEditState({
     this.errorMessage,
-    this.status = KidTaskCreateStatus.initial,
-    this.isEditMode = false,
+    this.status = MentorTaskEditStatus.initial,
     this.name,
     this.description,
     this.emoji,
     this.photo,
+    this.photoUrl,
     this.startData,
     this.endData,
     this.reminderType = ReminderType.single,
     this.reminderDate,
     this.reminderTime,
     this.reminderDays = const [],
-    this.step = 0,
   });
 
-  KidTaskCreateState copyWith({
+  MentorTaskEditState copyWith({
     String? errorMessage,
-    KidTaskCreateStatus? status,
-    bool? isEditMode,
+    MentorTaskEditStatus? status,
     String? name,
     String? description,
     String? emoji,
     XFile? photo,
+    String? photoUrl,
     DateTime? startData,
     DateTime? endData,
     ReminderType? reminderType,
     DateTime? reminderDate,
-    TimeOfDay? reminderTime, 
+    TimeOfDay? reminderTime,
     List<int>? reminderDays,
-    int? step,
   }) {
-    return KidTaskCreateState(
+    return MentorTaskEditState(
       errorMessage: errorMessage ?? this.errorMessage,
       status: status ?? this.status,
-      isEditMode: isEditMode ?? this.isEditMode,
       name: name ?? this.name,
       description: description ?? this.description,
       photo: photo == null
@@ -70,13 +63,25 @@ class KidTaskCreateState extends Equatable {
           : emoji == 'delete'
               ? null
               : emoji,
+      photoUrl: photoUrl ?? this.photoUrl,
       startData: startData ?? this.startData,
-      endData: endData == null ? this.endData : endData.year == 0 ? null : endData,
+      endData: endData == null
+          ? this.endData
+          : endData.year == 0
+              ? null
+              : endData,
       reminderType: reminderType ?? this.reminderType,
-      reminderDate: reminderDate == null ? this.reminderDate : reminderDate.year == 0 ? null : reminderDate,
-      reminderTime: reminderTime == null ? this.reminderTime : (reminderTime.hour == 0 && reminderTime.minute == 0) ? null : reminderTime,
+      reminderDate: reminderDate == null
+          ? this.reminderDate
+          : reminderDate.year == 0
+              ? null
+              : reminderDate,
+      reminderTime: reminderTime == null
+          ? this.reminderTime
+          : (reminderTime.hour == 0 && reminderTime.minute == 0)
+              ? null
+              : reminderTime,
       reminderDays: reminderDays ?? this.reminderDays,
-      step: step ?? this.step,
     );
   }
 
@@ -84,19 +89,18 @@ class KidTaskCreateState extends Equatable {
   List<Object?> get props => [
         errorMessage,
         status,
-        isEditMode,
         name,
         description,
         emoji,
         photo,
+        photoUrl,
         startData,
         endData,
         reminderType,
         reminderDate,
         reminderTime,
         reminderDays,
-        step,
       ];
 
-  KidTaskCreateState reset() => const KidTaskCreateState();
+  MentorTaskEditState reset() => const MentorTaskEditState();
 }

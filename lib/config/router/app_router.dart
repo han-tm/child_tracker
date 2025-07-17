@@ -302,6 +302,16 @@ final GoRouter router = GoRouter(
         ),
       ],
     ),
+    GoRoute(
+      path: '/mentor_create_task',
+      builder: (context, state) => const CreateMentorTaskScreen(),
+      routes: [
+        GoRoute(
+          path: 'success',
+          builder: (context, state) => const CreateTaskSuccessScreen(),
+        ),
+      ],
+    ),
     ShellRoute(
       builder: (context, state, child) {
         final task = state.extra as TaskModel;

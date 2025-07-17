@@ -22,15 +22,32 @@ class TaskCubit extends Cubit<TaskState> {
   StreamSubscription? _taskStreamSubscription;
 
   void init() {
-    final user = _userCubit.state;
-    if (user == null) return;
+    final me = _userCubit.state;
+    if (me == null) return;
     emit(state.copyWith(status: TaskStateStatus.loading));
 
-    final query = _fs
-        .collection('tasks')
-        .where('kid', isEqualTo: user.ref)
-        .where('status', isNotEqualTo: TaskStatus.deleted.name)
-        .orderBy('created_at', descending: true);
+    late Query query;
+
+    if (me.isKid) {
+      query = _fs
+          .collection('tasks')
+          .where('kid', isEqualTo: me.ref)
+          .where('status', isNotEqualTo: TaskStatus.deleted.name)
+          .orderBy('created_at', descending: true);
+    } else {
+      query = _fs
+          .collection('tasks')
+          .where('owner', isEqualTo: me.ref)
+          .where('status', isNotEqualTo: TaskStatus.deleted.name)
+          .orderBy('created_at', descending: true);
+
+      final selectedKid = state.selectedKid;
+      if (selectedKid != null) {
+        query = query.where('kid', isEqualTo: selectedKid.ref);
+      }
+    }
+
+    print(query.parameters);
 
     _taskStreamSubscription = query.snapshots().listen((event) {
       final tasks = event.docs.map((e) => TaskModel.fromFirestore(e)).toList();
@@ -41,6 +58,15 @@ class TaskCubit extends Cubit<TaskState> {
           emit(state.copyWith(errorMessage: e.toString(), status: TaskStateStatus.error));
         },
       );
+  }
+
+  void onKidSelected(UserModel? kid) {
+    if (kid == null) {
+      emit(state.resetSelectedKid());
+    } else {
+      emit(state.copyWith(selectedKid: kid));
+    }
+    init();
   }
 
   void onKidTaskChipSelected(KidTaskChip chip) {

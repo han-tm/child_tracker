@@ -11,3 +11,6 @@ export './kid_edit_task/edit_kid_task.dart';
 export './cancel_couse_screen.dart';
 export './delete_task_success.dart';
 export './task_complete_success.dart';
+export './mentor_create_task/mentor_task.dart';
+export './task_types_info_modal.dart';
+export './task_of_day_info.dart';

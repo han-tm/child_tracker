@@ -1,24 +1,43 @@
 import 'package:child_tracker/index.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 
-part 'state.dart';
+part 'edit_state.dart';
 
-class KidTaskCreateCubit extends Cubit<KidTaskCreateState> {
+class MentorTaskEditCubit extends Cubit<MentorTaskEditState> {
   final UserCubit _userCubit;
-  final FirebaseFirestore _fs;
-  final PageController pageController;
+  final TaskModel _task;
 
-  KidTaskCreateCubit({
+  MentorTaskEditCubit({
     required UserCubit userCubit,
+    required TaskModel task,
   })  : _userCubit = userCubit,
-        _fs = FirebaseFirestore.instance,
-        pageController = PageController(initialPage: 0),
-        super(const KidTaskCreateState());
+        _task = task,
+        super(const MentorTaskEditState());
+
+  void init() {
+    bool isEmoji = _task.photo?.startsWith('emoji:') ?? false;
+    String? photoUrl = _task.photo == null
+        ? null
+        : isEmoji
+            ? null
+            : _task.photo;
+    emit(state.copyWith(
+      photoUrl: photoUrl,
+      emoji: isEmoji ? _task.photo : null,
+      name: _task.name,
+      description: _task.description,
+      startData: _task.startDate,
+      endData: _task.endDate,
+      reminderType: _task.reminderType,
+      reminderDate: _task.reminderDate,
+      reminderTime: _task.reminderTime,
+      reminderDays: _task.reminderDays,
+    ));
+  }
 
   void onChangeNameAndDescription(String name, String? description) {
     emit(state.copyWith(name: name, description: description));
@@ -105,44 +124,22 @@ class KidTaskCreateCubit extends Cubit<KidTaskCreateState> {
     }
   }
 
-  void onChangeMode(bool editMode) {
-    emit(state.copyWith(isEditMode: editMode));
-  }
-
-  void onJumpToPage(int page) {
-    pageController.jumpToPage(page);
-  }
-
-  void nextPage() {
-    if (state.step == 4) {
-      // create
-    }
-    pageController.nextPage(duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
-    emit(state.copyWith(step: state.step + 1));
-  }
-
-  void prevPage() {
-    if (state.step == 0) return;
-    pageController.previousPage(duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
-    emit(state.copyWith(step: state.step - 1));
-  }
-
-  void createTask() async {
+  void editTask() async {
     final user = _userCubit.state;
     if (user == null) {
-      emit(state.copyWith(errorMessage: 'userNotFound'.tr(), status: KidTaskCreateStatus.error));
+      emit(state.copyWith(errorMessage: 'userNotFound'.tr(), status: MentorTaskEditStatus.error));
       return;
     }
 
-    if (state.name == null || state.startData == null || (state.photo == null && state.emoji == null)) {
-      emit(state.copyWith(errorMessage: 'fillAllFields'.tr(), status: KidTaskCreateStatus.error));
+    if (state.name == null || state.startData == null ) {
+      emit(state.copyWith(errorMessage: 'fillAllFields'.tr(), status: MentorTaskEditStatus.error));
       return;
     }
 
     try {
-      emit(state.copyWith(status: KidTaskCreateStatus.loading));
+      emit(state.copyWith(status: MentorTaskEditStatus.loading));
 
-      final newTaskRef = _fs.collection('tasks').doc();
+      final taskRef = _task.ref;
 
       DateTime now = DateTime.now();
       final DateTime? reminderTime = state.reminderTime != null
@@ -156,8 +153,6 @@ class KidTaskCreateCubit extends Cubit<KidTaskCreateState> {
           : null;
 
       final data = {
-        'owner': user.ref,
-        'kid': user.ref,
         'name': state.name,
         'description': state.description,
         'start_date': state.startData,
@@ -166,41 +161,29 @@ class KidTaskCreateCubit extends Cubit<KidTaskCreateState> {
         'reminder_date': state.reminderDate,
         'reminder_time': reminderTime,
         'reminder_days': state.reminderDays,
-        'created_at': DateTime.now(),
-        'type': TaskType.kid.name,
-        'status': TaskStatus.inProgress.name,
-        'used_counter': 0,
       };
 
       if (state.photo != null) {
         final uploadService = FirebaseStorageService();
         final photoUrl = await uploadService.uploadFile(file: state.photo!, type: UploadType.user, uid: user.id);
         if (photoUrl == null) {
-          emit(state.copyWith(status: KidTaskCreateStatus.error, errorMessage: 'photoUploadError'.tr()));
+          emit(state.copyWith(status: MentorTaskEditStatus.error, errorMessage: 'photoUploadError'.tr()));
           return;
         } else {
           data['photo'] = photoUrl;
         }
       } else if (state.emoji != null) {
         data['photo'] = 'emoji:${state.emoji}';
-      } else {
-        emit(state.copyWith(status: KidTaskCreateStatus.error, errorMessage: 'photoUploadError'.tr()));
       }
 
-      await newTaskRef.set(data);
+      await taskRef.update(data);
 
-      emit(state.copyWith(status: KidTaskCreateStatus.success));
+      emit(state.copyWith(status: MentorTaskEditStatus.success));
     } catch (e) {
-      print('error {createTask}: $e');
-      emit(state.copyWith(errorMessage: e.toString(), status: KidTaskCreateStatus.error));
+      print('error {editTask}: $e');
+      emit(state.copyWith(errorMessage: e.toString(), status: MentorTaskEditStatus.error));
     }
   }
 
   void reset() => emit(state.reset());
-
-  @override
-  Future<void> close() {
-    pageController.dispose();
-    return super.close();
-  }
 }

@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class MentorAppbarWidget extends StatelessWidget {
-  final UserModel user;
-  const MentorAppbarWidget({super.key, required this.user});
+  final UserModel? selectedKid;
+
+  const MentorAppbarWidget({super.key, this.selectedKid});
 
   @override
   Widget build(BuildContext context) {
@@ -14,13 +15,19 @@ class MentorAppbarWidget extends StatelessWidget {
       width: double.infinity,
       child: Row(
         children: [
-          CachedClickableImage(
-            width: 48,
-            height: 48,
-            circularRadius: 100,
-            noImageWidget: Image.asset('assets/images/mentors.png'),
+          GestureDetector(
+            onTap: () {
+              showKidSelectorModalBottomSheet(context);
+            },
+            child: CachedClickableImage(
+              width: 48,
+              height: 48,
+              circularRadius: 100,
+              imageUrl: selectedKid?.photo,
+              noImageWidget: selectedKid == null ? Image.asset('assets/images/all_kids.png') : null,
+            ),
           ),
-           Expanded(
+          Expanded(
             child: AppText(
               text: 'tasks'.tr(),
               size: 24,
@@ -28,20 +35,21 @@ class MentorAppbarWidget extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
           ),
-          Row(
-            children: [
-              SvgPicture.asset('assets/images/coin.svg'),
-              const Padding(
-                padding: EdgeInsets.only(left: 5),
-                child: AppText(
-                  text: '200',
-                  size: 20,
-                  fw: FontWeight.bold,
-                  color: dark5,
-                ),
-              )
-            ],
-          ),
+          if (selectedKid != null)
+            Row(
+              children: [
+                SvgPicture.asset('assets/images/coin.svg'),
+                 Padding(
+                  padding: const EdgeInsets.only(left: 5),
+                  child: AppText(
+                    text: selectedKid!.points.toString(),
+                    size: 20,
+                    fw: FontWeight.bold,
+                    color: dark5,
+                  ),
+                )
+              ],
+            )else const SizedBox(width: 40),
         ],
       ),
     );

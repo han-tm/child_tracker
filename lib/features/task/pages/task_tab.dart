@@ -42,14 +42,18 @@ class _TaskTabScreenState extends State<TaskTabScreen> {
                 automaticallyImplyLeading: false,
                 toolbarHeight: 72,
                 leadingWidth: 0,
-                title: me.isKid ? KidAppBarWidget(user: me) : MentorAppbarWidget(user: me),
+                title: me.isKid ? KidAppBarWidget(user: me) : MentorAppbarWidget(selectedKid: state.selectedKid),
               ),
               floatingActionButton: SizedBox(
                 width: 56,
                 height: 56,
                 child: FloatingActionButton(
                   onPressed: () {
-                    context.push('/kid_create_task');
+                    if (me.isKid) {
+                      context.push('/kid_create_task');
+                    } else {
+                      context.push('/mentor_create_task');
+                    }
                   },
                   elevation: 4,
                   backgroundColor: primary900,
@@ -70,7 +74,12 @@ class _TaskTabScreenState extends State<TaskTabScreen> {
                                   me: me,
                                   selectedDay: state.currentDay,
                                 )
-                              : const MentorTasksWidget(),
+                              : MentorTasksWidget(
+                                  tasks: state.tasks,
+                                  selectedKidChip: state.selectedKidChip,
+                                  me: me,
+                                  selectedDay: state.currentDay,
+                                ),
                         ),
                       ],
                     ),
