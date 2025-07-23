@@ -26,6 +26,10 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
     init();
   }
 
+  void onInfoTap(BuildContext context) {
+    showTaskOfDayInfoModalBottomSheet(context);
+  }
+
   void init() async {
     if (widget.task != null) {
       task = widget.task!;
@@ -52,7 +56,8 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
   }
 
   void onEdit() async {
-    final bool? refresh = await context.push('/edit_create_task', extra: task);
+    String route = task.type == TaskType.kid ? '/edit_create_task' : '/edit_mentor_create_task';
+    final bool? refresh = await context.push(route, extra: task);
     if (refresh == true) {
       setState(() => loading = true);
       final doc = await widget.taskRef.get();
@@ -250,7 +255,8 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                                     children: [
                                       Expanded(
                                         child: AppText(
-                                          text: '${"roleSelectionKid".tr()} ${task.owner?.id == me.id ? "creator".tr() : ''}',
+                                          text:
+                                              '${"roleSelectionKid".tr()} ${task.type == TaskType.kid ? "creator".tr() : ''}',
                                           size: 16,
                                           fw: FontWeight.w500,
                                           color: greyscale800,
@@ -280,7 +286,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                                           Expanded(
                                             flex: 2,
                                             child: AppText(
-                                              text: '${"roleSelectionMentor".tr()} ${task.owner?.id == me.id ? 'creator'.tr() : ''}',
+                                              text: "roleSelectionMentor".tr(),
                                               size: 16,
                                               fw: FontWeight.w500,
                                               color: greyscale800,
@@ -309,7 +315,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                                       padding: const EdgeInsets.only(top: 16),
                                       child: Row(
                                         children: [
-                                           Expanded(
+                                          Expanded(
                                             flex: 2,
                                             child: AppText(
                                               text: 'points_optional'.tr(),
@@ -344,7 +350,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                                   const SizedBox(height: 16),
                                   Row(
                                     children: [
-                                       Expanded(
+                                      Expanded(
                                         child: AppText(
                                           text: 'start'.tr(),
                                           size: 16,
@@ -363,7 +369,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                                   const SizedBox(height: 16),
                                   Row(
                                     children: [
-                                       Expanded(
+                                      Expanded(
                                         child: AppText(
                                           text: 'end_optional'.tr(),
                                           size: 16,
@@ -382,7 +388,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                                   const SizedBox(height: 16),
                                   Row(
                                     children: [
-                                       Expanded(
+                                      Expanded(
                                         child: AppText(
                                           text: 'reminder_optional'.tr(),
                                           size: 16,
@@ -409,17 +415,20 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                                             flex: 2,
                                             child: Row(
                                               children: [
-                                                 AppText(
+                                                AppText(
                                                   text: 'priority'.tr(),
                                                   size: 16,
                                                   fw: FontWeight.w500,
                                                   color: greyscale800,
                                                 ),
                                                 const SizedBox(width: 10),
-                                                SvgPicture.asset(
-                                                  'assets/images/info_square.svg',
-                                                  width: 20,
-                                                  height: 20,
+                                                GestureDetector(
+                                                  onTap: () => onInfoTap(context),
+                                                  child: SvgPicture.asset(
+                                                    'assets/images/info_square.svg',
+                                                    width: 20,
+                                                    height: 20,
+                                                  ),
                                                 ),
                                               ],
                                             ),
@@ -436,7 +445,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                                                   height: 24,
                                                 ),
                                                 const SizedBox(width: 10),
-                                                 AppText(
+                                                AppText(
                                                   text: 'task_of_the_day'.tr(),
                                                   size: 16,
                                                   textAlign: TextAlign.end,

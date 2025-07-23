@@ -13,7 +13,7 @@ class EditMentorTaskScreen extends StatelessWidget {
   const EditMentorTaskScreen({super.key, required this.task});
 
   void onChangeMode(BuildContext context, String path) {
-    context.push('/edit_create_task/$path', extra: task);
+    context.push('/edit_mentor_create_task/$path', extra: task);
   }
 
   void onDelete(BuildContext context) async {
@@ -35,6 +35,10 @@ class EditMentorTaskScreen extends StatelessWidget {
     }
   }
 
+  void onInfoTap(BuildContext context) {
+    showTaskOfDayInfoModalBottomSheet(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Builder(builder: (context) {
@@ -48,6 +52,13 @@ class EditMentorTaskScreen extends StatelessWidget {
           }
         },
         builder: (context, state) {
+          if (state.selectedKid == null) {
+            return Container(
+              constraints: const BoxConstraints.expand(),
+              color: white,
+              child: const Center(child: CircularProgressIndicator()),
+            );
+          }
           return Scaffold(
             backgroundColor: white,
             appBar: AppBar(
@@ -84,7 +95,7 @@ class EditMentorTaskScreen extends StatelessWidget {
                       child: IntrinsicHeight(
                         child: Column(
                           children: [
-                             Padding(
+                            Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 24),
                               child: MaskotMessage(
                                 message: 'want_to_fix_something'.tr(),
@@ -95,7 +106,7 @@ class EditMentorTaskScreen extends StatelessWidget {
                             const SizedBox(height: 20),
                             Container(
                               width: double.infinity,
-                              padding: const EdgeInsets.all(20),
+                              padding: const EdgeInsets.fromLTRB(20, 20, 0, 20),
                               margin: const EdgeInsets.symmetric(horizontal: 24),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(12),
@@ -148,12 +159,13 @@ class EditMentorTaskScreen extends StatelessWidget {
                                         ),
                                         const SizedBox(width: 2),
                                         _leftArrow(),
+                                        const SizedBox(width: 20),
                                       ],
                                     ),
                                   ),
                                   if (state.description != null)
                                     Padding(
-                                      padding: const EdgeInsets.only(top: 10),
+                                      padding: const EdgeInsets.only(top: 10, right: 20),
                                       child: AppText(
                                         text: state.description!.trim(),
                                         fw: FontWeight.normal,
@@ -163,10 +175,66 @@ class EditMentorTaskScreen extends StatelessWidget {
                                     ),
                                   const Divider(height: 40, thickness: 1, color: greyscale200),
                                   GestureDetector(
+                                    onTap: () => onChangeMode(context, 'kid'),
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          child: AppText(
+                                            text: 'child'.tr(),
+                                            size: 16,
+                                            fw: FontWeight.w500,
+                                            color: greyscale800,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 2),
+                                        AppText(
+                                          text: state.selectedKid?.name ?? '-',
+                                          size: 16,
+                                          textAlign: TextAlign.end,
+                                        ),
+                                        const SizedBox(width: 2),
+                                        _leftArrow(),
+                                        const SizedBox(width: 20),
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(height: 16),
+                                  GestureDetector(
+                                    onTap: () => onChangeMode(context, 'point'),
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          child: AppText(
+                                            text: 'points_optional'.tr(),
+                                            size: 16,
+                                            fw: FontWeight.w500,
+                                            color: greyscale800,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 2),
+                                        Row(
+                                          children: [
+                                            SvgPicture.asset('assets/images/coin.svg', width: 20, height: 20),
+                                            const SizedBox(width: 6),
+                                            AppText(
+                                              text: state.point != null ? state.point.toString() : '0',
+                                              size: 16,
+                                              textAlign: TextAlign.end,
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(width: 2),
+                                        _leftArrow(),
+                                        const SizedBox(width: 20),
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(height: 16),
+                                  GestureDetector(
                                     onTap: () => onChangeMode(context, 'startDate'),
                                     child: Row(
                                       children: [
-                                         Expanded(
+                                        Expanded(
                                           child: AppText(
                                             text: 'start'.tr(),
                                             size: 16,
@@ -182,6 +250,7 @@ class EditMentorTaskScreen extends StatelessWidget {
                                         ),
                                         const SizedBox(width: 2),
                                         _leftArrow(),
+                                        const SizedBox(width: 20),
                                       ],
                                     ),
                                   ),
@@ -190,7 +259,7 @@ class EditMentorTaskScreen extends StatelessWidget {
                                     onTap: () => onChangeMode(context, 'endDate'),
                                     child: Row(
                                       children: [
-                                         Expanded(
+                                        Expanded(
                                           child: AppText(
                                             text: 'end_optional'.tr(),
                                             size: 16,
@@ -206,6 +275,7 @@ class EditMentorTaskScreen extends StatelessWidget {
                                         ),
                                         const SizedBox(width: 2),
                                         _leftArrow(),
+                                        const SizedBox(width: 20),
                                       ],
                                     ),
                                   ),
@@ -214,7 +284,7 @@ class EditMentorTaskScreen extends StatelessWidget {
                                     onTap: () => onChangeMode(context, 'reminer'),
                                     child: Row(
                                       children: [
-                                         Expanded(
+                                        Expanded(
                                           child: AppText(
                                             text: 'reminder_optional'.tr(),
                                             size: 16,
@@ -232,8 +302,61 @@ class EditMentorTaskScreen extends StatelessWidget {
                                         ),
                                         const SizedBox(width: 2),
                                         _leftArrow(),
+                                        const SizedBox(width: 20),
                                       ],
                                     ),
+                                  ),
+                                  const SizedBox(height: 2),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: Row(
+                                          children: [
+                                            AppText(
+                                              text: 'priority'.tr(),
+                                              size: 16,
+                                              fw: FontWeight.w500,
+                                              color: greyscale800,
+                                            ),
+                                            const SizedBox(width: 8),
+                                            GestureDetector(
+                                              onTap: () => onInfoTap(context),
+                                              child: SvgPicture.asset('assets/images/info_square.svg'),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      const SizedBox(width: 2),
+                                      SvgPicture.asset(
+                                        'assets/images/red_flag.svg',
+                                        fit: BoxFit.contain,
+                                        width: 24,
+                                        height: 24,
+                                      ),
+                                      const SizedBox(width: 8),
+                                      AppText(
+                                        text: 'task_of_the_day'.tr(),
+                                        size: 16,
+                                        fw: FontWeight.w500,
+                                        textAlign: TextAlign.end,
+                                      ),
+                                      Transform.scale(
+                                        scale: 1.2,
+                                        child: Checkbox(
+                                          onChanged: (value) {
+                                            if (value != null) {
+                                              context.read<MentorTaskEditCubit>().onChangeTaskOfDay(value);
+                                            }
+                                          },
+                                          value: state.isTaskOfDay,
+                                          activeColor: primary900,
+                                          checkColor: white,
+                                          side: const BorderSide(color: primary900, width: 3),
+                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 4),
+                                    ],
                                   ),
                                 ],
                               ),

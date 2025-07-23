@@ -16,6 +16,9 @@ class MentorTaskEditState extends Equatable {
   final DateTime? reminderDate;
   final TimeOfDay? reminderTime;
   final List<int> reminderDays;
+  final bool isTaskOfDay;
+  final int? point;
+  final UserModel? selectedKid;
 
   const MentorTaskEditState({
     this.errorMessage,
@@ -31,6 +34,9 @@ class MentorTaskEditState extends Equatable {
     this.reminderDate,
     this.reminderTime,
     this.reminderDays = const [],
+    this.isTaskOfDay = false,
+    this.point,
+    this.selectedKid,
   });
 
   MentorTaskEditState copyWith({
@@ -47,6 +53,9 @@ class MentorTaskEditState extends Equatable {
     DateTime? reminderDate,
     TimeOfDay? reminderTime,
     List<int>? reminderDays,
+    bool? isTaskOfDay,
+    UserModel? selectedKid,
+    int? point,
   }) {
     return MentorTaskEditState(
       errorMessage: errorMessage ?? this.errorMessage,
@@ -82,6 +91,9 @@ class MentorTaskEditState extends Equatable {
               ? null
               : reminderTime,
       reminderDays: reminderDays ?? this.reminderDays,
+      isTaskOfDay: isTaskOfDay ?? this.isTaskOfDay,
+      selectedKid: selectedKid ?? this.selectedKid,
+      point: point ?? this.point,
     );
   }
 
@@ -100,6 +112,9 @@ class MentorTaskEditState extends Equatable {
         reminderDate,
         reminderTime,
         reminderDays,
+        isTaskOfDay,
+        point,
+        selectedKid,
       ];
 
   MentorTaskEditState reset() => const MentorTaskEditState();

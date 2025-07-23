@@ -349,6 +349,51 @@ final GoRouter router = GoRouter(
         ),
       ],
     ),
+    ShellRoute(
+      builder: (context, state, child) {
+        final task = state.extra as TaskModel;
+        return BlocProvider(
+          create: (context) => MentorTaskEditCubit(userCubit: sl(), task: task)..init(),
+          child: child,
+        );
+      },
+      routes: [
+        GoRoute(
+          path: '/edit_mentor_create_task',
+          builder: (context, state) => EditMentorTaskScreen(task: state.extra as TaskModel),
+          routes: [
+            GoRoute(
+              path: 'name',
+              builder: (context, state) => const MentorTaskEditNameScreen(),
+            ),
+            GoRoute(
+              path: 'photo',
+              builder: (context, state) => const MentorTaskEditPhotoScreen(),
+            ),
+            GoRoute(
+              path: 'startDate',
+              builder: (context, state) => const MentorTaskEditStartDateScreen(),
+            ),
+            GoRoute(
+              path: 'endDate',
+              builder: (context, state) => const MentorTaskEditEndDateScreen(),
+            ),
+            GoRoute(
+              path: 'reminer',
+              builder: (context, state) => const MentorTaskEditReminderScreen(),
+            ),
+            GoRoute(
+              path: 'kid',
+              builder: (context, state) => const MentorTaskEditKidScreen(),
+            ),
+            GoRoute(
+              path: 'point',
+              builder: (context, state) => const MentorTaskEditPointScreen(),
+            ),
+          ],
+        ),
+      ],
+    ),
     GoRoute(
       path: '/task_detail',
       builder: (context, state) {

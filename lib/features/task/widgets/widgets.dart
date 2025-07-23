@@ -14,3 +14,4 @@ export './task_complete_success.dart';
 export './mentor_create_task/mentor_task.dart';
 export './task_types_info_modal.dart';
 export './task_of_day_info.dart';
+export './mentor_edit_task/edit_mentor_task.dart';

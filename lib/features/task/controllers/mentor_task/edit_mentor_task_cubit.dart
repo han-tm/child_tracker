@@ -18,16 +18,18 @@ class MentorTaskEditCubit extends Cubit<MentorTaskEditState> {
         _task = task,
         super(const MentorTaskEditState());
 
-  void init() {
+  void init() async {
     bool isEmoji = _task.photo?.startsWith('emoji:') ?? false;
     String? photoUrl = _task.photo == null
         ? null
         : isEmoji
             ? null
             : _task.photo;
+
+    final UserModel? selectedKid = _task.kid != null ? await _userCubit.getUserByRef(_task.kid!) : null;
     emit(state.copyWith(
       photoUrl: photoUrl,
-      emoji: isEmoji ? _task.photo : null,
+      emoji: isEmoji ? _task.photo?.replaceAll('emoji:', '') : null,
       name: _task.name,
       description: _task.description,
       startData: _task.startDate,
@@ -36,6 +38,9 @@ class MentorTaskEditCubit extends Cubit<MentorTaskEditState> {
       reminderDate: _task.reminderDate,
       reminderTime: _task.reminderTime,
       reminderDays: _task.reminderDays,
+      selectedKid: selectedKid,
+      isTaskOfDay: _task.type == TaskType.priority,
+      point: _task.coin ?? 0,
     ));
   }
 
@@ -124,6 +129,18 @@ class MentorTaskEditCubit extends Cubit<MentorTaskEditState> {
     }
   }
 
+  void onChangeTaskOfDay(bool val) {
+    emit(state.copyWith(isTaskOfDay: val));
+  }
+
+  void onChangeKid(UserModel kid) {
+    emit(state.copyWith(selectedKid: kid));
+  }
+
+  void onChangePoint(int point) {
+    emit(state.copyWith(point: point));
+  }
+
   void editTask() async {
     final user = _userCubit.state;
     if (user == null) {
@@ -131,7 +148,10 @@ class MentorTaskEditCubit extends Cubit<MentorTaskEditState> {
       return;
     }
 
-    if (state.name == null || state.startData == null ) {
+    if (state.name == null ||
+        state.startData == null ||
+        state.selectedKid == null ||
+        (state.photo == null && state.emoji == null)) {
       emit(state.copyWith(errorMessage: 'fillAllFields'.tr(), status: MentorTaskEditStatus.error));
       return;
     }
@@ -153,6 +173,7 @@ class MentorTaskEditCubit extends Cubit<MentorTaskEditState> {
           : null;
 
       final data = {
+        'kid': state.selectedKid!.ref,
         'name': state.name,
         'description': state.description,
         'start_date': state.startData,
@@ -161,6 +182,8 @@ class MentorTaskEditCubit extends Cubit<MentorTaskEditState> {
         'reminder_date': state.reminderDate,
         'reminder_time': reminderTime,
         'reminder_days': state.reminderDays,
+        'type': state.isTaskOfDay ? TaskType.priority.name : TaskType.mentor.name,
+        'coin': state.point ?? 0,
       };
 
       if (state.photo != null) {

@@ -5,27 +5,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-class KidTaskEditEndDateScreen extends StatefulWidget {
-  const KidTaskEditEndDateScreen({super.key});
+class MentorTaskEditEndDateScreen extends StatefulWidget {
+  const MentorTaskEditEndDateScreen({super.key});
 
   @override
-  State<KidTaskEditEndDateScreen> createState() => _KidTaskEditEndDateScreenState();
+  State<MentorTaskEditEndDateScreen> createState() => _MentorTaskEditEndDateScreenState();
 }
 
-class _KidTaskEditEndDateScreenState extends State<KidTaskEditEndDateScreen> {
+class _MentorTaskEditEndDateScreenState extends State<MentorTaskEditEndDateScreen> {
   String? dateError;
 
   void onDatePick(BuildContext context) async {
     final selectedDate = await showDatePickerModalBottomSheet(context);
     if (selectedDate != null && context.mounted) {
-      final startDate = context.read<KidTaskEditCubit>().state.startData;
+      final startDate = context.read<MentorTaskEditCubit>().state.startData;
       if (startDate != null && selectedDate.isBefore(startDate)) {
         setState(() {
           dateError = 'end_date_before_start_error'.tr();
         });
       } else {
         if (dateError != null) setState(() => dateError = null);
-        context.read<KidTaskEditCubit>().onChangeEndDate(selectedDate);
+        context.read<MentorTaskEditCubit>().onChangeEndDate(selectedDate);
       }
     }
   }
@@ -33,7 +33,7 @@ class _KidTaskEditEndDateScreenState extends State<KidTaskEditEndDateScreen> {
   void onTimePick(BuildContext context) async {
     final selectedTime = await showTimePickerModalBottomSheet(context);
     if (selectedTime != null && context.mounted) {
-      context.read<KidTaskEditCubit>().onChangeEndTime(selectedTime);
+      context.read<MentorTaskEditCubit>().onChangeEndTime(selectedTime);
     }
   }
 
@@ -50,7 +50,7 @@ class _KidTaskEditEndDateScreenState extends State<KidTaskEditEndDateScreen> {
           },
         ),
       ),
-      body: BlocBuilder<KidTaskEditCubit, KidTaskEditState>(
+      body: BlocBuilder<MentorTaskEditCubit, MentorTaskEditState>(
         builder: (context, state) {
           final valid = state.endData != null;
           return Column(

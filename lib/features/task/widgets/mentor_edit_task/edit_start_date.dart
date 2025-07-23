@@ -5,35 +5,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-class KidTaskEditEndDateScreen extends StatefulWidget {
-  const KidTaskEditEndDateScreen({super.key});
-
-  @override
-  State<KidTaskEditEndDateScreen> createState() => _KidTaskEditEndDateScreenState();
-}
-
-class _KidTaskEditEndDateScreenState extends State<KidTaskEditEndDateScreen> {
-  String? dateError;
+class MentorTaskEditStartDateScreen extends StatelessWidget {
+  const MentorTaskEditStartDateScreen({super.key});
 
   void onDatePick(BuildContext context) async {
     final selectedDate = await showDatePickerModalBottomSheet(context);
     if (selectedDate != null && context.mounted) {
-      final startDate = context.read<KidTaskEditCubit>().state.startData;
-      if (startDate != null && selectedDate.isBefore(startDate)) {
-        setState(() {
-          dateError = 'end_date_before_start_error'.tr();
-        });
-      } else {
-        if (dateError != null) setState(() => dateError = null);
-        context.read<KidTaskEditCubit>().onChangeEndDate(selectedDate);
-      }
+      context.read<MentorTaskEditCubit>().onChangeStartDate(selectedDate);
     }
   }
 
   void onTimePick(BuildContext context) async {
     final selectedTime = await showTimePickerModalBottomSheet(context);
     if (selectedTime != null && context.mounted) {
-      context.read<KidTaskEditCubit>().onChangeEndTime(selectedTime);
+      context.read<MentorTaskEditCubit>().onChangeStartTime(selectedTime);
     }
   }
 
@@ -50,16 +35,16 @@ class _KidTaskEditEndDateScreenState extends State<KidTaskEditEndDateScreen> {
           },
         ),
       ),
-      body: BlocBuilder<KidTaskEditCubit, KidTaskEditState>(
+      body: BlocBuilder<MentorTaskEditCubit, MentorTaskEditState>(
         builder: (context, state) {
-          final valid = state.endData != null;
+          final valid = state.startData != null;
           return Column(
             children: [
               Padding(
                 padding: const EdgeInsets.only(left: 34, right: 24),
                 child: MaskotMessage(
-                  message: 'deadline_prompt'.tr(),
-                  maskot: '2186-min',
+                  message: 'when_to_start_task_prompt'.tr(),
+                  maskot: '2177-min',
                   flip: true,
                 ),
               ),
@@ -70,18 +55,17 @@ class _KidTaskEditEndDateScreenState extends State<KidTaskEditEndDateScreen> {
                   child: Column(
                     children: [
                       CustomDateInput(
-                        label: 'end_date_optional'.tr(),
+                        label: 'start_date'.tr(),
                         hint: 'selectDataHint'.tr(),
-                        date: state.endData,
-                        errorText: dateError,
+                        date: state.startData,
                         onTap: () => onDatePick(context),
                       ),
                       const SizedBox(height: 16),
-                      CustomTimeInput( hint: 'selectTime'.tr(),
+                      CustomTimeInput(
                         onTap: () => onTimePick(context),
-                        label: 'end_time_optional'.tr(),
-                        enable: state.endData != null,
-                        time: getTimeFromDate(state.endData),
+                        hint: 'selectTime'.tr(),
+                        label: 'start_time_optional'.tr(),
+                        time: getTimeFromDate(state.startData),
                       ),
                     ],
                   ),
@@ -89,30 +73,24 @@ class _KidTaskEditEndDateScreenState extends State<KidTaskEditEndDateScreen> {
               ),
               Container(
                 decoration: const BoxDecoration(border: Border(top: BorderSide(color: greyscale100))),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 20),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: FilledAppButton(
-                              text: 'apply'.tr(),
-                              isActive: valid,
-                              onTap: () {
-                                if (valid) {
-                                  context.pop();
-                                }
-                              },
-                            ),
-                          ),
-                        ],
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 20),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: FilledAppButton(
+                        text: 'apply'.tr(),
+                        isActive: valid,
+                        onTap: () {
+                          if (valid) {
+                            context.pop();
+                          }
+                        },
                       ),
-                      const SizedBox(height: 20),
-                    ],
-                  ),
+                    ),
+                    const SizedBox(height: 20),
+                  ],
                 ),
               ),
             ],
