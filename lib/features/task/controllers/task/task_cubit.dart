@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 
 part 'state.dart';
 
@@ -105,6 +106,48 @@ class TaskCubit extends Cubit<TaskState> {
     } catch (e) {
       print('error: {completeTask}: ${e.toString()}');
       return false;
+    }
+  }
+
+  Future<void> completeByKid(TaskModel task, String? comment, List<XFile> files) async {
+    emit(state.copyWith(status: TaskStateStatus.kidCompleting));
+
+    if (comment != null || files.isNotEmpty) {
+      final Map<String, dynamic> dialogDoc = {
+        "comment": comment,
+        "time": FieldValue.serverTimestamp(),
+      };
+
+      if (files.isNotEmpty) {
+        final uploadService = FirebaseStorageService();
+        final List<String> urls = [];
+
+        for (final file in files) {
+          final photoUrl = await uploadService.uploadFile(file: file, type: UploadType.task, uid: task.id);
+          if (photoUrl == null) {
+            emit(state.copyWith(status: TaskStateStatus.kidCompletingError));
+            return;
+          } else {
+            urls.add(photoUrl);
+          }
+        }
+
+        dialogDoc['files'] = urls;
+      }
+
+      final dialogRef = task.ref.collection('dialogs').doc();
+      await dialogRef.set(dialogDoc);
+    }
+
+    try {
+      await task.ref.update({
+        'status': TaskStatus.onReview.name,
+      });
+
+      emit(state.copyWith(status: TaskStateStatus.kidCompletingSuccess));
+    } catch (e) {
+      print('error: {completeByKid}: ${e.toString()}');
+      emit(state.copyWith(status: TaskStateStatus.kidCompletingError));
     }
   }
 

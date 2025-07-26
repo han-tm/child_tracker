@@ -42,6 +42,7 @@ class KidSignupSuccessScreen extends StatelessWidget {
                     text: 'accountReadySubtitle'.tr(),
                     size: 32,
                     fw: FontWeight.w700,
+                    maxLine: 2,
                     color: primary900,
                     textAlign: TextAlign.center,
                   ),

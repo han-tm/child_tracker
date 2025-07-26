@@ -404,6 +404,19 @@ final GoRouter router = GoRouter(
       },
     ),
     GoRoute(
+      path: '/task_dialog',
+      builder: (context, state) {
+        final extra = state.extra as Map<String, dynamic>;
+        final taskRef = extra['taskRef'] as DocumentReference;
+        final task = extra['task'] as TaskModel?;
+        return TaskDialogScreen(taskRef: taskRef, task: task);
+      },
+    ),
+    GoRoute(
+      path: '/task_send_review_success',
+      builder: (context, state) => const TaskSendReviewSuccessScreen(),
+    ),
+    GoRoute(
       path: '/task_cancel_reason',
       builder: (context, state) => TaskCancelReasonScreen(task: state.extra as TaskModel),
     ),
@@ -437,7 +450,7 @@ final GoRouter router = GoRouter(
             return ChangeKidPointScreen(isIncrease: isIncrease, kid: kid);
           },
         ),
-         GoRoute(
+        GoRoute(
           path: 'success',
           builder: (context, state) {
             final data = state.extra as Map<String, dynamic>;

@@ -86,30 +86,27 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
   }
 
   void onComplete(UserModel me) async {
-    if ((me.isKid) && me.id == task.owner?.id) {
-      // kids task
-      final confrim = await showConfirmModalBottomSheet(
-        context,
-        title: 'task_completed'.tr(),
-        isDestructive: false,
-        cancelText: 'cancel'.tr(),
-        confirmText: 'yesConfirm'.tr(),
-        message: 'is_everything_ready_confirm'.tr(),
-      );
-      if (confrim == true && mounted) {
-        final result = await context.read<TaskCubit>().completeTask(task);
-        if (result && mounted) {
-          final data = {'name': me.name};
-          context.replace('/task_complete_success', extra: data);
-        } else {
-          SnackBarSerive.showErrorSnackBar('failed_to_complete_task'.tr());
-        }
+    final confrim = await showConfirmModalBottomSheet(
+      context,
+      title: 'task_completed'.tr(),
+      isDestructive: false,
+      cancelText: 'cancel'.tr(),
+      confirmText: 'yesConfirm'.tr(),
+      message: 'is_everything_ready_confirm'.tr(),
+    );
+
+    if (confrim == true && mounted) {
+      if ((me.isKid) && me.id == task.owner?.id) {
+        final data = {'task': task, 'taskRef': task.ref};
+        context.push('/task_dialog', extra: data);
       }
     }
     if (!(me.isKid) && me.id == task.owner?.id) {
       // parent task | confirming
-    } else if (me.id == task.kid?.id) {
+    } else if (me.id == task.kid?.id && mounted) {
       // parents task | send to review
+      final data = {'task': task, 'taskRef': task.ref};
+      context.push('/task_dialog', extra: data);
     }
   }
 
@@ -315,18 +312,14 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                                       padding: const EdgeInsets.only(top: 16),
                                       child: Row(
                                         children: [
-                                          Expanded(
-                                            flex: 2,
-                                            child: AppText(
-                                              text: 'points_optional'.tr(),
-                                              size: 16,
-                                              fw: FontWeight.w500,
-                                              color: greyscale800,
-                                            ),
+                                          AppText(
+                                            text: 'points_optional'.tr(),
+                                            size: 16,
+                                            fw: FontWeight.w500,
+                                            color: greyscale800,
                                           ),
                                           const SizedBox(width: 2),
                                           Expanded(
-                                            flex: 3,
                                             child: Row(
                                               mainAxisAlignment: MainAxisAlignment.end,
                                               children: [

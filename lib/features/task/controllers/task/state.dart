@@ -8,6 +8,9 @@ enum TaskStateStatus {
   canceling,
   cancelError,
   cancelSuccess,
+  kidCompleting,
+  kidCompletingError,
+  kidCompletingSuccess,
 }
 
 class TaskState extends Equatable {

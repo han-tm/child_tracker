@@ -160,7 +160,7 @@ class TaskCard extends StatelessWidget {
                           borderRadius: BorderRadius.circular(4),
                         ),
                         child: AppText(
-                          text: taskCardStatusText(task.status),
+                          text: taskCardStatusText(task.status, isKid: me.isKid),
                           size: 10,
                           color: taskCardStatusTextColor(task.status),
                         ),

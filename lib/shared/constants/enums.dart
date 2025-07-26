@@ -96,12 +96,12 @@ Color taskCardStatusTextColor(TaskStatus? status) {
   }
 }
 
-String taskCardStatusText(TaskStatus? status) {
+String taskCardStatusText(TaskStatus? status, {bool isKid = false}) {
   switch (status) {
     case TaskStatus.inProgress:
       return 'in_progress'.tr();
     case TaskStatus.onReview:
-      return 'check'.tr();
+      return isKid ? 'in_review'.tr() : 'check'.tr();
     case TaskStatus.needsRework:
       return 'rework'.tr();
     case TaskStatus.completed:
