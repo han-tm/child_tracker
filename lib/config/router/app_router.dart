@@ -409,12 +409,26 @@ final GoRouter router = GoRouter(
         final extra = state.extra as Map<String, dynamic>;
         final taskRef = extra['taskRef'] as DocumentReference;
         final task = extra['task'] as TaskModel?;
-        return TaskDialogScreen(taskRef: taskRef, task: task);
+        final isRework = extra['is_rework'] as bool? ?? false;
+        return TaskDialogScreen(taskRef: taskRef, task: task, isRework: isRework);
+      },
+    ),
+    GoRoute(
+      path: '/task_execution_dialog',
+      builder: (context, state) {
+        final extra = state.extra as Map<String, dynamic>;
+        final taskRef = extra['taskRef'] as DocumentReference;
+        final task = extra['task'] as TaskModel?;
+        return TaskExecutionDialogScreen(taskRef: taskRef, task: task);
       },
     ),
     GoRoute(
       path: '/task_send_review_success',
       builder: (context, state) => const TaskSendReviewSuccessScreen(),
+    ),
+    GoRoute(
+      path: '/task_send_rework_success',
+      builder: (context, state) => const TaskSendReworkSuccessScreen(),
     ),
     GoRoute(
       path: '/task_cancel_reason',

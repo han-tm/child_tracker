@@ -27,3 +27,4 @@ export './bonus_container.dart';
 export './custom_birthday_wheel_picker.dart';
 export './photo_video_picker.dart';
 export './show_full_image_or_video.dart';
+export './show_full_photo_or_video_url.dart';

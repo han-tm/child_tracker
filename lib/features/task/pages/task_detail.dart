@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:child_tracker/index.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -19,6 +21,7 @@ class TaskDetailScreen extends StatefulWidget {
 class _TaskDetailScreenState extends State<TaskDetailScreen> {
   late TaskModel task;
   bool loading = false;
+  StreamSubscription? _taskStreamSubscription;
 
   @override
   void initState() {
@@ -39,6 +42,18 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
       task = TaskModel.fromFirestore(doc);
       setState(() => loading = false);
     }
+    initSubscriptions();
+  }
+
+  void initSubscriptions() {
+    _taskStreamSubscription = widget.taskRef.snapshots().listen((doc) {
+      final task = TaskModel.fromFirestore(doc);
+      if (mounted) {
+        setState(() {
+          this.task = task;
+        });
+      }
+    });
   }
 
   void onCancel() async {
@@ -98,16 +113,25 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
     if (confrim == true && mounted) {
       if ((me.isKid) && me.id == task.owner?.id) {
         final data = {'task': task, 'taskRef': task.ref};
-        context.push('/task_dialog', extra: data);
+        await context.push('/task_dialog', extra: data);
       }
     }
     if (!(me.isKid) && me.id == task.owner?.id) {
       // parent task | confirming
+      if (mounted) {
+        context.read<TaskCubit>().completeByMentor(task);
+      }
     } else if (me.id == task.kid?.id && mounted) {
       // parents task | send to review
       final data = {'task': task, 'taskRef': task.ref};
       context.push('/task_dialog', extra: data);
     }
+  }
+
+  @override
+  dispose() {
+    _taskStreamSubscription?.cancel();
+    super.dispose();
   }
 
   @override
@@ -191,110 +215,92 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                   child: Padding(
                     padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
                     child: IntrinsicHeight(
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-                            child: BonusContainer(
-                              color: taskCardBorderColor(task.status),
-                              title: taskDetailCardStatusText(task.status),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
+                      child: BlocConsumer<TaskCubit, TaskState>(
+                        listener: (context, state) {
+                          if (state.status == TaskStateStatus.mentorCompletingSuccess) {
+                            final extra = {
+                              "name": state.currentTaskKid?.name ?? '',
+                              "coin": task.coin ?? 0,
+                            };
+                            context.push('/task_complete_success', extra: extra);
+                          } else if (state.status == TaskStateStatus.mentorCompletingError) {
+                            SnackBarSerive.showErrorSnackBar('defaultErrorText'.tr());
+                          }
+                        },
+                        builder: (context, state) {
+                          return Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                                child: BonusContainer(
+                                  color: taskCardBorderColor(task.status),
+                                  title: taskDetailCardStatusText(task.status),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Builder(builder: (context) {
-                                        if (task.photo == null) {
-                                          return const CachedClickableImage(
-                                            height: 100,
-                                            width: 100,
-                                            circularRadius: 300,
-                                          );
-                                        } else {
-                                          bool isEmoji = task.photo!.startsWith('emoji:');
-                                          return CachedClickableImage(
-                                            height: 100,
-                                            width: 100,
-                                            circularRadius: 300,
-                                            emojiFontSize: 35,
-                                            emoji: isEmoji ? task.photo!.replaceAll('emoji:', '') : null,
-                                            imageUrl: isEmoji ? null : task.photo,
-                                          );
-                                        }
-                                      }),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 16),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      AppText(
-                                        text: task.name,
-                                        size: 24,
-                                        fw: FontWeight.bold,
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ],
-                                  ),
-                                  if (task.description != null)
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 10),
-                                      child: AppText(
-                                        text: task.description!.trim(),
-                                        fw: FontWeight.normal,
-                                        color: greyscale700,
-                                        maxLine: 10,
-                                      ),
-                                    ),
-                                  const Divider(height: 40, thickness: 1, color: greyscale200),
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: AppText(
-                                          text:
-                                              '${"roleSelectionKid".tr()} ${task.type == TaskType.kid ? "creator".tr() : ''}',
-                                          size: 16,
-                                          fw: FontWeight.w500,
-                                          color: greyscale800,
-                                        ),
-                                      ),
-                                      const SizedBox(width: 2),
-                                      if (task.kid != null)
-                                        Expanded(
-                                          child: FutureBuilder<UserModel>(
-                                            future: context.read<UserCubit>().getUserByRef(task.kid!),
-                                            builder: (context, snapshot) {
-                                              return AppText(
-                                                text: snapshot.data?.name ?? '...',
-                                                size: 16,
-                                                textAlign: TextAlign.end,
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Builder(builder: (context) {
+                                            if (task.photo == null) {
+                                              return const CachedClickableImage(
+                                                height: 100,
+                                                width: 100,
+                                                circularRadius: 300,
                                               );
-                                            },
+                                            } else {
+                                              bool isEmoji = task.photo!.startsWith('emoji:');
+                                              return CachedClickableImage(
+                                                height: 100,
+                                                width: 100,
+                                                circularRadius: 300,
+                                                emojiFontSize: 35,
+                                                emoji: isEmoji ? task.photo!.replaceAll('emoji:', '') : null,
+                                                imageUrl: isEmoji ? null : task.photo,
+                                              );
+                                            }
+                                          }),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 16),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          AppText(
+                                            text: task.name,
+                                            size: 24,
+                                            fw: FontWeight.bold,
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ],
+                                      ),
+                                      if (task.description != null)
+                                        Padding(
+                                          padding: const EdgeInsets.only(top: 10),
+                                          child: AppText(
+                                            text: task.description!.trim(),
+                                            fw: FontWeight.normal,
+                                            color: greyscale700,
+                                            maxLine: 10,
                                           ),
                                         ),
-                                    ],
-                                  ),
-                                  if (task.type != TaskType.kid)
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 16),
-                                      child: Row(
+                                      const Divider(height: 40, thickness: 1, color: greyscale200),
+                                      Row(
                                         children: [
                                           Expanded(
-                                            flex: 2,
                                             child: AppText(
-                                              text: "roleSelectionMentor".tr(),
+                                              text:
+                                                  '${"roleSelectionKid".tr()} ${task.type == TaskType.kid ? "creator".tr() : ''}',
                                               size: 16,
                                               fw: FontWeight.w500,
                                               color: greyscale800,
                                             ),
                                           ),
                                           const SizedBox(width: 2),
-                                          if (task.owner != null)
+                                          if (task.kid != null)
                                             Expanded(
-                                              flex: 2,
                                               child: FutureBuilder<UserModel>(
-                                                future: context.read<UserCubit>().getUserByRef(task.owner!),
+                                                future: context.read<UserCubit>().getUserByRef(task.kid!),
                                                 builder: (context, snapshot) {
                                                   return AppText(
                                                     text: snapshot.data?.name ?? '...',
@@ -306,177 +312,401 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                                             ),
                                         ],
                                       ),
-                                    ),
-                                  if ((task.coin ?? 0) > 0)
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 16),
-                                      child: Row(
-                                        children: [
-                                          AppText(
-                                            text: 'points_optional'.tr(),
-                                            size: 16,
-                                            fw: FontWeight.w500,
-                                            color: greyscale800,
-                                          ),
-                                          const SizedBox(width: 2),
-                                          Expanded(
-                                            child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.end,
-                                              children: [
-                                                SvgPicture.asset(
-                                                  'assets/images/coin.svg',
-                                                  width: 20,
-                                                  height: 20,
-                                                ),
-                                                const SizedBox(width: 6),
-                                                AppText(
-                                                  text: task.coin.toString(),
-                                                  size: 16,
-                                                  textAlign: TextAlign.end,
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  const SizedBox(height: 16),
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: AppText(
-                                          text: 'start'.tr(),
-                                          size: 16,
-                                          fw: FontWeight.w500,
-                                          color: greyscale800,
-                                        ),
-                                      ),
-                                      const SizedBox(width: 2),
-                                      AppText(
-                                        text: taskDate(task.startDate),
-                                        size: 16,
-                                        textAlign: TextAlign.end,
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 16),
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: AppText(
-                                          text: 'end_optional'.tr(),
-                                          size: 16,
-                                          fw: FontWeight.w500,
-                                          color: greyscale800,
-                                        ),
-                                      ),
-                                      const SizedBox(width: 2),
-                                      AppText(
-                                        text: taskDate(task.endDate),
-                                        size: 16,
-                                        textAlign: TextAlign.end,
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 16),
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: AppText(
-                                          text: 'reminder_optional'.tr(),
-                                          size: 16,
-                                          fw: FontWeight.w500,
-                                          color: greyscale800,
-                                        ),
-                                      ),
-                                      const SizedBox(width: 2),
-                                      AppText(
-                                        text: task.reminderType == ReminderType.single
-                                            ? taskDate(task.reminderDate)
-                                            : formatTimeOfDay(context, task.reminderTime),
-                                        size: 16,
-                                        textAlign: TextAlign.end,
-                                      ),
-                                    ],
-                                  ),
-                                  if (task.type == TaskType.priority)
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 16),
-                                      child: Row(
-                                        children: [
-                                          Expanded(
-                                            flex: 2,
-                                            child: Row(
-                                              children: [
-                                                AppText(
-                                                  text: 'priority'.tr(),
+                                      if (task.type != TaskType.kid)
+                                        Padding(
+                                          padding: const EdgeInsets.only(top: 16),
+                                          child: Row(
+                                            children: [
+                                              Expanded(
+                                                flex: 2,
+                                                child: AppText(
+                                                  text: "roleSelectionMentor".tr(),
                                                   size: 16,
                                                   fw: FontWeight.w500,
                                                   color: greyscale800,
                                                 ),
-                                                const SizedBox(width: 10),
-                                                GestureDetector(
-                                                  onTap: () => onInfoTap(context),
-                                                  child: SvgPicture.asset(
-                                                    'assets/images/info_square.svg',
-                                                    width: 20,
-                                                    height: 20,
+                                              ),
+                                              const SizedBox(width: 2),
+                                              if (task.owner != null)
+                                                Expanded(
+                                                  flex: 2,
+                                                  child: FutureBuilder<UserModel>(
+                                                    future: context.read<UserCubit>().getUserByRef(task.owner!),
+                                                    builder: (context, snapshot) {
+                                                      return AppText(
+                                                        text: snapshot.data?.name ?? '...',
+                                                        size: 16,
+                                                        textAlign: TextAlign.end,
+                                                      );
+                                                    },
                                                   ),
                                                 ),
-                                              ],
+                                            ],
+                                          ),
+                                        ),
+                                      if ((task.coin ?? 0) > 0)
+                                        Padding(
+                                          padding: const EdgeInsets.only(top: 16),
+                                          child: Row(
+                                            children: [
+                                              AppText(
+                                                text: 'points_optional'.tr(),
+                                                size: 16,
+                                                fw: FontWeight.w500,
+                                                color: greyscale800,
+                                              ),
+                                              const SizedBox(width: 2),
+                                              Expanded(
+                                                child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.end,
+                                                  children: [
+                                                    SvgPicture.asset(
+                                                      'assets/images/coin.svg',
+                                                      width: 20,
+                                                      height: 20,
+                                                    ),
+                                                    const SizedBox(width: 6),
+                                                    AppText(
+                                                      text: task.coin.toString(),
+                                                      size: 16,
+                                                      textAlign: TextAlign.end,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      const SizedBox(height: 16),
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            child: AppText(
+                                              text: 'start'.tr(),
+                                              size: 16,
+                                              fw: FontWeight.w500,
+                                              color: greyscale800,
                                             ),
                                           ),
                                           const SizedBox(width: 2),
-                                          Expanded(
-                                            flex: 3,
-                                            child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.end,
-                                              children: [
-                                                SvgPicture.asset(
-                                                  'assets/images/red_flag.svg',
-                                                  width: 24,
-                                                  height: 24,
-                                                ),
-                                                const SizedBox(width: 10),
-                                                AppText(
-                                                  text: 'task_of_the_day'.tr(),
-                                                  size: 16,
-                                                  textAlign: TextAlign.end,
-                                                ),
-                                              ],
-                                            ),
+                                          AppText(
+                                            text: taskDate(task.startDate),
+                                            size: 16,
+                                            textAlign: TextAlign.end,
                                           ),
                                         ],
                                       ),
-                                    ),
-                                ],
+                                      const SizedBox(height: 16),
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            child: AppText(
+                                              text: 'end_optional'.tr(),
+                                              size: 16,
+                                              fw: FontWeight.w500,
+                                              color: greyscale800,
+                                            ),
+                                          ),
+                                          const SizedBox(width: 2),
+                                          AppText(
+                                            text: taskDate(task.endDate),
+                                            size: 16,
+                                            textAlign: TextAlign.end,
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 16),
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            child: AppText(
+                                              text: 'reminder_optional'.tr(),
+                                              size: 16,
+                                              fw: FontWeight.w500,
+                                              color: greyscale800,
+                                            ),
+                                          ),
+                                          const SizedBox(width: 2),
+                                          AppText(
+                                            text: task.reminderType == ReminderType.single
+                                                ? taskDate(task.reminderDate)
+                                                : formatTimeOfDay(context, task.reminderTime),
+                                            size: 16,
+                                            textAlign: TextAlign.end,
+                                          ),
+                                        ],
+                                      ),
+                                      if (task.type == TaskType.priority)
+                                        Padding(
+                                          padding: const EdgeInsets.only(top: 16),
+                                          child: Row(
+                                            children: [
+                                              Expanded(
+                                                flex: 2,
+                                                child: Row(
+                                                  children: [
+                                                    AppText(
+                                                      text: 'priority'.tr(),
+                                                      size: 16,
+                                                      fw: FontWeight.w500,
+                                                      color: greyscale800,
+                                                    ),
+                                                    const SizedBox(width: 10),
+                                                    GestureDetector(
+                                                      onTap: () => onInfoTap(context),
+                                                      child: SvgPicture.asset(
+                                                        'assets/images/info_square.svg',
+                                                        width: 20,
+                                                        height: 20,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              const SizedBox(width: 2),
+                                              Expanded(
+                                                flex: 3,
+                                                child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.end,
+                                                  children: [
+                                                    SvgPicture.asset(
+                                                      'assets/images/red_flag.svg',
+                                                      width: 24,
+                                                      height: 24,
+                                                    ),
+                                                    const SizedBox(width: 10),
+                                                    AppText(
+                                                      text: 'task_of_the_day'.tr(),
+                                                      size: 16,
+                                                      textAlign: TextAlign.end,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                          const Spacer(),
-                          const SizedBox(height: 24),
-                          if ((task.status == TaskStatus.inProgress || task.status == TaskStatus.needsRework) &&
-                              task.kid?.id == me.id)
-                            Container(
-                              decoration: const BoxDecoration(border: Border(top: BorderSide(color: greyscale100))),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const SizedBox(height: 20),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 24),
-                                    child: FilledAppButton(
-                                      text: 'task_completed_exclamation'.tr(),
-                                      onTap: () {
-                                        onComplete(me);
-                                      },
+                              //Для ментора - когда в процессе
+                              if ((task.status == TaskStatus.inProgress) &&
+                                  task.type != TaskType.kid &&
+                                  task.owner?.id == me.id)
+                                GestureDetector(
+                                  onTap: () {
+                                    final data = {'task': task, 'taskRef': task.ref};
+                                    context.push('/task_execution_dialog', extra: data);
+                                  },
+                                  child: Container(
+                                    height: 66,
+                                    margin: const EdgeInsets.fromLTRB(24, 8, 24, 0),
+                                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                        color: white,
+                                        borderRadius: BorderRadius.circular(12),
+                                        border: Border.all(color: greyscale200, width: 3)),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Flexible(
+                                          child: AppText(
+                                            text: 'execution'.tr(),
+                                            size: 16,
+                                            fw: FontWeight.w500,
+                                            color: greyscale800,
+                                          ),
+                                        ),
+                                        const Icon(CupertinoIcons.chevron_right, size: 20),
+                                      ],
                                     ),
                                   ),
-                                  const SizedBox(height: 20),
-                                ],
-                              ),
-                            ),
-                        ],
+                                ),
+                              //Для ребенка - когда на проверке
+                              if ((task.status == TaskStatus.onReview) && task.kid?.id == me.id)
+                                GestureDetector(
+                                  onTap: () {
+                                    final data = {'task': task, 'taskRef': task.ref};
+                                    context.push('/task_execution_dialog', extra: data);
+                                  },
+                                  child: Container(
+                                    height: 66,
+                                    margin: const EdgeInsets.fromLTRB(24, 8, 24, 0),
+                                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                        color: white,
+                                        borderRadius: BorderRadius.circular(12),
+                                        border: Border.all(color: greyscale200, width: 3)),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Flexible(
+                                          child: AppText(
+                                            text: 'execution'.tr(),
+                                            size: 16,
+                                            fw: FontWeight.w500,
+                                            color: greyscale800,
+                                          ),
+                                        ),
+                                        Row(
+                                          children: [
+                                            AppText(
+                                              text: '${'in_review'.tr()}...',
+                                              size: 16,
+                                              fw: FontWeight.w600,
+                                              color: greyscale500,
+                                            ),
+                                            const SizedBox(width: 8),
+                                            const Icon(CupertinoIcons.chevron_right, size: 20),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              //Для ментора - когда на проверке
+                              if ((task.status == TaskStatus.onReview) &&
+                                  task.type != TaskType.kid &&
+                                  task.owner?.id == me.id)
+                                GestureDetector(
+                                  onTap: () {
+                                    final data = {'task': task, 'taskRef': task.ref};
+                                    context.push('/task_execution_dialog', extra: data);
+                                  },
+                                  child: Container(
+                                    height: 66,
+                                    margin: const EdgeInsets.fromLTRB(24, 8, 24, 0),
+                                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                        color: white,
+                                        borderRadius: BorderRadius.circular(12),
+                                        border: Border.all(color: greyscale200, width: 3)),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Flexible(
+                                          child: AppText(
+                                            text: 'execution'.tr(),
+                                            size: 16,
+                                            fw: FontWeight.w500,
+                                            color: greyscale800,
+                                          ),
+                                        ),
+                                        Row(
+                                          children: [
+                                            AppText(
+                                              text: 'check_it'.tr(),
+                                              size: 16,
+                                              fw: FontWeight.w600,
+                                              color: primary900,
+                                            ),
+                                            const SizedBox(width: 8),
+                                            const Icon(CupertinoIcons.chevron_right, size: 20),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              // выполнено
+                              if ((task.status == TaskStatus.completed))
+                                GestureDetector(
+                                  onTap: () {
+                                    final data = {'task': task, 'taskRef': task.ref};
+                                    context.push('/task_execution_dialog', extra: data);
+                                  },
+                                  child: Container(
+                                    height: 66,
+                                    margin: const EdgeInsets.fromLTRB(24, 8, 24, 0),
+                                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                        color: white,
+                                        borderRadius: BorderRadius.circular(12),
+                                        border: Border.all(color: success, width: 3)),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Flexible(
+                                          child: AppText(
+                                            text: 'execution'.tr(),
+                                            size: 16,
+                                            fw: FontWeight.w500,
+                                            color: greyscale800,
+                                          ),
+                                        ),
+                                        Row(
+                                          children: [
+                                            AppText(
+                                              text: 'confirmed'.tr(),
+                                              size: 16,
+                                              fw: FontWeight.w600,
+                                              color: greyscale500,
+                                            ),
+                                            const SizedBox(width: 8),
+                                            const Icon(CupertinoIcons.chevron_right, size: 20),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              const Spacer(),
+                              const SizedBox(height: 24),
+                              //Для ребенка - когда в процессе
+                              if ((task.status == TaskStatus.inProgress || task.status == TaskStatus.needsRework) &&
+                                  task.kid?.id == me.id)
+                                Container(
+                                  decoration: const BoxDecoration(border: Border(top: BorderSide(color: greyscale100))),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      const SizedBox(height: 20),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 24),
+                                        child: FilledAppButton(
+                                          text: 'task_done_button'.tr(),
+                                          onTap: () {
+                                            onComplete(me);
+                                          },
+                                        ),
+                                      ),
+                                      const SizedBox(height: 20),
+                                    ],
+                                  ),
+                                ),
+                              //Для ментора - когда в процессе
+                              if ((task.status == TaskStatus.inProgress ||
+                                      task.status == TaskStatus.needsRework ||
+                                      task.status == TaskStatus.onReview) &&
+                                  task.owner?.id == me.id)
+                                Container(
+                                  decoration: const BoxDecoration(border: Border(top: BorderSide(color: greyscale100))),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      const SizedBox(height: 20),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 24),
+                                        child: FilledAppButton(
+                                          text: 'task_done_button'.tr(),
+                                          isLoading: state.status == TaskStateStatus.mentorCompleting,
+                                          onTap: () {
+                                            onComplete(me);
+                                          },
+                                        ),
+                                      ),
+                                      const SizedBox(height: 20),
+                                    ],
+                                  ),
+                                ),
+                            ],
+                          );
+                        },
                       ),
                     ),
                   ),

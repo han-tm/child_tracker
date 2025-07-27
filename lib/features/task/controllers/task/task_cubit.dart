@@ -35,6 +35,11 @@ class TaskCubit extends Cubit<TaskState> {
           .where('kid', isEqualTo: me.ref)
           .where('status', isNotEqualTo: TaskStatus.deleted.name)
           .orderBy('created_at', descending: true);
+
+      final selectedMentor = state.selectedMentor;
+      if (selectedMentor != null) {
+        query = query.where('owner', isEqualTo: selectedMentor.ref);
+      }
     } else {
       query = _fs
           .collection('tasks')
@@ -47,8 +52,6 @@ class TaskCubit extends Cubit<TaskState> {
         query = query.where('kid', isEqualTo: selectedKid.ref);
       }
     }
-
-    print(query.parameters);
 
     _taskStreamSubscription = query.snapshots().listen((event) {
       final tasks = event.docs.map((e) => TaskModel.fromFirestore(e)).toList();
@@ -66,6 +69,15 @@ class TaskCubit extends Cubit<TaskState> {
       emit(state.resetSelectedKid());
     } else {
       emit(state.copyWith(selectedKid: kid));
+    }
+    init();
+  }
+
+  void onMentorSelected(UserModel? mentor) {
+    if (mentor == null) {
+      emit(state.resetSelectedMentor());
+    } else {
+      emit(state.copyWith(selectedMentor: mentor));
     }
     init();
   }
@@ -115,6 +127,7 @@ class TaskCubit extends Cubit<TaskState> {
     if (comment != null || files.isNotEmpty) {
       final Map<String, dynamic> dialogDoc = {
         "comment": comment,
+        "user": _userCubit.state?.ref,
         "time": FieldValue.serverTimestamp(),
       };
 
@@ -148,6 +161,99 @@ class TaskCubit extends Cubit<TaskState> {
     } catch (e) {
       print('error: {completeByKid}: ${e.toString()}');
       emit(state.copyWith(status: TaskStateStatus.kidCompletingError));
+    }
+  }
+
+  Future<void> completeByKidSkip(TaskModel task) async {
+    emit(state.copyWith(status: TaskStateStatus.kidCompletingSkip));
+
+    try {
+      await task.ref.update({
+        'status': TaskStatus.onReview.name,
+      });
+
+      emit(state.copyWith(status: TaskStateStatus.kidCompletingSuccess));
+    } catch (e) {
+      print('error: {completeByKid}: ${e.toString()}');
+      emit(state.copyWith(status: TaskStateStatus.kidCompletingError));
+    }
+  }
+
+  Future<void> reworkByMentor(TaskModel task, String? comment, List<XFile> files) async {
+    emit(state.copyWith(status: TaskStateStatus.mentorSendRework));
+
+    if (comment != null || files.isNotEmpty) {
+      final Map<String, dynamic> dialogDoc = {
+        "comment": comment,
+        "user": _userCubit.state?.ref,
+        "time": FieldValue.serverTimestamp(),
+      };
+
+      if (files.isNotEmpty) {
+        final uploadService = FirebaseStorageService();
+        final List<String> urls = [];
+
+        for (final file in files) {
+          final photoUrl = await uploadService.uploadFile(file: file, type: UploadType.task, uid: task.id);
+          if (photoUrl == null) {
+            emit(state.copyWith(status: TaskStateStatus.mentorSendReworkError));
+            return;
+          } else {
+            urls.add(photoUrl);
+          }
+        }
+
+        dialogDoc['files'] = urls;
+      }
+
+      final dialogRef = task.ref.collection('dialogs').doc();
+      await dialogRef.set(dialogDoc);
+    }
+
+    try {
+      await task.ref.update({
+        'status': TaskStatus.needsRework.name,
+      });
+
+      emit(state.copyWith(status: TaskStateStatus.mentorSendReworkSuccess));
+    } catch (e) {
+      print('error: {reworkByMentor}: ${e.toString()}');
+      emit(state.copyWith(status: TaskStateStatus.mentorSendReworkError));
+    }
+  }
+
+  Future<void> reworkByMentorSkip(TaskModel task) async {
+    emit(state.copyWith(status: TaskStateStatus.mentorSendReworkSkip));
+
+    try {
+      await task.ref.update({
+        'status': TaskStatus.needsRework.name,
+      });
+
+      emit(state.copyWith(status: TaskStateStatus.mentorSendReworkSuccess));
+    } catch (e) {
+      print('error: {reworkByMentorSkip}: ${e.toString()}');
+      emit(state.copyWith(status: TaskStateStatus.mentorSendReworkError));
+    }
+  }
+
+  Future<void> completeByMentor(TaskModel task) async {
+    emit(state.copyWith(status: TaskStateStatus.mentorCompleting));
+
+    try {
+      if (task.kid != null) {
+        final taskKid = await _userCubit.getUserByRef(task.kid!);
+        emit(state.copyWith(currentTaskKid: taskKid));
+      }
+
+      await task.ref.update({
+        'status': TaskStatus.completed.name,
+      });
+
+      emit(state.copyWith(status: TaskStateStatus.mentorCompletingSuccess));
+    } catch (e) {
+      print('error: {completeByMentor}: ${e.toString()}');
+      emit(state.copyWith(status: TaskStateStatus.mentorCompletingError));
     }
   }
 

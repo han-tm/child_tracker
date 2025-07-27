@@ -469,5 +469,6 @@
     "completion_confirmed": "Completion confirmed",
     "completion_not_confirmed": "Execution not confirmed",
     "confirmed": "Confirmed",
-    "not_confirmed": "Not confirmed"
+    "not_confirmed": "Not confirmed",
+    "want_to_show_task": "Can you show how you completed the task?"
 }

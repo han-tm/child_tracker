@@ -469,5 +469,6 @@
     "completion_confirmed": "Выполнение подтверждено",
     "completion_not_confirmed": "Выполнение не подтверждено",
     "confirmed": "Подтверждено",
-    "not_confirmed": "Не подтверждено"
+    "not_confirmed": "Не подтверждено",
+    "want_to_show_task": "Можешь показать, как выполнил задание?"
 }

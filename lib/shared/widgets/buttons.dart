@@ -155,6 +155,7 @@ class OutlinedAppButton extends StatelessWidget {
   final double fontSize;
   final FontWeight fw;
   final bool isActive;
+  final Widget? icon;
 
   const OutlinedAppButton({
     super.key,
@@ -165,6 +166,7 @@ class OutlinedAppButton extends StatelessWidget {
     this.fontSize = 16,
     this.fw = FontWeight.w700,
     this.isActive = true,
+    this.icon,
   });
 
   @override
@@ -182,7 +184,20 @@ class OutlinedAppButton extends StatelessWidget {
         child: Center(
           child: isLoading
               ? const CircularProgressIndicator(color: primary900)
-              : AppText(text: text, size: fontSize, fw: fw, color: isActive ? primary900 : primary900.withOpacity(0.5)),
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    if (icon != null) icon!,
+                    Flexible(
+                      child: AppText(
+                        text: text,
+                        size: fontSize,
+                        fw: fw,
+                        color: isActive ? primary900 : primary900.withOpacity(0.5),
+                      ),
+                    ),
+                  ],
+                ),
         ),
       ),
     );

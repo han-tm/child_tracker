@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 import 'package:image_picker/image_picker.dart';
 import 'package:mime/mime.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 
 class CustomImagePicker {
@@ -54,7 +55,6 @@ class CustomImagePicker {
 
   static final _picker = ImagePicker();
 
-  
   static Future<XFile?> pickAvatarFromGallery(BuildContext context, {ImageSource? source}) async {
     source ??= await showImageSourceSelectModalBottomSheet(context);
 
@@ -109,15 +109,41 @@ class CustomImagePicker {
     return allowedVideoMimeTypes.contains(mimeType);
   }
 
+  static bool isVideoUrl(String url) {
+    final String path = url.split('?').first;
+    final lowerCaseUrl = path.toLowerCase();
+    return lowerCaseUrl.endsWith('.mp4') ||
+        lowerCaseUrl.endsWith('.mov') ||
+        lowerCaseUrl.endsWith('.avi') ||
+        lowerCaseUrl.endsWith('.mkv') ||
+        lowerCaseUrl.endsWith('.webm') ||
+        lowerCaseUrl.endsWith('.flv') ||
+        lowerCaseUrl.endsWith('.wmv');
+  }
+
   static Future<Uint8List?> getFileVideoThumbnail(String path) async {
-    
     final thumb = await VideoThumbnail.thumbnailData(
       video: path,
       imageFormat: ImageFormat.JPEG,
-      maxHeight: 120, 
-      maxWidth: 120, 
+      maxHeight: 120,
+      maxWidth: 120,
       quality: 75,
-    ).onError((_, e){
+    ).onError((_, e) {
+      print(e);
+      return null;
+    });
+    return thumb;
+  }
+
+  static Future<String?> getFileVideoThumbnailFromUrl(String url) async {
+    final thumb = await VideoThumbnail.thumbnailFile(
+      video: url,
+      thumbnailPath: (await getTemporaryDirectory()).path,
+      imageFormat: ImageFormat.WEBP,
+      maxHeight: 100,
+      maxWidth: 100,
+      quality: 75,
+    ).onError((_, e) {
       print(e);
       return null;
     });

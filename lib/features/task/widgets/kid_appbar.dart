@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class KidAppBarWidget extends StatelessWidget {
-  final UserModel user;
-  const KidAppBarWidget({super.key, required this.user});
+  final UserModel? selectedMentor;
+  final UserModel me;
+  const KidAppBarWidget({super.key, required this.me, this.selectedMentor});
 
   @override
   Widget build(BuildContext context) {
@@ -14,13 +15,19 @@ class KidAppBarWidget extends StatelessWidget {
       width: double.infinity,
       child: Row(
         children: [
-          CachedClickableImage(
-            width: 48,
-            height: 48,
-            circularRadius: 100,
-            noImageWidget: Image.asset('assets/images/mentors.png'),
+          GestureDetector(
+            onTap: () {
+              showMentorSelectorModalBottomSheet(context);
+            },
+            child: CachedClickableImage(
+              width: 48,
+              height: 48,
+              circularRadius: 100,
+              imageUrl: selectedMentor?.photo,
+              noImageWidget: selectedMentor == null ? Image.asset('assets/images/mentors.png') : null,
+            ),
           ),
-           Expanded(
+          Expanded(
             child: AppText(
               text: 'tasks'.tr(),
               size: 24,
@@ -31,10 +38,10 @@ class KidAppBarWidget extends StatelessWidget {
           Row(
             children: [
               SvgPicture.asset('assets/images/coin.svg'),
-              const Padding(
-                padding: EdgeInsets.only(left: 5),
+              Padding(
+                padding: const EdgeInsets.only(left: 5),
                 child: AppText(
-                  text: '200',
+                  text: me.points.toString(),
                   size: 20,
                   fw: FontWeight.bold,
                   color: dark5,

@@ -1,5 +1,3 @@
-
-
 import 'package:child_tracker/index.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -39,7 +37,12 @@ class MentorTasksWidget extends StatelessWidget {
             final tasksCopy = List.of(tasks);
             late List<TaskModel> result;
             if (selectedKidChip == KidTaskChip.progress) {
-              result = tasksCopy.where((task) => task.status == TaskStatus.inProgress).toList();
+              result = tasksCopy
+                  .where((task) =>
+                      task.status == TaskStatus.inProgress ||
+                      task.status == TaskStatus.onReview ||
+                      task.status == TaskStatus.needsRework)
+                  .toList();
             } else if (selectedKidChip == KidTaskChip.completed) {
               result = tasksCopy.where((task) => task.status == TaskStatus.completed).toList();
             } else if (selectedKidChip == KidTaskChip.canceled) {

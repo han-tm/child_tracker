@@ -9,8 +9,17 @@ enum TaskStateStatus {
   cancelError,
   cancelSuccess,
   kidCompleting,
+  kidCompletingSkip,
   kidCompletingError,
   kidCompletingSuccess,
+  mentorCompleting,
+  mentorCompletingError,
+  mentorCompletingSuccess,
+
+  mentorSendRework,
+  mentorSendReworkSkip,
+  mentorSendReworkError,
+  mentorSendReworkSuccess,
 }
 
 class TaskState extends Equatable {
@@ -20,6 +29,8 @@ class TaskState extends Equatable {
   final KidTaskChip selectedKidChip;
   final DateTime currentDay;
   final UserModel? selectedKid;
+  final UserModel? selectedMentor;
+  final UserModel? currentTaskKid;
   const TaskState({
     this.errorMessage,
     this.status = TaskStateStatus.initial,
@@ -27,6 +38,8 @@ class TaskState extends Equatable {
     this.selectedKidChip = KidTaskChip.all,
     required this.currentDay,
     this.selectedKid,
+    this.selectedMentor,
+    this.currentTaskKid,
   });
 
   TaskState copyWith({
@@ -36,6 +49,8 @@ class TaskState extends Equatable {
     KidTaskChip? selectedKidChip,
     DateTime? currentDay,
     UserModel? selectedKid,
+    UserModel? selectedMentor,
+    UserModel? currentTaskKid,
   }) {
     return TaskState(
       errorMessage: errorMessage ?? this.errorMessage,
@@ -44,6 +59,8 @@ class TaskState extends Equatable {
       selectedKidChip: selectedKidChip ?? this.selectedKidChip,
       currentDay: currentDay ?? this.currentDay,
       selectedKid: selectedKid ?? this.selectedKid,
+      selectedMentor: selectedMentor ?? this.selectedMentor,
+      currentTaskKid: currentTaskKid ?? this.currentTaskKid,
     );
   }
 
@@ -55,6 +72,8 @@ class TaskState extends Equatable {
         selectedKidChip,
         currentDay,
         selectedKid,
+        selectedMentor,
+        currentTaskKid,
       ];
 
   TaskState reset() => TaskState(currentDay: currentDay);
@@ -67,6 +86,21 @@ class TaskState extends Equatable {
       selectedKidChip: selectedKidChip,
       currentDay: currentDay,
       selectedKid: null,
+      selectedMentor: selectedMentor,
+      currentTaskKid: currentTaskKid,
+    );
+  }
+
+  TaskState resetSelectedMentor() {
+    return TaskState(
+      errorMessage: errorMessage,
+      status: status,
+      tasks: tasks,
+      selectedKidChip: selectedKidChip,
+      currentDay: currentDay,
+      selectedKid: selectedKid,
+      selectedMentor: null,
+      currentTaskKid: currentTaskKid,
     );
   }
 }

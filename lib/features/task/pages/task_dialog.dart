@@ -11,7 +11,8 @@ import 'package:reactive_forms/reactive_forms.dart';
 class TaskDialogScreen extends StatefulWidget {
   final DocumentReference taskRef;
   final TaskModel? task;
-  const TaskDialogScreen({super.key, required this.taskRef, this.task});
+  final bool isRework;
+  const TaskDialogScreen({super.key, required this.taskRef, this.task, this.isRework = false});
 
   @override
   State<TaskDialogScreen> createState() => _TaskDialogScreenState();
@@ -21,15 +22,10 @@ class _TaskDialogScreenState extends State<TaskDialogScreen> {
   late TaskModel task;
   bool loading = false;
   List<XFile> files = [];
+  bool isRework = false;
 
   final form = FormGroup({
-    'comment': FormControl<String>(
-        // validators: [
-        //   Validators.required,
-        //   Validators.minLength(3),
-        //   Validators.maxLength(400),
-        // ],
-        ),
+    'comment': FormControl<String>(),
   });
 
   @override
@@ -39,6 +35,7 @@ class _TaskDialogScreenState extends State<TaskDialogScreen> {
   }
 
   void init() async {
+    isRework = widget.isRework;
     if (widget.task != null) {
       task = widget.task!;
     } else {
@@ -93,15 +90,15 @@ class _TaskDialogScreenState extends State<TaskDialogScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const SizedBox(height: 12),
-                      const MaskotMessage(
-                        message: 'Можешь показать, как выполнил задание?',
+                      MaskotMessage(
+                        message: isRework ? 'for_revision_title'.tr() : 'want_to_show_task'.tr(),
                         flip: true,
                       ),
                       const SizedBox(height: 40),
                       ReactiveCustomInput(
                         formName: 'comment',
-                        label: 'title'.tr(),
-                        hint: 'enter_title_hint'.tr(),
+                        label: 'comment'.tr(),
+                        hint: 'comment_enter'.tr(),
                         inputType: TextInputType.multiline,
                         textInputAction: TextInputAction.done,
                         maxLenght: 400,
@@ -113,7 +110,7 @@ class _TaskDialogScreenState extends State<TaskDialogScreen> {
                         },
                       ),
                       const SizedBox(height: 16),
-                      const AppText(text: 'Добавить фото/видео'),
+                      AppText(text: 'add_photo_video'.tr()),
                       PhotoVideoPicker(
                         files: files,
                         onAdd: onAddFile,
@@ -142,45 +139,83 @@ class _TaskDialogScreenState extends State<TaskDialogScreen> {
                         const SizedBox(height: 20),
                         BlocConsumer<TaskCubit, TaskState>(
                           listener: (context, state) {
-                            if (state.status == TaskStateStatus.kidCompletingError) {
+                            if (state.status == TaskStateStatus.kidCompletingError ||
+                                state.status == TaskStateStatus.mentorSendReworkError) {
                               SnackBarSerive.showErrorSnackBar(state.errorMessage ?? 'defaultErrorText'.tr());
                             } else if (state.status == TaskStateStatus.kidCompletingSuccess) {
                               context.replace('/task_send_review_success');
+                            } else if (state.status == TaskStateStatus.mentorSendReworkSuccess) {
+                              context.replace('/task_send_rework_success');
                             }
                           },
                           builder: (context, state) {
-                            return Row(
-                              children: [
-                                Expanded(
-                                  child: FilledSecondaryAppButton(
-                                    text: 'buttonSkip'.tr(),
-                                    onTap: () {
-                                      context.read<TaskCubit>().completeByKid(task, null, []);
-                                    },
-                                    isLoading: state.status == TaskStateStatus.kidCompleting,
+                            if (isRework) {
+                              return Row(
+                                children: [
+                                  Expanded(
+                                    child: FilledSecondaryAppButton(
+                                      text: 'buttonSkip'.tr(),
+                                      onTap: () {
+                                        context.read<TaskCubit>().reworkByMentorSkip(task);
+                                      },
+                                      isLoading: state.status == TaskStateStatus.mentorSendReworkSkip,
+                                    ),
                                   ),
-                                ),
-                                const SizedBox(width: 24),
-                                ReactiveFormConsumer(
-                                  builder: (context, formGroup, child) {
-                                    final comment = formGroup.value['comment'] as String?;
-                                    bool isValid = (comment ?? '').trim().isNotEmpty || files.isNotEmpty;
-                                    return Expanded(
-                                      child: FilledAppButton(
-                                        text: 'add'.tr(),
-                                        onTap: () {
-                                          if (isValid) {
-                                            context.read<TaskCubit>().completeByKid(task, comment, files);
-                                          }
-                                        },
-                                        isActive: isValid,
-                                        isLoading: state.status == TaskStateStatus.kidCompleting,
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ],
-                            );
+                                  const SizedBox(width: 24),
+                                  ReactiveFormConsumer(
+                                    builder: (context, formGroup, child) {
+                                      final comment = formGroup.value['comment'] as String?;
+                                      bool isValid = (comment ?? '').trim().isNotEmpty || files.isNotEmpty;
+                                      return Expanded(
+                                        child: FilledAppButton(
+                                          text: 'add'.tr(),
+                                          onTap: () {
+                                            if (isValid) {
+                                              context.read<TaskCubit>().reworkByMentor(task, comment, files);
+                                            }
+                                          },
+                                          isActive: isValid,
+                                          isLoading: state.status == TaskStateStatus.mentorSendRework,
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ],
+                              );
+                            } else {
+                              return Row(
+                                children: [
+                                  Expanded(
+                                    child: FilledSecondaryAppButton(
+                                      text: 'buttonSkip'.tr(),
+                                      onTap: () {
+                                        context.read<TaskCubit>().completeByKidSkip(task);
+                                      },
+                                      isLoading: state.status == TaskStateStatus.kidCompletingSkip,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 24),
+                                  ReactiveFormConsumer(
+                                    builder: (context, formGroup, child) {
+                                      final comment = formGroup.value['comment'] as String?;
+                                      bool isValid = (comment ?? '').trim().isNotEmpty || files.isNotEmpty;
+                                      return Expanded(
+                                        child: FilledAppButton(
+                                          text: 'add'.tr(),
+                                          onTap: () {
+                                            if (isValid) {
+                                              context.read<TaskCubit>().completeByKid(task, comment, files);
+                                            }
+                                          },
+                                          isActive: isValid,
+                                          isLoading: state.status == TaskStateStatus.kidCompleting,
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ],
+                              );
+                            }
                           },
                         ),
                         const SizedBox(height: 20),

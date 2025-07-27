@@ -1,11 +1,12 @@
+
 import 'package:child_tracker/index.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
-class TaskSendReviewSuccessScreen extends StatelessWidget {
-  const TaskSendReviewSuccessScreen({super.key});
+class TaskSendReworkSuccessScreen extends StatelessWidget {
+  const TaskSendReworkSuccessScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +29,7 @@ class TaskSendReviewSuccessScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                   AppText(
-                    text: 'task_in_review'.tr(),
+                    text: 'task_in_revision'.tr(),
                     size: 32,
                     maxLine: 2,
                     fw: FontWeight.w700,

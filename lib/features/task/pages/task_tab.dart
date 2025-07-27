@@ -42,7 +42,7 @@ class _TaskTabScreenState extends State<TaskTabScreen> {
                 automaticallyImplyLeading: false,
                 toolbarHeight: 72,
                 leadingWidth: 0,
-                title: me.isKid ? KidAppBarWidget(user: me) : MentorAppbarWidget(selectedKid: state.selectedKid),
+                title: me.isKid ? KidAppBarWidget(me: me, selectedMentor: state.selectedMentor) : MentorAppbarWidget(selectedKid: state.selectedKid),
               ),
               floatingActionButton: SizedBox(
                 width: 56,
