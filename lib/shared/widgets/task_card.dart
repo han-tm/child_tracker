@@ -10,7 +10,8 @@ import 'package:go_router/go_router.dart';
 class TaskCard extends StatelessWidget {
   final TaskModel task;
   final UserModel me;
-  const TaskCard({super.key, required this.task, required this.me});
+  final bool hasBorder;
+  const TaskCard({super.key, required this.task, required this.me, this.hasBorder = false});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +26,9 @@ class TaskCard extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(6),
-          border: Border(left: BorderSide(color: taskCardBorderColor(task.status), width: 3)),
+          border: Border(
+            left: BorderSide(color: taskCardBorderColor(task.status), width: 3),
+          ),
           color: white,
         ),
         child: Row(

@@ -101,30 +101,58 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
   }
 
   void onComplete(UserModel me) async {
-    final confrim = await showConfirmModalBottomSheet(
-      context,
-      title: 'task_completed'.tr(),
-      isDestructive: false,
-      cancelText: 'cancel'.tr(),
-      confirmText: 'yesConfirm'.tr(),
-      message: 'is_everything_ready_confirm'.tr(),
-    );
+    TaskModel? priorityTask = canCompleteTask(me);
 
-    if (confrim == true && mounted) {
-      if ((me.isKid) && me.id == task.owner?.id) {
-        final data = {'task': task, 'taskRef': task.ref};
-        await context.push('/task_dialog', extra: data);
+    if (priorityTask != null) {
+      // showFirstDoPriorityTaskModalBottomSheet(context);
+      SnackBarSerive.showFirstDoTaskOfTheDayAlert(
+        priorityTask.name,
+        () => showFirstDoPriorityTaskModalBottomSheet(context, priorityTask),
+      );
+    } else {
+      final confrim = await showConfirmModalBottomSheet(
+        context,
+        title: 'task_completed'.tr(),
+        isDestructive: false,
+        cancelText: 'cancel'.tr(),
+        confirmText: 'yesConfirm'.tr(),
+        message: 'is_everything_ready_confirm'.tr(),
+      );
+      if (confrim == false || confrim == null) return;
+
+      if (mounted) {
+        if ((me.isKid) && me.id == task.owner?.id) {
+          final data = {'task': task, 'taskRef': task.ref};
+          context.push('/task_dialog', extra: data);
+        } else if (!(me.isKid) && me.id == task.owner?.id) {
+          // parent task | confirming
+          context.read<TaskCubit>().completeByMentor(task);
+        } else if (me.id == task.kid?.id && mounted) {
+          // parents task | send to review
+          final data = {'task': task, 'taskRef': task.ref};
+          context.push('/task_dialog', extra: data);
+        }
       }
     }
-    if (!(me.isKid) && me.id == task.owner?.id) {
-      // parent task | confirming
-      if (mounted) {
-        context.read<TaskCubit>().completeByMentor(task);
-      }
-    } else if (me.id == task.kid?.id && mounted) {
-      // parents task | send to review
-      final data = {'task': task, 'taskRef': task.ref};
-      context.push('/task_dialog', extra: data);
+  }
+
+  TaskModel? canCompleteTask(UserModel me) {
+    if (!me.isKid) return null;
+    if (task.type == TaskType.kid || task.type == TaskType.priority) return null;
+
+    final tasks = context
+        .read<TaskCubit>()
+        .state
+        .tasks
+        .where((e) => e.type == TaskType.priority && task.kid?.id == e.kid?.id)
+        .toList();
+
+    print(tasks.length);
+
+    if (tasks.isNotEmpty) {
+      return tasks.first;
+    } else {
+      return null;
     }
   }
 
@@ -491,9 +519,45 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                                 ),
                               ),
                               //Для ментора - когда в процессе
-                              if ((task.status == TaskStatus.inProgress) &&
+                              if ((task.status == TaskStatus.inProgress ||
+                                      task.status == TaskStatus.needsRework ||
+                                      task.status == TaskStatus.canceled) &&
                                   task.type != TaskType.kid &&
                                   task.owner?.id == me.id)
+                                GestureDetector(
+                                  onTap: () {
+                                    final data = {'task': task, 'taskRef': task.ref};
+                                    context.push('/task_execution_dialog', extra: data);
+                                  },
+                                  child: Container(
+                                    height: 66,
+                                    margin: const EdgeInsets.fromLTRB(24, 8, 24, 0),
+                                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                        color: white,
+                                        borderRadius: BorderRadius.circular(12),
+                                        border: Border.all(color: greyscale200, width: 3)),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Flexible(
+                                          child: AppText(
+                                            text: 'execution'.tr(),
+                                            size: 16,
+                                            fw: FontWeight.w500,
+                                            color: greyscale800,
+                                          ),
+                                        ),
+                                        const Icon(CupertinoIcons.chevron_right, size: 20),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              //Для ребенка - когда в процессе
+                              if ((task.status == TaskStatus.inProgress || task.status == TaskStatus.canceled) &&
+                                  task.type != TaskType.kid &&
+                                  task.kid?.id == me.id)
                                 GestureDetector(
                                   onTap: () {
                                     final data = {'task': task, 'taskRef': task.ref};
@@ -558,6 +622,50 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                                               size: 16,
                                               fw: FontWeight.w600,
                                               color: greyscale500,
+                                            ),
+                                            const SizedBox(width: 8),
+                                            const Icon(CupertinoIcons.chevron_right, size: 20),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              //Для ребенка - когда на дороботке
+                              if ((task.status == TaskStatus.needsRework) && task.kid?.id == me.id)
+                                GestureDetector(
+                                  onTap: () {
+                                    final data = {'task': task, 'taskRef': task.ref};
+                                    context.push('/task_execution_dialog', extra: data);
+                                  },
+                                  child: Container(
+                                    height: 66,
+                                    margin: const EdgeInsets.fromLTRB(24, 8, 24, 0),
+                                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                      color: white,
+                                      borderRadius: BorderRadius.circular(12),
+                                      border: Border.all(color: orange, width: 3),
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Flexible(
+                                          child: AppText(
+                                            text: 'execution'.tr(),
+                                            size: 16,
+                                            fw: FontWeight.w500,
+                                            color: greyscale800,
+                                          ),
+                                        ),
+                                        Row(
+                                          children: [
+                                            AppText(
+                                              text: 'rework'.tr(),
+                                              size: 16,
+                                              fw: FontWeight.w600,
+                                              color: primary900,
                                             ),
                                             const SizedBox(width: 8),
                                             const Icon(CupertinoIcons.chevron_right, size: 20),
@@ -655,6 +763,35 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                                     ),
                                   ),
                                 ),
+                              //когда отменено
+                              if ((task.status == TaskStatus.canceled) && task.reasonOfCancel != null)
+                                Container(
+                                  margin: const EdgeInsets.fromLTRB(24, 8, 24, 0),
+                                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                      color: white,
+                                      borderRadius: BorderRadius.circular(12),
+                                      border: Border.all(color: greyscale200, width: 3)),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      AppText(
+                                        text: 'couse_of_cancel'.tr(),
+                                        size: 16,
+                                        fw: FontWeight.w500,
+                                        color: greyscale800,
+                                      ),
+                                      const Divider(height: 36, thickness: 1, color: greyscale200),
+                                      AppText(
+                                        text: task.reasonOfCancel == 'out_of_deadline'
+                                            ? 'out_of_deadline'.tr()
+                                            : task.reasonOfCancel ?? '',
+                                      ),
+                                    ],
+                                  ),
+                                ),
+
                               const Spacer(),
                               const SizedBox(height: 24),
                               //Для ребенка - когда в процессе

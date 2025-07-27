@@ -21,6 +21,7 @@ class TaskModel {
   final DateTime? actionDate;
   final int? coin;
   final int usedCounter;
+  final String? reasonOfCancel;
 
   TaskModel({
     required this.id,
@@ -41,6 +42,7 @@ class TaskModel {
     this.actionDate,
     this.coin,
     this.usedCounter = 0,
+    this.reasonOfCancel,
   });
 
   factory TaskModel.fromFirestore(DocumentSnapshot doc) {
@@ -66,6 +68,7 @@ class TaskModel {
       actionDate: data['action_date'] != null ? (data['action_date'] as Timestamp).toDate() : null,
       coin: data['coin'],
       usedCounter: data['used_counter'],
+      reasonOfCancel: data['cancel_reason'],
     );
   }
 

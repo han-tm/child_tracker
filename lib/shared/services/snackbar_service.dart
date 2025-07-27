@@ -331,4 +331,68 @@ class SnackBarSerive {
       },
     );
   }
+
+  static showFirstDoTaskOfTheDayAlert(String taskName, VoidCallback onGo) {
+    BotToast.showCustomNotification(
+      duration: const Duration(seconds: 6),
+      align: Alignment.topCenter,
+      crossPage: true,
+      toastBuilder: (cancelFunc) {
+        return GestureDetector(
+          onTap: cancelFunc,
+          behavior: HitTestBehavior.translucent,
+          child: Container(
+            margin: const EdgeInsets.only(top: 60),
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+            decoration: BoxDecoration(
+              color: white,
+              border: const Border.symmetric(
+                vertical: BorderSide(color: greyscale200),
+              ),
+              boxShadow: [
+                BoxShadow(
+                  blurRadius: 32,
+                  color: const Color(0xFF04060F).withOpacity(0.12),
+                ),
+              ],
+            ),
+            child: Row(
+              children: [
+                SvgPicture.asset(
+                  'assets/images/bell_fill.svg',
+                  width: 28,
+                  height: 28,
+                  color: orange,
+                  fit: BoxFit.contain,
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: AppText(
+                    text: '${'first_complete_task'.tr()}: "$taskName"',
+                    size: 16,
+                    maxLine: 10,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                SizedBox(
+                  width: 94,
+                  child: FilledAppButton(
+                    height: 34,
+                    onTap: (){
+                      cancelFunc();
+                      onGo();
+                    },
+                    fontSize: 14,
+                    fw: FontWeight.w600,
+                    fontColor: white,
+                    text: 'go_to'.tr(),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
 }

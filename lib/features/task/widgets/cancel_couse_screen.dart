@@ -99,7 +99,7 @@ class _TaskCancelReasonScreenState extends State<TaskCancelReasonScreen> {
                                             isLoading: state.status == TaskStateStatus.canceling && !valid,
                                             onTap: () {
                                               if (state.status == TaskStateStatus.canceling) return;
-                                              context.read<TaskCubit>().cancelTask(widget.task, valid ? text : null);
+                                              context.read<TaskCubit>().cancelTask(widget.task,  null);
                                             },
                                           ),
                                         ),

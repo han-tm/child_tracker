@@ -132,43 +132,9 @@ class _TaskExecutionDialogScreenState extends State<TaskExecutionDialogScreen> {
                     ),
                   ),
                   if (me.isKid)
-                    Container(
-                      width: double.infinity,
-                      decoration: const BoxDecoration(
-                        border: Border(top: BorderSide(color: greyscale100)),
-                        color: white,
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 24),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const SizedBox(height: 20),
-                            if (task.status == TaskStatus.needsRework)
-                              FilledSecondaryAppButton(
-                                text: 'confirm_of_complete'.tr(),
-                                onTap: () {},
-                              ),
-                            // const SizedBox(height: 24),
-                            if (task.status == TaskStatus.onReview)
-                              OutlinedAppButton(
-                                text: '${'in_review'.tr()}...',
-                              ),
-                            if (task.status == TaskStatus.completed)
-                              OutlinedAppButton(
-                                text: 'completion_confirmed'.tr(),
-                                icon: const Padding(
-                                  padding: EdgeInsets.only(right: 8),
-                                  child: Icon(Icons.done, color: primary900, size: 20),
-                                ),
-                              ),
-                            const SizedBox(height: 20),
-                          ],
-                        ),
-                      ),
-                    )
-                  else
-                    Container(
+                   task.status == TaskStatus.canceled
+                        ? const SizedBox()
+                        : Container(
                       width: double.infinity,
                       decoration: const BoxDecoration(
                         border: Border(top: BorderSide(color: greyscale100)),
@@ -193,9 +159,33 @@ class _TaskExecutionDialogScreenState extends State<TaskExecutionDialogScreen> {
                                     message: 'is_everything_ready_confirm'.tr(),
                                   );
                                   if (confrim == true && context.mounted) {
-                                    context.read<TaskCubit>().completeByMentor(task);
+                                    final data = {'task': task, 'taskRef': task.ref};
+                                    context.replace('/task_dialog', extra: data);
                                   }
                                 },
+                              ),
+                            if (task.status == TaskStatus.needsRework)
+                              FilledAppButton(
+                                text: 'confirm_of_complete'.tr(),
+                                onTap: () async {
+                                  final confrim = await showConfirmModalBottomSheet(
+                                    context,
+                                    title: 'task_completed'.tr(),
+                                    isDestructive: false,
+                                    cancelText: 'cancel'.tr(),
+                                    confirmText: 'yesConfirm'.tr(),
+                                    message: 'is_everything_ready_confirm'.tr(),
+                                  );
+                                  if (confrim == true && context.mounted) {
+                                    final data = {'task': task, 'taskRef': task.ref};
+                                    context.replace('/task_dialog', extra: data);
+                                  }
+                                },
+                              ),
+                            // const SizedBox(height: 24),
+                            if (task.status == TaskStatus.onReview)
+                              OutlinedAppButton(
+                                text: '${'in_review'.tr()}...',
                               ),
                             if (task.status == TaskStatus.completed)
                               OutlinedAppButton(
@@ -205,40 +195,84 @@ class _TaskExecutionDialogScreenState extends State<TaskExecutionDialogScreen> {
                                   child: Icon(Icons.done, color: primary900, size: 20),
                                 ),
                               ),
-                            if (task.status == TaskStatus.onReview)
-                              Column(
-                                children: [
-                                  FilledAppButton(
-                                    text: 'confirm_of_complete'.tr(),
-                                    isLoading: state.status == TaskStateStatus.mentorCompleting,
-                                    onTap: () async {
-                                      final confrim = await showConfirmModalBottomSheet(
-                                        context,
-                                        title: 'task_completed'.tr(),
-                                        isDestructive: false,
-                                        cancelText: 'cancel'.tr(),
-                                        confirmText: 'yesConfirm'.tr(),
-                                        message: 'is_everything_ready_confirm'.tr(),
-                                      );
-                                      if (confrim == true && context.mounted) {
-                                        context.read<TaskCubit>().completeByMentor(task);
-                                      }
-                                    },
-                                  ),
-                                  const SizedBox(height: 24),
-                                  OutlinedAppButton(
-                                    onPress: () {
-                                      final data = {'task': task, 'taskRef': task.ref, 'is_rework': true};
-                                      context.replace('/task_dialog', extra: data);
-                                    },
-                                    text: 'for_revision'.tr(),
-                                  ),
-                                ],
-                              ),
                           ],
                         ),
                       ),
                     )
+                  else
+                    task.status == TaskStatus.canceled
+                        ? const SizedBox()
+                        : Container(
+                            width: double.infinity,
+                            decoration: const BoxDecoration(
+                              border: Border(top: BorderSide(color: greyscale100)),
+                              color: white,
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  if (task.status == TaskStatus.inProgress || task.status == TaskStatus.needsRework)
+                                    FilledAppButton(
+                                      text: 'task_done_button'.tr(),
+                                      isLoading: state.status == TaskStateStatus.mentorCompleting,
+                                      onTap: () async {
+                                        final confrim = await showConfirmModalBottomSheet(
+                                          context,
+                                          title: 'task_completed'.tr(),
+                                          isDestructive: false,
+                                          cancelText: 'cancel'.tr(),
+                                          confirmText: 'yesConfirm'.tr(),
+                                          message: 'is_everything_ready_confirm'.tr(),
+                                        );
+                                        if (confrim == true && context.mounted) {
+                                          context.read<TaskCubit>().completeByMentor(task);
+                                        }
+                                      },
+                                    ),
+                                  if (task.status == TaskStatus.completed)
+                                    OutlinedAppButton(
+                                      text: 'completion_confirmed'.tr(),
+                                      icon: const Padding(
+                                        padding: EdgeInsets.only(right: 8),
+                                        child: Icon(Icons.done, color: primary900, size: 20),
+                                      ),
+                                    ),
+                                  if (task.status == TaskStatus.onReview)
+                                    Column(
+                                      children: [
+                                        FilledAppButton(
+                                          text: 'confirm_of_complete'.tr(),
+                                          isLoading: state.status == TaskStateStatus.mentorCompleting,
+                                          onTap: () async {
+                                            final confrim = await showConfirmModalBottomSheet(
+                                              context,
+                                              title: 'task_completed'.tr(),
+                                              isDestructive: false,
+                                              cancelText: 'cancel'.tr(),
+                                              confirmText: 'yesConfirm'.tr(),
+                                              message: 'is_everything_ready_confirm'.tr(),
+                                            );
+                                            if (confrim == true && context.mounted) {
+                                              context.read<TaskCubit>().completeByMentor(task);
+                                            }
+                                          },
+                                        ),
+                                        const SizedBox(height: 24),
+                                        OutlinedAppButton(
+                                          onPress: () {
+                                            final data = {'task': task, 'taskRef': task.ref, 'is_rework': true};
+                                            context.replace('/task_dialog', extra: data);
+                                          },
+                                          text: 'for_revision'.tr(),
+                                        ),
+                                      ],
+                                    ),
+                                ],
+                              ),
+                            ),
+                          )
                 ],
               );
             },
