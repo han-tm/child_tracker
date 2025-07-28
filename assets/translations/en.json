@@ -474,5 +474,6 @@
     "first_complete_task": "Complete your daily task first!",
     "cant_awward_points": "I can't award points for this assignment.",
     "task_of_day_not_done": "The tasks of the day are not completed! Complete them quickly!",
-    "go_to": "Go to"
+    "go_to": "Go to",
+    "time_to_do_task": "Time to complete the task:"
 }

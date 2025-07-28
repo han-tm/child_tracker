@@ -14,6 +14,13 @@ class MentorMainScreen extends StatefulWidget {
 }
 
 class _MentorMainScreenState extends State<MentorMainScreen> {
+  @override
+  void initState() {
+    super.initState();
+    FirebaseMessaginService service = sl<FirebaseMessaginService>();
+    service.setupFCM();
+  }
+
   void onTapTab(int index) async {
     switch (index) {
       case 0:

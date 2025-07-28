@@ -47,5 +47,20 @@
 		<true/>
 		<key>UIStatusBarHidden</key>
 		<false/>
+		<key>UIBackgroundModes</key>
+		<array>
+			<string>fetch</string>
+			<string>remote-notification</string>
+		</array>
+		<key>NSAppleMusicUsageDescription</key>
+		<string>Для воспроизведения аудио</string>
+		<key>NSCameraUsageDescription</key>
+		<string>Фотография будет использована для обновления аватара вашего профиля и прикрепления фотографии к вашим проектам</string>
+		<key>NSMicrophoneUsageDescription</key>
+		<string>Для воспроизведения аудио</string>
+		<key>NSPhotoLibraryUsageDescription</key>
+		<string>Фотография будет использована для обновления аватара вашего профиля и прикрепления фотографии к вашим проектам</string>
+		<key>NSUserNotificationUsageDescription</key>
+		<string>Нам необходимо ваше разрешение для показа уведомлений о напоминаниях о задачах.</string>		
 	</dict>
 </plist>

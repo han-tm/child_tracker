@@ -250,10 +250,23 @@ class TaskCubit extends Cubit<TaskState> {
         'status': TaskStatus.completed.name,
       });
 
+      await _onAddPointToKid(task.kid!, task.coin ?? 0);
+
       emit(state.copyWith(status: TaskStateStatus.mentorCompletingSuccess));
     } catch (e) {
       print('error: {completeByMentor}: ${e.toString()}');
       emit(state.copyWith(status: TaskStateStatus.mentorCompletingError));
+    }
+  }
+
+  Future<void> _onAddPointToKid(DocumentReference kid, int point) async {
+    try {
+      await kid.update({
+        'points': FieldValue.increment(point),
+      });
+    } catch (e) {
+      print('error: {_onAddPointToKid}: ${e.toString()}');
+      rethrow;
     }
   }
 

@@ -10,7 +10,7 @@ class CreateKidTaskScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => KidTaskCreateCubit(userCubit: sl()),
+      create: (context) => KidTaskCreateCubit(userCubit: sl(), localNotificationService: sl()),
       child: Builder(builder: (context) {
         return BlocConsumer<KidTaskCreateCubit, KidTaskCreateState>(
           listener: (context, state) {

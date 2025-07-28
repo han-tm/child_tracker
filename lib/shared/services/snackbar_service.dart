@@ -102,65 +102,67 @@ class SnackBarSerive {
       duration: duration,
       crossPage: true,
       toastBuilder: (cancelFunc) {
-        return GestureDetector(
-          behavior: HitTestBehavior.translucent,
-          onTap: () {
-            if (onTap != null) {
-              onTap();
-            }
-            cancelFunc();
-          },
-          child: Container(
-            margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-            decoration: BoxDecoration(
-              color: greyscale900,
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  blurRadius: 32,
-                  color: const Color(0xFFC4AC88).withOpacity(0.62),
-                ),
-              ],
+        return Container(
+          margin: const EdgeInsets.only(top: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          decoration: BoxDecoration(
+            color: white,
+            border: const Border.symmetric(
+              vertical: BorderSide(color: greyscale200),
             ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
+            boxShadow: [
+              BoxShadow(
+                blurRadius: 32,
+                color: const Color(0xFF04060F).withOpacity(0.12),
+              ),
+            ],
+          ),
+          child: Row(
+            children: [
+              SvgPicture.asset(
+                'assets/images/bell.svg',
+                width: 24,
+                height: 24,
+                color: primary900,
+                fit: BoxFit.contain,
+              ),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SvgPicture.asset(
-                      'assets/images/bell.svg',
-                      width: 24,
-                      height: 24,
-                      color: primary900,
-                      fit: BoxFit.contain,
+                    AppText(
+                      text: title,
+                      size: 18,
+                      fw: FontWeight.w600,
                     ),
-                    const SizedBox(width: 14),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          AppText(
-                            text: title,
-                            size: 18,
-                            fw: FontWeight.w600,
-                            color: primary900,
-                          ),
-                          if (body != null)
-                            AppText(
-                              text: body,
-                              size: 16,
-                              fw: FontWeight.w500,
-                              color: primary900,
-                            ),
-                        ],
+                    if (body != null)
+                      AppText(
+                        text: body,
+                        size: 16,
+                        fw: FontWeight.w500,
                       ),
-                    ),
                   ],
                 ),
-              ],
-            ),
+              ),
+              if (onTap != null) const SizedBox(width: 12),
+              if (onTap != null)
+                SizedBox(
+                  width: 94,
+                  child: FilledAppButton(
+                    height: 34,
+                    onTap: () {
+                      cancelFunc();
+                      onTap();
+                    },
+                    fontSize: 14,
+                    fw: FontWeight.w600,
+                    fontColor: white,
+                    text: 'go_to'.tr(),
+                  ),
+                ),
+            ],
           ),
         );
       },
@@ -378,7 +380,7 @@ class SnackBarSerive {
                   width: 94,
                   child: FilledAppButton(
                     height: 34,
-                    onTap: (){
+                    onTap: () {
                       cancelFunc();
                       onGo();
                     },

@@ -14,6 +14,14 @@ class KidMainScreen extends StatefulWidget {
 }
 
 class _KidMainScreenState extends State<KidMainScreen> {
+
+  @override
+  void initState() {
+    super.initState();
+    FirebaseMessaginService service = sl<FirebaseMessaginService>();
+    service.setupFCM();
+  }
+
   void onTapTab(int index) async {
     switch (index) {
       case 0:
