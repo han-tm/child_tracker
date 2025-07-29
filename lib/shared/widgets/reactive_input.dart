@@ -22,6 +22,7 @@ class ReactiveCustomInput extends StatelessWidget {
   final bool hasAsyncValidator;
   final int maxLenght;
   final FocusNode? focus;
+  final TextEditingController? controller;
 
   const ReactiveCustomInput({
     super.key,
@@ -43,6 +44,7 @@ class ReactiveCustomInput extends StatelessWidget {
     this.hasAsyncValidator = false,
     this.maxLenght = 200,
     this.focus,
+    this.controller,
   });
 
   @override
@@ -53,6 +55,7 @@ class ReactiveCustomInput extends StatelessWidget {
         if (label.isNotEmpty) AppText(text: label),
         if (label.isNotEmpty) const SizedBox(height: 8),
         ReactiveTextField(
+          controller: controller,
           onSubmitted: onSubmitted,
           key: ValueKey(formName),
           readOnly: !enabled,

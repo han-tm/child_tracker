@@ -21,6 +21,7 @@ class MentorTaskCreateState extends Equatable {
   final List<TaskModel> usedTasks;
   final bool isTaskOfDay;
   final int step;
+  final TaskModel? suggestTask;
 
   const MentorTaskCreateState({
     this.errorMessage,
@@ -41,6 +42,7 @@ class MentorTaskCreateState extends Equatable {
     this.selectedKid,
     this.usedTasks = const [],
     this.isTaskOfDay = false,
+    this.suggestTask,
   });
 
   MentorTaskCreateState copyWith({
@@ -62,6 +64,7 @@ class MentorTaskCreateState extends Equatable {
     UserModel? selectedKid,
     List<TaskModel>? usedTasks,
     bool? isTaskOfDay,
+    TaskModel? suggestTask,
   }) {
     return MentorTaskCreateState(
       errorMessage: errorMessage ?? this.errorMessage,
@@ -102,6 +105,11 @@ class MentorTaskCreateState extends Equatable {
       usedTasks: usedTasks ?? this.usedTasks,
       point: point ?? this.point,
       isTaskOfDay: isTaskOfDay ?? this.isTaskOfDay,
+      suggestTask: suggestTask == null
+          ? this.suggestTask
+          : suggestTask.id == 'delete'
+              ? null
+              : suggestTask,
     );
   }
 
@@ -125,6 +133,7 @@ class MentorTaskCreateState extends Equatable {
         usedTasks,
         point,
         isTaskOfDay,
+        suggestTask,
       ];
 
   MentorTaskCreateState reset() => const MentorTaskCreateState();

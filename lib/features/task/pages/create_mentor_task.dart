@@ -12,7 +12,7 @@ class CreateMentorTaskScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => MentorTaskCreateCubit(userCubit: sl())..initPopularTasks(),
+      create: (context) => MentorTaskCreateCubit(userCubit: sl(), localNotificationService: sl())..initPopularTasks(),
       child: Builder(builder: (context) {
         return BlocConsumer<MentorTaskCreateCubit, MentorTaskCreateState>(
           listener: (context, state) {

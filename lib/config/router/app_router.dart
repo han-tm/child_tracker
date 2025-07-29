@@ -435,6 +435,10 @@ final GoRouter router = GoRouter(
       builder: (context, state) => TaskCancelReasonScreen(task: state.extra as TaskModel),
     ),
     GoRoute(
+      path: '/popular_tasks',
+      builder: (context, state) => PopularSuggestsScreen(popularTasks: state.extra as List<TaskModel>),
+    ),
+    GoRoute(
       path: '/task_delete_success',
       builder: (context, state) => const DeleteTaskSuccessScreen(),
     ),

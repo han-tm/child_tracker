@@ -172,7 +172,7 @@ class KidTaskCreateCubit extends Cubit<KidTaskCreateState> {
         'created_at': DateTime.now(),
         'type': TaskType.kid.name,
         'status': TaskStatus.inProgress.name,
-        'used_counter': 0,
+        // 'used_counter': 0,
       };
 
       if (state.photo != null) {
