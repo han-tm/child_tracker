@@ -152,13 +152,15 @@ class _KidProgressScreenState extends State<KidProgressScreen> with SingleTicker
 
   void _updateTasksStream() {
     final dateRange = _getDateRange();
-    final startDate = dateRange['startDate']!;
-    final endDate = dateRange['endDate']!;
+    final startDate = dateRange['startDate']!.dateOnly;
+    final endDate = dateRange['endDate']!.dateOnly;
+
+    final endDateFormatted = DateTime(endDate.year, endDate.month, endDate.day, 23, 59);
 
     _tasksStream = TaskModel.collection
         .where('kid', isEqualTo: widget.kid.ref)
         .where('action_date', isGreaterThanOrEqualTo: startDate)
-        .where('action_date', isLessThanOrEqualTo: endDate)
+        .where('action_date', isLessThanOrEqualTo: endDateFormatted)
         .where('status', whereIn: ['completed', 'canceled'])
         .snapshots()
         .map((snapshot) {
@@ -176,7 +178,7 @@ class _KidProgressScreenState extends State<KidProgressScreen> with SingleTicker
           icon: const Icon(CupertinoIcons.arrow_left),
           onPressed: () => context.pop(),
         ),
-        title:  AppText(text: 'taskProgress'.tr(), size: 24, fw: FontWeight.w700),
+        title: AppText(text: 'taskProgress'.tr(), size: 24, fw: FontWeight.w700),
         centerTitle: false,
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(111),
@@ -196,7 +198,6 @@ class _KidProgressScreenState extends State<KidProgressScreen> with SingleTicker
       body: StreamBuilder<List<TaskModel>>(
         stream: _tasksStream,
         builder: (context, snapshot) {
-       
           final tasks = snapshot.data ?? [];
           return SingleChildScrollView(
             padding: const EdgeInsets.all(24),
@@ -254,7 +255,7 @@ class _KidProgressHeader extends StatelessWidget {
             ),
             child: TabBar(
               controller: tabController,
-              tabs:  [
+              tabs: [
                 Tab(text: 'week'.tr()),
                 Tab(text: 'month'.tr()),
                 Tab(text: 'year'.tr()),
@@ -339,7 +340,7 @@ class _TaskCountsInfo extends StatelessWidget {
                     borderRadius: BorderRadius.vertical(top: Radius.circular(7)),
                     color: primary900,
                   ),
-                  child:  Center(
+                  child: Center(
                     child: AppText(
                       text: 'tasksCompleted'.tr(),
                       size: 14,
@@ -386,7 +387,7 @@ class _TaskCountsInfo extends StatelessWidget {
                     borderRadius: BorderRadius.vertical(top: Radius.circular(7)),
                     color: red,
                   ),
-                  child:  Center(
+                  child: Center(
                     child: AppText(
                       text: 'taskCanceled'.tr(),
                       size: 14,
@@ -687,7 +688,7 @@ class _ProgressCompletePercentageState extends State<_ProgressCompletePercentage
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-           AppText(text: 'completeProsent'.tr(), size: 20, fw: FontWeight.w700),
+          AppText(text: 'completeProsent'.tr(), size: 20, fw: FontWeight.w700),
           const Divider(height: 32, thickness: 1, color: greyscale200),
           SizedBox(
             width: double.infinity,
@@ -829,15 +830,15 @@ class _ProgressCompletePercentageState extends State<_ProgressCompletePercentage
       case 0:
         return 'y1'.tr();
       case 1:
-        return  'y2'.tr();
+        return 'y2'.tr();
       case 2:
-        return  'y3'.tr();
+        return 'y3'.tr();
       case 3:
-        return  'y4'.tr();
+        return 'y4'.tr();
       case 4:
-        return  'y5'.tr();
+        return 'y5'.tr();
       case 5:
-        return  'y6'.tr();
+        return 'y6'.tr();
       default:
         return '';
     }
@@ -1107,7 +1108,7 @@ class _ProgressCompleteCountState extends State<_ProgressCompleteCount> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-           AppText(text: 'completeProsent'.tr(), size: 20, fw: FontWeight.w700),
+          AppText(text: 'completeProsent'.tr(), size: 20, fw: FontWeight.w700),
           const Divider(height: 32, thickness: 1, color: greyscale200),
           SizedBox(
             width: double.infinity,
@@ -1248,15 +1249,15 @@ class _ProgressCompleteCountState extends State<_ProgressCompleteCount> {
       case 0:
         return 'y1'.tr();
       case 1:
-        return  'y2'.tr();
+        return 'y2'.tr();
       case 2:
-        return  'y3'.tr();
+        return 'y3'.tr();
       case 3:
-        return  'y4'.tr();
+        return 'y4'.tr();
       case 4:
-        return  'y5'.tr();
+        return 'y5'.tr();
       case 5:
-        return  'y6'.tr();
+        return 'y6'.tr();
       default:
         return '';
     }

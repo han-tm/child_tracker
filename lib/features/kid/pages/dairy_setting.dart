@@ -18,9 +18,11 @@ class _DairySettingScreenState extends State<DairySettingScreen> {
 
   Future<void> changeNotificationStatus(bool val) async {
     context.read<UserCubit>().setDairyNotification(val);
+    final localPush = sl<LocalNotificationService>();
+    localPush.toggleDailyDiaryReminders(val);
   }
 
-  void onMembersTap(){
+  void onMembersTap() {
     context.push('/dairy/members');
   }
 
@@ -40,7 +42,7 @@ class _DairySettingScreenState extends State<DairySettingScreen> {
           icon: const Icon(CupertinoIcons.arrow_left),
           onPressed: () => context.pop(),
         ),
-        title:  AppText(
+        title: AppText(
           text: 'settings'.tr(),
           size: 24,
           fw: FontWeight.w700,
@@ -57,7 +59,7 @@ class _DairySettingScreenState extends State<DairySettingScreen> {
                 children: [
                   SvgPicture.asset('assets/images/members.svg', width: 24, height: 24),
                   const SizedBox(width: 20),
-                   Expanded(child: AppText(text: 'diary_members'.tr(), size: 16, fw: FontWeight.w700)),
+                  Expanded(child: AppText(text: 'diary_members'.tr(), size: 16, fw: FontWeight.w700)),
                   const Icon(CupertinoIcons.chevron_right, size: 22, color: greyscale900),
                 ],
               ),
@@ -69,7 +71,7 @@ class _DairySettingScreenState extends State<DairySettingScreen> {
               children: [
                 SvgPicture.asset('assets/images/bell.svg', width: 24, height: 24),
                 const SizedBox(width: 20),
-                 Expanded(child: AppText(text: 'notifications'.tr(), size: 16, fw: FontWeight.w700)),
+                Expanded(child: AppText(text: 'notifications'.tr(), size: 16, fw: FontWeight.w700)),
                 Transform.scale(
                   scale: 0.8,
                   child: CupertinoSwitch(

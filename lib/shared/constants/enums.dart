@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 enum UserType { kid, mentor }
 
-enum ReminderType {single, daily}
+enum ReminderType { single, daily }
 
 enum ChatType { private, group, support }
 
@@ -41,6 +41,42 @@ enum TaskStatus {
   canceled,
 
   deleted,
+}
+
+enum NotificationType {
+  reminder,
+  taskComplete,
+  taskRework,
+  taskCanceled,
+  taskDeleted,
+  taskCreated,
+  taskReview,
+  coinChange,
+  other,
+}
+
+NotificationType notificationTypeFromString(String? typeString) {
+  if (typeString == null) return NotificationType.other;
+  switch (typeString) {
+    case 'reminder':
+      return NotificationType.reminder;
+    case 'taskComplete':
+      return NotificationType.taskComplete;
+    case 'taskRework':
+      return NotificationType.taskRework;
+    case 'taskCanceled':
+      return NotificationType.taskCanceled;
+    case 'taskDeleted':
+      return NotificationType.taskDeleted;
+    case 'taskCreated':
+      return NotificationType.taskCreated;
+    case 'taskReview':
+      return NotificationType.taskReview;
+    case 'coinChange':
+      return NotificationType.coinChange;
+    default:
+      return NotificationType.other;
+  }
 }
 
 Color taskCardBorderColor(TaskStatus? status) {

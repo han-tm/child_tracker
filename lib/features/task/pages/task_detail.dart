@@ -104,7 +104,6 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
     TaskModel? priorityTask = canCompleteTask(me);
 
     if (priorityTask != null) {
-      // showFirstDoPriorityTaskModalBottomSheet(context);
       SnackBarSerive.showFirstDoTaskOfTheDayAlert(
         priorityTask.name,
         () => showFirstDoPriorityTaskModalBottomSheet(context, priorityTask),
@@ -122,8 +121,11 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
 
       if (mounted) {
         if ((me.isKid) && me.id == task.owner?.id) {
-          final data = {'task': task, 'taskRef': task.ref};
-          context.push('/task_dialog', extra: data);
+          bool complete = await context.read<TaskCubit>().completeTask(task);
+          if (complete && mounted) {
+            final extra = {"name": me.name, "coin": null};
+            context.push('/task_complete_success', extra: extra);
+          }
         } else if (!(me.isKid) && me.id == task.owner?.id) {
           // parent task | confirming
           context.read<TaskCubit>().completeByMentor(task);
@@ -794,7 +796,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
 
                               const Spacer(),
                               const SizedBox(height: 24),
-                              //Для ребенка - когда в процессе
+                              // Для ребенка - когда в процессе
                               if ((task.status == TaskStatus.inProgress || task.status == TaskStatus.needsRework) &&
                                   task.kid?.id == me.id)
                                 Container(
@@ -820,6 +822,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                               if ((task.status == TaskStatus.inProgress ||
                                       task.status == TaskStatus.needsRework ||
                                       task.status == TaskStatus.onReview) &&
+                                  task.type != TaskType.kid &&
                                   task.owner?.id == me.id)
                                 Container(
                                   decoration: const BoxDecoration(border: Border(top: BorderSide(color: greyscale100))),

@@ -34,48 +34,72 @@ class _TaskTypesInfoContentState extends State<_TaskTypesInfoContent> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 24),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                width: 38,
-                height: 3,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(100),
-                  color: greyscale200,
-                ),
-              )
-            ],
-          ),
-          const SizedBox(height: 24),
-          AppText(text: 'info'.tr(), size: 24, fw: FontWeight.w700),
-          const SizedBox(height: 12),
-          const Divider(height: 1, thickness: 1, color: greyscale200),
-          const SizedBox(height: 20),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: MaskotMessage(
-              message: 'task_type_message'.tr(),
-              maskot: '2177-min',
-              flip: true,
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  width: 38,
+                  height: 3,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(100),
+                    color: greyscale200,
+                  ),
+                )
+              ],
             ),
-          ),
-          const SizedBox(height: 40),
-          card('task_without_point', 'task_without_point'.tr(), 'task_without_point_desc'.tr()),
-          card('task_with_point', 'task_with_point'.tr(), 'task_with_point_desc'.tr()),
-          card('task_of_day', 'task_of_day'.tr(), 'task_of_day_desc'.tr()),
-          const SizedBox(height: 4),
-          const Divider(height: 1, thickness: 1, color: greyscale200),
-          const SizedBox(height: 24),
-          FilledAppButton(
-            text: 'ok'.tr(),
-            onTap: () => Navigator.pop(context),
-          ),
-          const SizedBox(height: 28),
-        ],
+            const SizedBox(height: 24),
+            AppText(text: 'info'.tr(), size: 24, fw: FontWeight.w700),
+            const SizedBox(height: 12),
+            const Divider(height: 1, thickness: 1, color: greyscale200),
+            const SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    flex: 3,
+                    child: Transform.flip(
+                      flipX: true,
+                      child: Image.asset(
+                        'assets/images/2177-min.png',
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 6),
+                  Expanded(
+                    flex: 5,
+                    child: LeftArrowBubleShape(
+                      child: AppText(
+                        text: 'task_type_message'.tr(),
+                        size: 18,
+                        maxLine: 10,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 40),
+            card('task_without_point', 'task_without_point'.tr(), 'task_without_point_desc'.tr()),
+            card('task_with_point', 'task_with_point'.tr(), 'task_with_point_desc'.tr()),
+            card('task_of_day', 'task_of_day'.tr(), 'task_of_day_desc'.tr()),
+            const SizedBox(height: 4),
+            const Divider(height: 1, thickness: 1, color: greyscale200),
+            const SizedBox(height: 24),
+            FilledAppButton(
+              text: 'ok'.tr(),
+              onTap: () => Navigator.pop(context),
+            ),
+            const SizedBox(height: 28),
+          ],
+        ),
       ),
     );
   }

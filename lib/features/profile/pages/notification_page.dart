@@ -22,7 +22,7 @@ class NotificationScreen extends StatelessWidget {
           icon: const Icon(CupertinoIcons.arrow_left),
           onPressed: () => context.pop(),
         ),
-        title:  AppText(text: 'notifications'.tr(), size: 24, fw: FontWeight.w700),
+        title: AppText(text: 'notifications'.tr(), size: 24, fw: FontWeight.w700),
         centerTitle: true,
         actions: [
           Padding(
@@ -44,7 +44,7 @@ class NotificationScreen extends StatelessWidget {
       body: BlocBuilder<UserCubit, UserModel?>(
         builder: (context, user) {
           if (user == null) return const SizedBox();
-          return StreamBuilder<List>(
+          return StreamBuilder<List<NotificationModel>>(
               stream: getNotifications(user.ref),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting || snapshot.data == null) {
@@ -54,11 +54,23 @@ class NotificationScreen extends StatelessWidget {
                 }
                 final notifications = snapshot.data!;
                 if (notifications.isEmpty) return const EmptyNotificationsWidget();
+
+                final groupedNotifications = groupNotificationsByDate(notifications);
+
                 return ListView.builder(
                   padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                  itemCount: notifications.length,
+                  itemCount: groupedNotifications.length,
                   itemBuilder: (context, index) {
-                    return NotificationCard(notification: notifications[index]);
+                    final group = groupedNotifications[index];
+                    final date = group.key;
+                    final notifications = group.value..sort((a, b) => b.time!.compareTo(a.time!));
+
+                    return Column(
+                      children: [
+                        groupHeader(date),
+                        ...notifications.map((notification) => NotificationCard(notification: notification)),
+                      ],
+                    );
                   },
                 );
               });
@@ -66,13 +78,55 @@ class NotificationScreen extends StatelessWidget {
       ),
     );
   }
+
+  Widget groupHeader(DateTime time) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 24),
+      child: Row(
+        children: [
+          AppText(
+            text: dateToChatDivider(time),
+            size: 14,
+            color: greyscale500,
+          ),
+          const SizedBox(width: 16),
+          const Expanded(child: Divider(height: 1, thickness: 1, color: greyscale200)),
+        ],
+      ),
+    );
+  }
+}
+
+List<MapEntry<DateTime, List<NotificationModel>>> groupNotificationsByDate(List<NotificationModel> notifications) {
+  List<MapEntry<DateTime, List<NotificationModel>>> grouped = [];
+
+  grouped = notifications
+      .where((n) => n.time != null)
+      .groupBy((n) => DateTime(n.time!.year, n.time!.month, n.time!.day))
+      .entries
+      .toList()
+    ..sort((a, b) => b.key.compareTo(a.key));
+
+  return grouped;
+}
+
+extension IterableExtension<T> on Iterable<T> {
+  Map<K, List<T>> groupBy<K>(K Function(T) keyFunction) => fold(
+        <K, List<T>>{},
+        (Map<K, List<T>> map, T element) {
+          final key = keyFunction(element);
+          map.putIfAbsent(key, () => <T>[]).add(element);
+          return map;
+        },
+      );
 }
 
 Stream<List<NotificationModel>> getNotifications(DocumentReference ref) {
-  return ref
+  final fs = FirebaseFirestore.instance;
+  return fs
       .collection('notifications')
-      // .where('user', isEqualTo: ref)
-      // .orderBy('created_at', descending: true)
+      .where('user', isEqualTo: ref)
+      .orderBy('time', descending: true)
       .snapshots()
-      .map((docs) => docs.docs.map((doc) => NotificationModel(title: 'Title', date: DateTime.now())).toList());
+      .map((docs) => docs.docs.map((doc) => NotificationModel.fromFirestore(doc)).toList());
 }

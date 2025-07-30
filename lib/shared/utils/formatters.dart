@@ -63,3 +63,9 @@ String dateFormatDDMMYYYYHHMM(DateTime? date) {
   if (date == null) return '-';
   return DateFormat('dd.MM.yyyy, HH:mm', 'ru').format(date);
 }
+
+extension DateOnly on DateTime {
+  DateTime get dateOnly {
+    return DateTime(year, month, day);
+  }
+}

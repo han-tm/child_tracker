@@ -12,12 +12,15 @@ part 'state.dart';
 class TaskCubit extends Cubit<TaskState> {
   final UserCubit _userCubit;
   final FirebaseFirestore _fs;
+  final FirebaseMessaginService _fcm;
 
   TaskCubit({
     required UserCubit userCubit,
     required FirebaseFirestore fs,
+    required FirebaseMessaginService fcm,
   })  : _userCubit = userCubit,
         _fs = fs,
+        _fcm = fcm,
         super(TaskState(currentDay: DateTime.now()));
 
   StreamSubscription? _taskStreamSubscription;
@@ -93,7 +96,17 @@ class TaskCubit extends Cubit<TaskState> {
   void cancelTask(TaskModel task, String? reason) async {
     emit(state.copyWith(status: TaskStateStatus.canceling));
     try {
-      await task.ref.update({'status': TaskStatus.canceled.name, 'cancel_reason': reason});
+      await task.ref.update({
+        'status': TaskStatus.canceled.name,
+        'cancel_reason': reason,
+        'action_date': FieldValue.serverTimestamp(),
+      });
+
+      if (_userCubit.state?.isKid == false) {
+        //mentor owner cancel task
+        _fcm.sendPushToKidOnTaskCanceled(task);
+      }
+
       emit(state.copyWith(status: TaskStateStatus.cancelSuccess));
     } catch (e) {
       print('error: {cancelTask}: ${e.toString()}');
@@ -104,6 +117,12 @@ class TaskCubit extends Cubit<TaskState> {
   Future<bool> deleteTask(TaskModel task) async {
     try {
       await task.ref.update({'status': TaskStatus.deleted.name});
+
+      if (_userCubit.state?.isKid == false) {
+        //mentor owner cancel task
+        _fcm.sendPushToKidOnTaskDeleted(task);
+      }
+
       return true;
     } catch (e) {
       print('error: {deleteTask}: ${e.toString()}');
@@ -111,9 +130,13 @@ class TaskCubit extends Cubit<TaskState> {
     }
   }
 
+  //Когда ребенок завершает собственную задачу
   Future<bool> completeTask(TaskModel task) async {
     try {
-      await task.ref.update({'status': TaskStatus.completed.name});
+      await task.ref.update({
+        'status': TaskStatus.completed.name,
+        'action_date': FieldValue.serverTimestamp(),
+      });
       return true;
     } catch (e) {
       print('error: {completeTask}: ${e.toString()}');
@@ -157,6 +180,8 @@ class TaskCubit extends Cubit<TaskState> {
         'status': TaskStatus.onReview.name,
       });
 
+      _fcm.sendPushToMentorOnTaskSentToReview(task);
+
       emit(state.copyWith(status: TaskStateStatus.kidCompletingSuccess));
     } catch (e) {
       print('error: {completeByKid}: ${e.toString()}');
@@ -171,6 +196,8 @@ class TaskCubit extends Cubit<TaskState> {
       await task.ref.update({
         'status': TaskStatus.onReview.name,
       });
+
+      _fcm.sendPushToMentorOnTaskSentToReview(task);
 
       emit(state.copyWith(status: TaskStateStatus.kidCompletingSuccess));
     } catch (e) {
@@ -215,6 +242,8 @@ class TaskCubit extends Cubit<TaskState> {
         'status': TaskStatus.needsRework.name,
       });
 
+      _fcm.sendPushToKidOnTaskRework(task);
+
       emit(state.copyWith(status: TaskStateStatus.mentorSendReworkSuccess));
     } catch (e) {
       print('error: {reworkByMentor}: ${e.toString()}');
@@ -229,6 +258,8 @@ class TaskCubit extends Cubit<TaskState> {
       await task.ref.update({
         'status': TaskStatus.needsRework.name,
       });
+
+      _fcm.sendPushToKidOnTaskRework(task);
 
       emit(state.copyWith(status: TaskStateStatus.mentorSendReworkSuccess));
     } catch (e) {
@@ -248,9 +279,12 @@ class TaskCubit extends Cubit<TaskState> {
 
       await task.ref.update({
         'status': TaskStatus.completed.name,
+        'action_date': FieldValue.serverTimestamp(),
       });
 
       await _onAddPointToKid(task.kid!, task.coin ?? 0);
+
+      _fcm.sendPushToKidOnTaskComplete(task);
 
       emit(state.copyWith(status: TaskStateStatus.mentorCompletingSuccess));
     } catch (e) {

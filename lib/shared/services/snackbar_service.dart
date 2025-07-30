@@ -136,12 +136,14 @@ class SnackBarSerive {
                       text: title,
                       size: 18,
                       fw: FontWeight.w600,
+                      maxLine: 2,
                     ),
                     if (body != null)
                       AppText(
                         text: body,
                         size: 16,
                         fw: FontWeight.w500,
+                        maxLine: 3,
                       ),
                   ],
                 ),

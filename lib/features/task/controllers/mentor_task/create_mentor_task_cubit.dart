@@ -11,15 +11,15 @@ part 'state.dart';
 class MentorTaskCreateCubit extends Cubit<MentorTaskCreateState> {
   final UserCubit _userCubit;
   final FirebaseFirestore _fs;
+  final FirebaseMessaginService _fcm;
   final PageController pageController;
-  final LocalNotificationService _localNotificationService;
 
   MentorTaskCreateCubit({
     required UserCubit userCubit,
-    required LocalNotificationService localNotificationService,
+    required FirebaseMessaginService fcm,
   })  : _userCubit = userCubit,
         _fs = FirebaseFirestore.instance,
-        _localNotificationService = localNotificationService,
+        _fcm = fcm,
         pageController = PageController(initialPage: 0),
         super(const MentorTaskCreateState());
 
@@ -225,6 +225,8 @@ class MentorTaskCreateCubit extends Cubit<MentorTaskCreateState> {
 
       await _markSuggestTask();
 
+      _fcm.sendPushToKidOnTaskCreated(state.selectedKid!.ref, state.name ?? '', newTaskRef.id);
+
       emit(state.copyWith(status: MentorTaskCreateStatus.success));
     } catch (e) {
       print('error {createTask}: $e');
@@ -241,41 +243,6 @@ class MentorTaskCreateCubit extends Cubit<MentorTaskCreateState> {
   }
 
   void reset() => emit(state.reset());
-
-  Future<void> setReminder({
-    required String id,
-    required String name,
-    required ReminderType reminderType,
-    DateTime? date,
-    TimeOfDay? reminderTime,
-    List<int> weekdays = const [],
-  }) async {
-    if (reminderType == ReminderType.single) {
-      if (date == null) {
-        throw Exception('Дата не указан');
-      }
-      await _localNotificationService.scheduleOneTimeNotification(
-        id: id.hashCode,
-        title: 'time_to_do_task'.tr(),
-        body: name,
-        scheduledDateTime: date,
-      );
-    } else {
-      if (reminderTime == null) {
-        throw Exception('Время не указана');
-      }
-      if (weekdays.isEmpty) {
-        throw Exception('Дни не указаны');
-      }
-      await _localNotificationService.scheduleWeeklyNotifications(
-        baseId: id.hashCode,
-        title: 'time_to_do_task'.tr(),
-        body: name,
-        time: reminderTime,
-        weekdays: weekdays,
-      );
-    }
-  }
 
   @override
   Future<void> close() {

@@ -67,7 +67,7 @@ class TaskModel {
       createdAt: data['created_at'] != null ? (data['created_at'] as Timestamp).toDate() : null,
       actionDate: data['action_date'] != null ? (data['action_date'] as Timestamp).toDate() : null,
       coin: data['coin'],
-      usedCounter: data['used_counter'],
+      usedCounter: data['used_counter'] ?? 0,
       reasonOfCancel: data['cancel_reason'],
     );
   }

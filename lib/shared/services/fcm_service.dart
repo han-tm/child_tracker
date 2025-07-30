@@ -4,13 +4,16 @@ import 'package:child_tracker/index.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:cloud_functions/cloud_functions.dart' as cf;
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class FirebaseMessaginService {
   final FirebaseMessaging _fcm;
   final FirebaseFirestore _fs;
   final UserCubit _userCubit;
   final cf.FirebaseFunctions _functions;
-  final LocalNotificationService _localNotificationService;
+  final LocalNotificationService _localPush;
+  
 
   FirebaseMessaginService(
       {required FirebaseMessaging fcm,
@@ -20,13 +23,13 @@ class FirebaseMessaginService {
       required LocalNotificationService localNotificationService})
       : _fs = fs,
         _fcm = fcm,
+        _localPush = localNotificationService,
         _userCubit = appUserCubit,
-        _functions = functions,
-        _localNotificationService = localNotificationService;
+        _functions = functions;
 
   List<String> receivedNotificationIds = [];
 
-  Future<void> setupFCM() async {
+  Future<void> setupFCM(BuildContext context) async {
     await _fcm.requestPermission(
       alert: true,
       badge: true,
@@ -45,17 +48,118 @@ class FirebaseMessaginService {
           log('Message already viewed: ${message.messageId}');
           return;
         }
-        // _localNotificationService.showFCMNotificationForeground(
-        //   title: notification.title ?? 'Notification',
-        //   body: notification.body ?? '',
-        // );
+
+        final Map<String, dynamic> notificationData = message.data;
+        NotificationType type = notificationTypeFromString(notificationData['type']);
+
+        onTap() {
+          if (type == NotificationType.reminder ||
+              type == NotificationType.taskComplete ||
+              type == NotificationType.taskRework ||
+              type == NotificationType.taskCanceled ||
+              type == NotificationType.taskDeleted ||
+              type == NotificationType.taskCreated ||
+              type == NotificationType.taskReview) {
+            final String? taskId = notificationData['task_id'];
+            if (taskId == null) return;
+            final taskRef = _fs.collection('tasks').doc(taskId);
+            final data = {'task': null, 'taskRef': taskRef};
+            if (context.mounted) {
+              context.push('/task_detail', extra: data);
+            }
+          } else if (type == NotificationType.coinChange) {
+            context.push('/kid_coins', extra: _userCubit.state);
+          } else {
+            return;
+          }
+        }
+
         SnackBarSerive.showSnackBarOnReceivePushNotification(
           notification.title ?? 'Notification',
           notification.body,
-          null,
+          onTap,
         );
       }
     });
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      log('Message: ${message.messageId} TITLE: ${message.notification?.title}:  BODY: ${message.notification?.body} \n DATA: ${message.data}');
+      final notification = message.notification;
+      if (notification != null) {
+        bool alreadyView = isNotificationReceived(message.messageId ?? '');
+        if (alreadyView) {
+          log('Message already viewed: ${message.messageId}');
+          return;
+        }
+
+        final Map<String, dynamic> notificationData = message.data;
+        NotificationType type = notificationTypeFromString(notificationData['type']);
+
+        onTap() {
+          if (type == NotificationType.reminder ||
+              type == NotificationType.taskComplete ||
+              type == NotificationType.taskRework ||
+              type == NotificationType.taskCanceled ||
+              type == NotificationType.taskDeleted ||
+              type == NotificationType.taskCreated ||
+              type == NotificationType.taskReview) {
+            final String? taskId = notificationData['task_id'];
+            if (taskId == null) return;
+            final taskRef = _fs.collection('tasks').doc(taskId);
+            final data = {'task': null, 'taskRef': taskRef};
+            if (context.mounted) {
+              context.push('/task_detail', extra: data);
+            }
+          } else if (type == NotificationType.coinChange) {
+            context.push('/kid_coins', extra: _userCubit.state);
+          } else {
+            return;
+          }
+        }
+
+        if (context.mounted) {
+          onTap();
+        }
+      }
+    });
+
+    FirebaseMessaging.instance.getInitialMessage().then((message) async {
+      if (!context.mounted) return;
+      if (message == null) return;
+
+      final Map<String, dynamic> notificationData = message.data;
+      NotificationType type = notificationTypeFromString(notificationData['type']);
+
+      onTap() {
+        if (type == NotificationType.reminder ||
+            type == NotificationType.taskComplete ||
+            type == NotificationType.taskRework ||
+            type == NotificationType.taskCanceled ||
+            type == NotificationType.taskDeleted ||
+            type == NotificationType.taskCreated ||
+            type == NotificationType.taskReview) {
+          final String? taskId = notificationData['task_id'];
+          if (taskId == null) return;
+          final taskRef = _fs.collection('tasks').doc(taskId);
+          final data = {'task': null, 'taskRef': taskRef};
+          if (context.mounted) {
+            context.push('/task_detail', extra: data);
+          }
+        } else if (type == NotificationType.coinChange) {
+          context.push('/kid_coins', extra: _userCubit.state);
+        } else {
+          return;
+        }
+      }
+
+      if (context.mounted) {
+        onTap();
+      }
+    });
+
+    if(_userCubit.state?.isKid == true){
+      _localPush.setDailyDiaryReminder(_userCubit.state?.dairyNotification ?? true);
+    }
   }
 
   bool isNotificationReceived(String id) => receivedNotificationIds.contains(id);
@@ -64,4 +168,219 @@ class FirebaseMessaginService {
     if (token == null) return;
     await _userCubit.state?.ref.update({'fcm_token': token});
   }
+
+  //Пуш ребенку, когда ментор подтверждает выполнение
+  void sendPushToKidOnTaskComplete(TaskModel task) async {
+    final DocumentReference? receiver = task.kid;
+
+    if (receiver == null) {
+      print('Receiver not found');
+      return;
+    }
+
+    const String title = 'Задание выполнено';
+    final String taskName = task.name;
+    final int coin = task.coin ?? 0;
+    final String body = 'Задание "$taskName" проверено и выполнено.${coin > 0 ? '\nТы получил +$coin баллов!' : ''}';
+    final Map<String, dynamic> payload = {
+      "type": NotificationType.taskComplete.name,
+      "task_id": task.id,
+    };
+
+    try {
+      await _createSystemNotificationDoc(receiver, title, body, NotificationType.taskComplete, payload);
+
+      _callSendPushCallback(receiver.id, title, body, payload);
+    } catch (e) {
+      print('{sendPushToKidOnTaskComplete} error: $e');
+    }
+  }
+
+  //Пуш ребенку, когда ментор отправляет на доработку
+  void sendPushToKidOnTaskRework(TaskModel task) async {
+    final DocumentReference? receiver = task.kid;
+
+    if (receiver == null) {
+      print('Receiver not found');
+      return;
+    }
+
+    const String title = 'Задание нужно доработать';
+    final String taskName = task.name;
+    final String body = 'Задание "$taskName" нужно доработать';
+    final Map<String, dynamic> payload = {
+      "type": NotificationType.taskRework.name,
+      "task_id": task.id,
+    };
+
+    try {
+      await _createSystemNotificationDoc(receiver, title, body, NotificationType.taskRework, payload);
+
+      _callSendPushCallback(receiver.id, title, body, payload);
+    } catch (e) {
+      print('{sendPushToKidOnTaskComplete} error: $e');
+    }
+  }
+
+  //Пуш ребенку, когда ментор отменяет задачу
+  void sendPushToKidOnTaskCanceled(TaskModel task) async {
+    final DocumentReference? receiver = task.kid;
+
+    if (receiver == null) {
+      print('Receiver not found');
+      return;
+    }
+
+    const String title = 'Задание отменена';
+    final String taskName = task.name;
+    final String body = 'Задание "$taskName" была отменена';
+    final Map<String, dynamic> payload = {
+      "type": NotificationType.taskCanceled.name,
+      "task_id": task.id,
+    };
+
+    try {
+      await _createSystemNotificationDoc(receiver, title, body, NotificationType.taskCanceled, payload);
+
+      _callSendPushCallback(receiver.id, title, body, payload);
+    } catch (e) {
+      print('{sendPushToKidOnTaskComplete} error: $e');
+    }
+  }
+
+  //Пуш ребенку, когда ментор удаляет задачу
+  void sendPushToKidOnTaskDeleted(TaskModel task) async {
+    final DocumentReference? receiver = task.kid;
+
+    if (receiver == null) {
+      print('Receiver not found');
+      return;
+    }
+
+    const String title = 'Задание удалено';
+    final String taskName = task.name;
+    final String body = 'Задание "$taskName" было удалено';
+    final Map<String, dynamic> payload = {
+      "type": NotificationType.taskDeleted.name,
+      "task_id": task.id,
+    };
+
+    try {
+      await _createSystemNotificationDoc(receiver, title, body, NotificationType.taskDeleted, payload);
+
+      _callSendPushCallback(receiver.id, title, body, payload);
+    } catch (e) {
+      print('{sendPushToKidOnTaskComplete} error: $e');
+    }
+  }
+
+  //Пуш ребенку, когда ментор создает задачу
+  void sendPushToKidOnTaskCreated(DocumentReference kid, String taskName, String taskId) async {
+    final DocumentReference receiver = kid;
+
+    const String title = 'Новое задание';
+    final String body = 'Наставник добавил тебе задание: "$taskName"';
+    final Map<String, dynamic> payload = {
+      "type": NotificationType.taskCreated.name,
+      "task_id": taskId,
+    };
+
+    try {
+      await _createSystemNotificationDoc(receiver, title, body, NotificationType.taskCreated, payload);
+
+      _callSendPushCallback(receiver.id, title, body, payload);
+    } catch (e) {
+      print('{sendPushToKidOnTaskCreated} error: $e');
+    }
+  }
+
+  //Пуш ментору, когда ребенок отправил задачу на проверку
+  void sendPushToMentorOnTaskSentToReview(TaskModel task) async {
+    final DocumentReference? receiver = task.owner;
+
+    if (receiver == null) {
+      print('Receiver not found');
+      return;
+    }
+
+    const String title = 'Проверь задание';
+    final String taskName = task.name;
+    final String body = 'Ребенок отправил задание "$taskName" на проверку';
+    final Map<String, dynamic> payload = {
+      "type": NotificationType.taskReview.name,
+      "task_id": task.id,
+    };
+
+    try {
+      await _createSystemNotificationDoc(receiver, title, body, NotificationType.taskReview, payload);
+
+      _callSendPushCallback(receiver.id, title, body, payload);
+    } catch (e) {
+      print('{sendPushToMentorOnTaskSentToReview} error: $e');
+    }
+  }
+
+  //Пуш ребенку, когда ментор списал/добавил баллы
+  void sendPushToKidOnCoinChanged(UserModel mentor, DocumentReference kid, int amount) async {
+    final DocumentReference receiver = kid;
+
+    String title = amount.isNegative ? 'Списание баллов' : 'Добавление баллов';
+    final String mentorName = mentor.name;
+    final String body = 'Наставник $mentorName ${amount.isNegative ? 'списал' : 'добавил'} $amount баллов';
+    final Map<String, dynamic> payload = {
+      "type": NotificationType.coinChange.name,
+    };
+
+    try {
+      await _createSystemNotificationDoc(receiver, title, body, NotificationType.coinChange, payload);
+
+      _callSendPushCallback(receiver.id, title, body, payload);
+    } catch (e) {
+      print('{sendPushToKidOnTaskCreated} error: $e');
+    }
+  }
+
+  void _callSendPushCallback(String userId, String title, String body, Map payload) async {
+    try {
+      final cf.HttpsCallable callable = _functions.httpsCallable('sendPushNotificationToUser');
+      final response = await callable.call(<String, dynamic>{
+        'userId': userId,
+        'title': title,
+        'body': body,
+        'data': payload,
+      });
+      print('Результат вызова функции: ${response.data}');
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> _createSystemNotificationDoc(
+    DocumentReference receiver,
+    String title,
+    String body,
+    NotificationType type,
+    Map payload,
+  ) async {
+    final notificationRef = _fs.collection('notifications').doc();
+
+    final notificationData = {
+      "user": receiver,
+      "time": FieldValue.serverTimestamp(),
+      "title": title,
+      "body": body,
+      "type": type.name,
+      "payload": payload,
+      "is_read": false,
+    };
+
+    await notificationRef.set(notificationData);
+  }
 }
+
+
+//  Message: 0:1753783382232457%a1133c67a1133c67 TITLE: Время выполнить задание::  BODY: "Будет увед в 12 10" 
+//        DATA: {task_id: UQzZuZXND0lf6Lng6x5D, type: reminder}
+
+// Message: 0:1753852724489856%a1133c67a1133c67 TITLE: Новое задание:  BODY: Наставник добавил тебе задание: "Только для теста " 
+//        DATA: {task_id: T1N8hkvpu53Au5BxZ8ZY, type: taskCreated}

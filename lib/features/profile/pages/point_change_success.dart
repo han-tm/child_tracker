@@ -39,6 +39,7 @@ class CoinChangeSuccessScreen extends StatelessWidget {
                     fw: FontWeight.w700,
                     color: primary900,
                     textAlign: TextAlign.center,
+                    maxLine: 2,
                   ),
                   const SizedBox(height: 12),
                   RichText(

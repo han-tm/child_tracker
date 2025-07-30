@@ -12,14 +12,6 @@ class BonusTabScreen extends StatelessWidget {
         title: GestureDetector(
             onTap: () {
               // SnackBarSerive.showSnackBarOnReceivePushNotification('Привет, Как дела?', 'Нужно выполнить зарядку', null);
-              // final LocalNotificationService localNotificationService = sl<LocalNotificationService>();
-              // localNotificationService.scheduleWeeklyNotifications(
-              //   baseId: 999,
-              //   title: 'Напоминания',
-              //   body: 'делать зарядку',
-              //   time: TimeOfDay(hour: 15,minute: 58),
-              //   weekdays: [1]
-              // );
             },
             child: const AppText(text: 'Bonus')),
       ),

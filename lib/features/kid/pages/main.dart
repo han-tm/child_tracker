@@ -19,7 +19,7 @@ class _KidMainScreenState extends State<KidMainScreen> {
   void initState() {
     super.initState();
     FirebaseMessaginService service = sl<FirebaseMessaginService>();
-    service.setupFCM();
+    service.setupFCM(context);
   }
 
   void onTapTab(int index) async {

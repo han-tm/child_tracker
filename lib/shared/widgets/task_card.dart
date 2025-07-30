@@ -19,6 +19,9 @@ class TaskCard extends StatelessWidget {
       onTap: () {
         final data = {'task': task, 'taskRef': task.ref};
         context.push('/task_detail', extra: data);
+
+        // final fcm = sl<FirebaseMessaginService>();
+        // fcm.sendPushToKidOnTaskCreated(task.kid!, task.name, task.id);
       },
       child: Container(
         width: double.infinity,

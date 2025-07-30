@@ -56,9 +56,18 @@ class _ChangeKidPointScreenState extends State<ChangeKidPointScreen> {
         amount = -amount;
       }
 
+      final fcm = sl<FirebaseMessaginService>();
+
+      final mentor = context.read<UserCubit>().state;
+
+      if (mentor == null) {
+        SnackBarSerive.showErrorSnackBar('defaultErrorText'.tr());
+        return;
+      }
+
       final doc = {
         'kid': widget.kid.ref,
-        'mentor': context.read<UserCubit>().state?.ref,
+        'mentor': mentor.ref,
         'created_at': FieldValue.serverTimestamp(),
         'coin': amount,
         'name': form.control('text').value,
@@ -75,6 +84,8 @@ class _ChangeKidPointScreenState extends State<ChangeKidPointScreen> {
         await ref.set(doc);
 
         if (mounted) await widget.kid.ref.update({'points': FieldValue.increment(amount)});
+
+        fcm.sendPushToKidOnCoinChanged(mentor, widget.kid.ref, amount);
 
         if (mounted) {
           setState(() {

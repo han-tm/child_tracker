@@ -12,14 +12,11 @@ class KidTaskCreateCubit extends Cubit<KidTaskCreateState> {
   final UserCubit _userCubit;
   final FirebaseFirestore _fs;
   final PageController pageController;
-  final LocalNotificationService _localNotificationService;
 
   KidTaskCreateCubit({
     required UserCubit userCubit,
-    required LocalNotificationService localNotificationService,
   })  : _userCubit = userCubit,
         _fs = FirebaseFirestore.instance,
-        _localNotificationService = localNotificationService,
         pageController = PageController(initialPage: 0),
         super(const KidTaskCreateState());
 
@@ -192,14 +189,14 @@ class KidTaskCreateCubit extends Cubit<KidTaskCreateState> {
 
       await newTaskRef.set(data);
 
-      await _setReminder(
-        id: newTaskRef.id,
-        name: state.name ?? '',
-        reminderType: state.reminderType,
-        date: state.reminderDate,
-        reminderTime: state.reminderTime,
-        weekdays: state.reminderDays,
-      );
+      // await _setReminder(
+      //   id: newTaskRef.id,
+      //   name: state.name ?? '',
+      //   reminderType: state.reminderType,
+      //   date: state.reminderDate,
+      //   reminderTime: state.reminderTime,
+      //   weekdays: state.reminderDays,
+      // );
 
       emit(state.copyWith(status: KidTaskCreateStatus.success));
     } catch (e) {
@@ -214,40 +211,5 @@ class KidTaskCreateCubit extends Cubit<KidTaskCreateState> {
   Future<void> close() {
     pageController.dispose();
     return super.close();
-  }
-
-  Future<void> _setReminder({
-    required String id,
-    required String name,
-    required ReminderType reminderType,
-    DateTime? date,
-    TimeOfDay? reminderTime,
-    List<int> weekdays = const [],
-  }) async {
-    if (reminderType == ReminderType.single) {
-      if (date == null) {
-        throw Exception('Дата не указан');
-      }
-      await _localNotificationService.scheduleOneTimeNotification(
-        id: id.hashCode,
-        title: 'time_to_do_task'.tr(),
-        body: name,
-        scheduledDateTime: date,
-      );
-    } else {
-      if (reminderTime == null) {
-        throw Exception('Время не указана');
-      }
-      if (weekdays.isEmpty) {
-        throw Exception('Дни не указаны');
-      }
-      await _localNotificationService.scheduleWeeklyNotifications(
-        baseId: id.hashCode,
-        title: 'time_to_do_task'.tr(),
-        body: name,
-        time: reminderTime,
-        weekdays: weekdays,
-      );
-    }
   }
 }
