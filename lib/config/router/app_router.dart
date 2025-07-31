@@ -566,6 +566,53 @@ final GoRouter router = GoRouter(
       path: '/change_lang',
       builder: (context, state) => const ChangeLangScreen(),
     ),
+    GoRoute(
+      path: '/create_bonus',
+      builder: (context, state) => const CreateBonusScreen(),
+      routes: [
+        GoRoute(
+          path: 'success',
+          builder: (context, state) => const CreateBonusSuccessScreen(),
+        ),
+      ],
+    ),
+    ShellRoute(
+      builder: (context, state, child) {
+        final task = state.extra as TaskModel;
+        return BlocProvider(
+          create: (context) => KidTaskEditCubit(userCubit: sl(), task: task)..init(),
+          child: child,
+        );
+      },
+      routes: [
+        GoRoute(
+          path: '/edit_bonus',
+          builder: (context, state) => EditBonusScreen(bonus: state.extra as BonusModel),
+          routes: [
+            GoRoute(
+              path: 'name',
+              builder: (context, state) => const BonusEditNameScreen(),
+            ),
+            GoRoute(
+              path: 'photo',
+              builder: (context, state) => const BonusEditPhotoScreen(),
+            ),
+            GoRoute(
+              path: 'link',
+              builder: (context, state) => const BonusEditLinkScreen(),
+            ),
+            GoRoute(
+              path: 'point',
+              builder: (context, state) => const BonusEditPointScreen(),
+            ),
+            GoRoute(
+              path: 'mentor_or_kid',
+              builder: (context, state) => const BonusEditKidOrMentorScreen(),
+            ),
+          ],
+        ),
+      ],
+    ),
   ],
   errorBuilder: (context, state) => ErrorScreen(error: state.error.toString()),
 );

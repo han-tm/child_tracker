@@ -35,7 +35,7 @@ class BonusCard extends StatelessWidget {
                       children: [
                         Expanded(
                           child: AppText(
-                            text: bonus.title,
+                            text: bonus.name,
                             size: 20,
                             fw: FontWeight.w700,
                           ),

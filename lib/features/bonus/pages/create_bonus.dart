@@ -1,22 +1,23 @@
+import 'package:child_tracker/features/bonus/widgets/create/select_kid_or_mentor.dart';
 import 'package:child_tracker/index.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-class CreateKidTaskScreen extends StatelessWidget {
-  const CreateKidTaskScreen({super.key});
+class CreateBonusScreen extends StatelessWidget {
+  const CreateBonusScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => KidTaskCreateCubit(userCubit: sl()),
+      create: (context) => CreateBonusCubit(userCubit: sl(), fcm: sl()),
       child: Builder(builder: (context) {
-        return BlocConsumer<KidTaskCreateCubit, KidTaskCreateState>(
+        return BlocConsumer<CreateBonusCubit, CreateBonusState>(
           listener: (context, state) {
-            if (state.status == KidTaskCreateStatus.error) {
+            if (state.status == CreateBonusStatus.error) {
               SnackBarSerive.showErrorSnackBar(state.errorMessage ?? defaultErrorText);
-            } else if (state.status == KidTaskCreateStatus.success) {
+            } else if (state.status == CreateBonusStatus.success) {
               context.replace('/kid_create_task/success');
             }
           },
@@ -29,14 +30,13 @@ class CreateKidTaskScreen extends StatelessWidget {
                   icon: const Icon(CupertinoIcons.arrow_left),
                   onPressed: () {
                     if (state.isEditMode) {
-                      //back to prewiew page
-                      context.read<KidTaskCreateCubit>().onChangeMode(false);
-                      context.read<KidTaskCreateCubit>().onJumpToPage(5);
+                      context.read<CreateBonusCubit>().onChangeMode(false);
+                      context.read<CreateBonusCubit>().onJumpToPage(5);
                     } else {
                       if (state.step == 0) {
                         context.pop();
                       } else {
-                        context.read<KidTaskCreateCubit>().prevPage();
+                        context.read<CreateBonusCubit>().prevPage();
                       }
                     }
                   },
@@ -56,14 +56,14 @@ class CreateKidTaskScreen extends StatelessWidget {
                     behavior: HitTestBehavior.translucent,
                     onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
                     child: PageView(
-                      controller: context.read<KidTaskCreateCubit>().pageController,
+                      controller: context.read<CreateBonusCubit>().pageController,
                       physics: const NeverScrollableScrollPhysics(),
                       children: const [
+                         CreateBonusSelectKidOrMentor(),
                         CreateBonusSetPhoto(),
-                        KidCreateTaskSetName(),
-                        KidCreateTaskSetStartDate(),
-                        KidCreateTaskSetEndDate(),
-                        KidCreateTaskSetReminder(),
+                        CreateBonusSetName(),
+                        CreateBonusSetLink(),
+                        CreateBonusSetPoint(),
                         CreateBonusPreview(),
                       ],
                     ),

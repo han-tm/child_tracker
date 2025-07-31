@@ -8,7 +8,7 @@ enum ReminderType { single, daily }
 
 enum ChatType { private, group, support }
 
-enum BonusStatus { needApprove, active, canceled, readyToReceive, received }
+enum BonusStatus { needApprove, active, canceled, readyToReceive, received, rejected, deleted }
 
 enum KidTaskChip { all, progress, completed, canceled }
 
@@ -201,5 +201,35 @@ String dairyEmotionNameRus(DairyEmotion emotion) {
       return 'good'.tr();
     default:
       return 'normal'.tr();
+  }
+}
+
+enum BonusChip { request, active, received, canceled, rejected }
+
+String bonusChipRusName(BonusChip chip) {
+  switch (chip) {
+    case BonusChip.request:
+      return 'applications_chip'.tr();
+    case BonusChip.active:
+      return 'actives_chip'.tr();
+    case BonusChip.received:
+      return 'received_chip'.tr();
+    case BonusChip.canceled:
+      return 'canceled_chip'.tr();
+    case BonusChip.rejected:
+      return 'rejected_chip'.tr();
+    default:
+      return '-';
+  }
+}
+
+Color bonusCardStatusColor(BonusStatus? status) {
+  switch (status) {
+    case BonusStatus.needApprove:
+      return info;
+    case BonusStatus.readyToReceive:
+      return success;
+    default:
+      return white;
   }
 }
