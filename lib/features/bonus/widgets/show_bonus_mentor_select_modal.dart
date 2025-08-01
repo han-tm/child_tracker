@@ -102,8 +102,8 @@ class _SelectBonusMentorContentState extends State<_SelectBonusMentorContent> {
                           });
                         },
                         isSelected: selectedMentor == null,
-                        name: 'all_kids'.tr(),
-                        placeholder: Image.asset('assets/images/all_kids.png'),
+                        name: 'allMentors'.tr(),
+                        placeholder: Image.asset('assets/images/mentors.png'),
                       ),
                       ...me.connections.map((e) {
                         return Padding(

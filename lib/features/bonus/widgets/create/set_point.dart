@@ -6,7 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 
 class CreateBonusSetPoint extends StatefulWidget {
-  const CreateBonusSetPoint({super.key});
+  final bool isKidBonus;
+  const CreateBonusSetPoint({super.key, required this.isKidBonus});
 
   @override
   State<CreateBonusSetPoint> createState() => _CreateBonusSetPointState();
@@ -20,6 +21,15 @@ class _CreateBonusSetPointState extends State<CreateBonusSetPoint> {
       ],
     ),
   });
+
+  @override
+  void initState() {
+    super.initState();
+    final oldPoint = context.read<CreateBonusCubit>().state.point;
+    if (oldPoint != null) {
+      form.value = {'point': oldPoint};
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +51,7 @@ class _CreateBonusSetPointState extends State<CreateBonusSetPoint> {
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 24),
                             child: MaskotMessage(
-                              message: 'name_the_task_prompt'.tr(),
+                              message: 'bonus_condition'.tr(),
                               maskot: '2186-min',
                               flip: true,
                             ),
@@ -51,8 +61,8 @@ class _CreateBonusSetPointState extends State<CreateBonusSetPoint> {
                             padding: const EdgeInsets.symmetric(horizontal: 24),
                             child: ReactiveCustomInput(
                               formName: 'point',
-                              label: 'title'.tr(),
-                              hint: 'enter_title_hint'.tr(),
+                              label: 'bonus_count'.tr(),
+                              hint: 'enter'.tr(),
                               inputType: TextInputType.number,
                               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                               textInputAction: TextInputAction.next,
@@ -80,11 +90,12 @@ class _CreateBonusSetPointState extends State<CreateBonusSetPoint> {
                                           formGroup.markAllAsTouched();
                                           if (valid) {
                                             final point = formGroup.control('point').value as int?;
-                                            if(point == null) return;
+                                            if (point == null) return;
                                             context.read<CreateBonusCubit>().onChangePoint(point);
+                                            FocusManager.instance.primaryFocus?.unfocus();
                                             if (state.isEditMode) {
                                               context.read<CreateBonusCubit>().onChangeMode(false);
-                                              context.read<CreateBonusCubit>().onJumpToPage(5);
+                                              context.read<CreateBonusCubit>().onJumpToPage(widget.isKidBonus ? 4 : 5);
                                             } else {
                                               context.read<CreateBonusCubit>().nextPage();
                                             }

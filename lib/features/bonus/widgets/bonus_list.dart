@@ -37,7 +37,7 @@ class BonusListWidget extends StatelessWidget {
             if (selectedChip == BonusChip.request) {
               result = bonusesCopy.where((bonus) => bonus.status == BonusStatus.needApprove).toList();
             } else if (selectedChip == BonusChip.active) {
-              result = bonusesCopy.where((bonus) => bonus.status == BonusStatus.active).toList();
+              result = bonusesCopy.where((bonus) => bonus.status == BonusStatus.active || bonus.status == BonusStatus.readyToReceive).toList();
             } else if (selectedChip == BonusChip.received) {
               result = bonusesCopy.where((bonus) => bonus.status == BonusStatus.received).toList();
             } else if (selectedChip == BonusChip.canceled) {
@@ -55,7 +55,7 @@ class BonusListWidget extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 24),
               itemCount: result.length,
               separatorBuilder: (context, index) => const SizedBox(height: 16),
-              itemBuilder: (context, index) => BonusCard(bonus: result[index]),
+              itemBuilder: (context, index) => BonusCard(bonus: result[index], me: me),
             );
           }),
         ),

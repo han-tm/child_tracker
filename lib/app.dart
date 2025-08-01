@@ -21,6 +21,7 @@ class App extends StatelessWidget {
         BlocProvider(create: (context) => sl<NewChatCubit>()),
         BlocProvider(create: (context) => sl<CurrentChatCubit>()),
         BlocProvider(create: (context) => sl<TaskCubit>()),
+        BlocProvider(create: (context) => sl<BonusCubit>()),
       ],
       child: BlocBuilder<LocaleCubit, Locale>(
         builder: (context, locale) {

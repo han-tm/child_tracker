@@ -5,7 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 
 class CreateBonusSetLink extends StatefulWidget {
-  const CreateBonusSetLink({super.key});
+  final bool isKidBonus;
+  const CreateBonusSetLink({super.key, required this.isKidBonus});
 
   @override
   State<CreateBonusSetLink> createState() => _CreateBonusSetLinkState();
@@ -13,8 +14,19 @@ class CreateBonusSetLink extends StatefulWidget {
 
 class _CreateBonusSetLinkState extends State<CreateBonusSetLink> {
   final form = FormGroup({
-    'link': FormControl<String>(),
+    'link': FormControl<String>(
+      validators: [
+        Validators.pattern(urlRegExp),
+      ],
+    ),
   });
+
+  @override
+  void initState() {
+    super.initState();
+    final oldLink = context.read<CreateBonusCubit>().state.link;
+    form.value = {'link': oldLink};
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,9 +48,9 @@ class _CreateBonusSetLinkState extends State<CreateBonusSetLink> {
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 24),
                             child: MaskotMessage(
-                              message: 'name_the_task_prompt'.tr(),
-                              maskot: '2186-min',
-                              flip: true,
+                              message: 'add_link'.tr(),
+                              maskot: '2185-min',
+                              flip: false,
                             ),
                           ),
                           const SizedBox(height: 40),
@@ -46,17 +58,21 @@ class _CreateBonusSetLinkState extends State<CreateBonusSetLink> {
                             padding: const EdgeInsets.symmetric(horizontal: 24),
                             child: ReactiveCustomInput(
                               formName: 'link',
-                              label: 'title'.tr(),
-                              hint: 'enter_title_hint'.tr(),
-                              inputType: TextInputType.text,
+                              label: 'link'.tr(),
+                              hint: 'put'.tr(),
+                              inputType: TextInputType.url,
                               textCapitalization: TextCapitalization.none,
                               maxLenght: 300,
+                              validationMessages: {
+                                'pattern': (error) => 'invalid_url'.tr(),
+                              },
                             ),
                           ),
                           const Spacer(),
                           ReactiveFormConsumer(
                             builder: (context, formGroup, child) {
-                              final valid = formGroup.valid;
+                              final link = formGroup.control('link').value as String?;
+                              final valid = link != null && link.isNotEmpty;
                               return Container(
                                 decoration: const BoxDecoration(border: Border(top: BorderSide(color: greyscale100))),
                                 child: Column(
@@ -71,6 +87,8 @@ class _CreateBonusSetLinkState extends State<CreateBonusSetLink> {
                                             child: FilledSecondaryAppButton(
                                               text: 'skip'.tr(),
                                               onTap: () {
+                                                context.read<CreateBonusCubit>().onChangeLink('');
+                                                FocusManager.instance.primaryFocus?.unfocus();
                                                 if (state.isEditMode) {
                                                   context.read<CreateBonusCubit>().onChangeMode(false);
                                                   context.read<CreateBonusCubit>().onJumpToPage(5);
@@ -88,11 +106,13 @@ class _CreateBonusSetLinkState extends State<CreateBonusSetLink> {
                                               onTap: () {
                                                 formGroup.markAllAsTouched();
                                                 if (valid) {
-                                                  final name = formGroup.control('name').value;
-                                                  context.read<CreateBonusCubit>().onChangeName(name);
+                                                  context.read<CreateBonusCubit>().onChangeLink(link);
+                                                  FocusManager.instance.primaryFocus?.unfocus();
                                                   if (state.isEditMode) {
                                                     context.read<CreateBonusCubit>().onChangeMode(false);
-                                                    context.read<CreateBonusCubit>().onJumpToPage(5);
+                                                    context
+                                                        .read<CreateBonusCubit>()
+                                                        .onJumpToPage(widget.isKidBonus ? 4 : 5);
                                                   } else {
                                                     context.read<CreateBonusCubit>().nextPage();
                                                   }

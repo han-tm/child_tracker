@@ -24,9 +24,9 @@ class _MentorMainScreenState extends State<MentorMainScreen> {
   void onTapTab(int index) async {
     switch (index) {
       case 0:
-        GoRouter.of(context).go('/mentor_bonus');
-      case 1:
         GoRouter.of(context).go('/mentor_task');
+      case 1:
+        GoRouter.of(context).go('/mentor_bonus');
       case 2:
         GoRouter.of(context).go('/mentor_chat');
       case 3:
@@ -37,10 +37,10 @@ class _MentorMainScreenState extends State<MentorMainScreen> {
   static int _calculateSelectedIndex(BuildContext context) {
     final String location = GoRouterState.of(context).uri.path;
     if (location.startsWith('/mentor_bonus')) {
-      return 0;
+      return 1;
     }
     if (location.startsWith('/mentor_task')) {
-      return 1;
+      return 0;
     }
     if (location.startsWith('/mentor_chat')) {
       return 2;
@@ -92,14 +92,14 @@ class _MentorMainScreenState extends State<MentorMainScreen> {
           iconSize: 24,
           items: [
             BottomNavigationBarItem(
-              activeIcon: SvgPicture.asset('assets/images/bonus_filled_tab.svg'),
-              icon: SvgPicture.asset('assets/images/bonus_tab.svg'),
-              label: 'bonuses'.tr(),
-            ),
-            BottomNavigationBarItem(
               activeIcon: SvgPicture.asset('assets/images/tracker_filled_tab.svg'),
               icon: SvgPicture.asset('assets/images/tracker_tab.svg'),
               label: 'tasks'.tr(),
+            ),
+            BottomNavigationBarItem(
+              activeIcon: SvgPicture.asset('assets/images/bonus_filled_tab.svg'),
+              icon: SvgPicture.asset('assets/images/bonus_tab.svg'),
+              label: 'bonuses'.tr(),
             ),
             BottomNavigationBarItem(
               activeIcon: SvgPicture.asset('assets/images/chat_filled_tab.svg'),

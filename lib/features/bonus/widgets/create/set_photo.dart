@@ -7,7 +7,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 
 class CreateBonusSetPhoto extends StatelessWidget {
-  const CreateBonusSetPhoto({super.key});
+  final bool isKidBonus;
+  const CreateBonusSetPhoto({super.key, required this.isKidBonus});
 
   void onPick(BuildContext context) async {
     final XFile? xfile = await CustomImagePicker.pickAvatarFromGallery(context);
@@ -79,7 +80,7 @@ class CreateBonusSetPhoto extends StatelessWidget {
                         if (valid) {
                           if (state.isEditMode) {
                             context.read<CreateBonusCubit>().onChangeMode(false);
-                            context.read<CreateBonusCubit>().onJumpToPage(5);
+                            context.read<CreateBonusCubit>().onJumpToPage(isKidBonus ? 4 : 5);
                           } else {
                             context.read<CreateBonusCubit>().nextPage();
                           }

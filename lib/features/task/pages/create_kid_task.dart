@@ -59,12 +59,12 @@ class CreateKidTaskScreen extends StatelessWidget {
                       controller: context.read<KidTaskCreateCubit>().pageController,
                       physics: const NeverScrollableScrollPhysics(),
                       children: const [
-                        CreateBonusSetPhoto(),
+                        KidCreateTaskSetPhoto(),
                         KidCreateTaskSetName(),
                         KidCreateTaskSetStartDate(),
                         KidCreateTaskSetEndDate(),
                         KidCreateTaskSetReminder(),
-                        CreateBonusPreview(),
+                        KidCreateTaskPreview(),
                       ],
                     ),
                   );

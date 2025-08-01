@@ -6,19 +6,27 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CreateBonusPreview extends StatelessWidget {
-  const CreateBonusPreview({super.key});
+  final UserModel me;
+  const CreateBonusPreview({super.key, required this.me});
 
   void onChangeMode(BuildContext context, int index) {
     context.read<CreateBonusCubit>().onChangeMode(true);
     context.read<CreateBonusCubit>().onJumpToPage(index);
   }
 
+  void onOpenLink(String link) async {
+    if (link.isEmpty) return;
+    await launchUrl(Uri.parse(link));
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CreateBonusCubit, CreateBonusState>(
       builder: (context, state) {
+        bool isKidBonus = me.isKid;
         return LayoutBuilder(
           builder: (context, constraints) {
             return SingleChildScrollView(
@@ -30,10 +38,10 @@ class CreateBonusPreview extends StatelessWidget {
                   child: IntrinsicHeight(
                     child: Column(
                       children: [
-                         Padding(
+                        Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 24),
                           child: MaskotMessage(
-                            message: 'check_task_details_prompt'.tr(),
+                            message: 'check_bonus_detail'.tr(),
                             maskot: '2177-min',
                             flip: true,
                           ),
@@ -61,14 +69,14 @@ class CreateBonusPreview extends StatelessWidget {
                                         height: 100,
                                         circularRadius: 300,
                                         emojiFontSize: 60,
-                                        onTap: () => onChangeMode(context, 0),
+                                        onTap: () => onChangeMode(context, 1),
                                         imageFile: state.photo != null ? File(state.photo!.path) : null,
                                         emoji: state.emoji,
                                       ),
                                       Align(
                                         alignment: Alignment.bottomRight,
                                         child: GestureDetector(
-                                          onTap: () => onChangeMode(context, 0),
+                                          onTap: () => onChangeMode(context, 1),
                                           child: SvgPicture.asset('assets/images/edit_blue_fill.svg'),
                                         ),
                                       ),
@@ -78,7 +86,8 @@ class CreateBonusPreview extends StatelessWidget {
                               ),
                               const SizedBox(height: 16),
                               GestureDetector(
-                                onTap: () => onChangeMode(context, 1),
+                                behavior: HitTestBehavior.translucent,
+                                onTap: () => onChangeMode(context, 2),
                                 child: Row(
                                   children: [
                                     const SizedBox(width: 24),
@@ -95,19 +104,145 @@ class CreateBonusPreview extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                              if (state.link != null)
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 10),
-                                  child: AppText(
-                                    text: state.link!.trim(),
-                                    fw: FontWeight.normal,
-                                    color: greyscale700,
-                                    maxLine: 3,
+                              const Divider(height: 40, thickness: 1, color: greyscale200),
+                              GestureDetector(
+                                behavior: HitTestBehavior.translucent,
+                                onTap: () {
+                                  if (isKidBonus) return;
+                                  onChangeMode(context, 0);
+                                },
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: AppText(
+                                        text: '${'child'.tr()} ${isKidBonus ? 'creator'.tr() : ''}',
+                                        size: 16,
+                                        fw: FontWeight.w500,
+                                        color: greyscale800,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 2),
+                                    AppText(
+                                      text: isKidBonus ? me.name : state.kid?.name ?? '-',
+                                      size: 16,
+                                      textAlign: TextAlign.end,
+                                    ),
+                                    const SizedBox(width: 2),
+                                    _leftArrow(),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(height: 16),
+                              GestureDetector(
+                                behavior: HitTestBehavior.translucent,
+                                onTap: () {
+                                  if (!isKidBonus) return;
+                                  onChangeMode(context, 0);
+                                },
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: AppText(
+                                        text: '${'roleSelectionMentor'.tr()} ${!isKidBonus ? 'creator'.tr() : ''}',
+                                        size: 16,
+                                        fw: FontWeight.w500,
+                                        color: greyscale800,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 2),
+                                    AppText(
+                                      text: !isKidBonus ? me.name : state.mentor?.name ?? '-',
+                                      size: 16,
+                                      textAlign: TextAlign.end,
+                                    ),
+                                    const SizedBox(width: 2),
+                                    _leftArrow(),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(height: 16),
+                              GestureDetector(
+                                behavior: HitTestBehavior.translucent,
+                                onTap: () => onChangeMode(context, 3),
+                                child: Row(
+                                  children: [
+                                    AppText(
+                                      text: 'link_opt'.tr(),
+                                      size: 16,
+                                      fw: FontWeight.w500,
+                                      color: greyscale800,
+                                    ),
+                                    const SizedBox(width: 2),
+                                    const Spacer(),
+                                    if (state.link != null && state.link!.isNotEmpty)
+                                      GestureDetector(
+                                        onTap: () => onOpenLink(state.link!),
+                                        child: Container(
+                                          height: 34,
+                                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(100),
+                                            border: Border.all(color: primary900, width: 1.5),
+                                          ),
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.end,
+                                            children: [
+                                              SvgPicture.asset(
+                                                'assets/images/link.svg',
+                                                width: 14,
+                                                height: 14,
+                                              ),
+                                              const SizedBox(width: 6),
+                                              AppText(
+                                                text: 'link'.tr(),
+                                                size: 14,
+                                                color: primary900,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    if (state.link == null || (state.link?.isEmpty ?? true)) const AppText(text: '-'),
+                                    const SizedBox(width: 2),
+                                    _leftArrow(),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(height: 16),
+                              if (!isKidBonus)
+                                GestureDetector(
+                                  behavior: HitTestBehavior.translucent,
+                                  onTap: () => onChangeMode(context, 4),
+                                  child: Row(
+                                    children: [
+                                      AppText(
+                                        text: 'execution_conditions'.tr(),
+                                        size: 16,
+                                        fw: FontWeight.w500,
+                                        color: greyscale800,
+                                      ),
+                                      const SizedBox(width: 2),
+                                      const Spacer(),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        children: [
+                                          SvgPicture.asset(
+                                            'assets/images/coin.svg',
+                                            width: 20,
+                                            height: 20,
+                                          ),
+                                          const SizedBox(width: 6),
+                                          AppText(
+                                            text: state.point?.toString() ?? '0',
+                                            size: 16,
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(width: 2),
+                                      _leftArrow(),
+                                    ],
                                   ),
                                 ),
-                              const Divider(height: 40, thickness: 1, color: greyscale200),
-                            
-                            
                             ],
                           ),
                         ),
@@ -122,7 +257,7 @@ class CreateBonusPreview extends StatelessWidget {
                               Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 24),
                                 child: FilledAppButton(
-                                  text: 'create'.tr(),
+                                  text: isKidBonus ? 'create_request_for_bonus'.tr() : 'create_bonus'.tr(),
                                   isLoading: state.status == CreateBonusStatus.loading,
                                   onTap: () {
                                     if (state.status == CreateBonusStatus.loading) return;

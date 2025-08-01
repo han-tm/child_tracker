@@ -489,6 +489,7 @@
     "whoToSeeBonus": "Whose bonuses shall we check?",
     "application_from_child": "Application from child",
     "link": "Link",
+    "link_opt": "Link (optional)",
     "approve_bonus": "Approve bonus",
     "reject_bonus": "Reject",
     "wait_for_execution": "Waiting for conditions to be fulfilled...",
@@ -515,6 +516,7 @@
     "want_receive_gift": "wants to receive a bonus",
     "tap_approve": "Well, do you like the bonus idea? Tap approve!",
     "who_will_get_bonus": "Who will have access to the new bonus?",
+    "who_will_get_bonus2": "Who do you want to receive a bonus from?",
     "bonus_name_message": "What shall we name the bonus?",
     "add_link": "If there's a link, we can add it :)",
     "bonus_condition": "Let's set the conditions to get the bonus!",
@@ -522,6 +524,11 @@
     "check_bonus_detail": "Shall we check the bonus details?",
     "bonus_created": "Bonus created!",
     "bonus_created_text": "Tap \"OK\" — and let the child be the first to know!",
+    "bonus_created_text2": "Жми \"Ок\" — and let the mentor be the first to know!",
     "no_children": "No children list",
-    "add_children": "Add child"
+    "add_children": "Add child",
+    "put": "Paste",
+    "invalid_url": "Invalid link",
+    "create_bonus": "Create bonus",
+    "create_request_for_bonus": "Create a bonus request"
 }

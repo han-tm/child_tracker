@@ -60,6 +60,7 @@ class BonusCubit extends Cubit<BonusState> {
     })
       ..onError(
         (_, e) {
+          print('error: {init}: ${e.toString()}');
           emit(state.copyWith(errorMessage: e.toString(), status: BonusStateStatus.error));
         },
       );

@@ -13,7 +13,6 @@ class FirebaseMessaginService {
   final UserCubit _userCubit;
   final cf.FirebaseFunctions _functions;
   final LocalNotificationService _localPush;
-  
 
   FirebaseMessaginService(
       {required FirebaseMessaging fcm,
@@ -157,7 +156,7 @@ class FirebaseMessaginService {
       }
     });
 
-    if(_userCubit.state?.isKid == true){
+    if (_userCubit.state?.isKid == true) {
       _localPush.setDailyDiaryReminder(_userCubit.state?.dairyNotification ?? true);
     }
   }
@@ -337,6 +336,46 @@ class FirebaseMessaginService {
       _callSendPushCallback(receiver.id, title, body, payload);
     } catch (e) {
       print('{sendPushToKidOnTaskCreated} error: $e');
+    }
+  }
+
+  //Пуш ребенку, когда ментор создает бонус
+  void sendPushToKidOnBonusCreated(DocumentReference kid, String bonusName, String bonusId) async {
+    final DocumentReference receiver = kid;
+
+    const String title = 'Новый бонус';
+    final String body = 'Наставник добавил тебе бонус: "$bonusName"';
+    final Map<String, dynamic> payload = {
+      "type": NotificationType.bonusCreated.name,
+      "bonus_id": bonusId,
+    };
+
+    try {
+      await _createSystemNotificationDoc(receiver, title, body, NotificationType.bonusCreated, payload);
+
+      _callSendPushCallback(receiver.id, title, body, payload);
+    } catch (e) {
+      print('{sendPushToKidOnBonusCreated} error: $e');
+    }
+  }
+
+  //Пуш ментору, когда ребенок создает бонус и ждет подтверждения
+  void sendPushToMentorOnBonusNeedApprove(DocumentReference mentor, String kidName, String bonusName, String bonusId) async {
+    final DocumentReference receiver = mentor;
+
+     String title = '$kidName создал новый бонус';
+    final String body = '$kidName ждёт подтверждения по бонусу: "$bonusName"';
+    final Map<String, dynamic> payload = {
+      "type": NotificationType.bonusNeedApprove.name,
+      "bonus_id": bonusId,
+    };
+
+    try {
+      await _createSystemNotificationDoc(receiver, title, body, NotificationType.bonusNeedApprove, payload);
+
+      _callSendPushCallback(receiver.id, title, body, payload);
+    } catch (e) {
+      print('{sendPushToMentorOnBonusNeedApprove} error: $e');
     }
   }
 

@@ -52,6 +52,8 @@ enum NotificationType {
   taskCreated,
   taskReview,
   coinChange,
+  bonusCreated,
+  bonusNeedApprove,
   other,
 }
 

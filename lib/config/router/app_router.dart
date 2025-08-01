@@ -85,9 +85,9 @@ String? getRouteForStatus(UserInitialStatus status) {
     case UserInitialStatus.fillProfileMentor:
       return '/auth/role';
     case UserInitialStatus.successKid:
-      return '/kid_bonus';
+      return '/kid_task';
     case UserInitialStatus.successMentor:
-      return '/mentor_bonus';
+      return '/mentor_task';
     case UserInitialStatus.banned:
       return '/banned';
     default:

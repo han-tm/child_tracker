@@ -19,9 +19,6 @@ class TaskCard extends StatelessWidget {
       onTap: () {
         final data = {'task': task, 'taskRef': task.ref};
         context.push('/task_detail', extra: data);
-
-        // final fcm = sl<FirebaseMessaginService>();
-        // fcm.sendPushToKidOnTaskCreated(task.kid!, task.name, task.id);
       },
       child: Container(
         width: double.infinity,
@@ -52,9 +49,10 @@ class TaskCard extends StatelessWidget {
                   height: 42,
                   emojiFontSize: 25,
                   emoji: isEmoji ? task.photo!.replaceAll('emoji:', '') : null,
-                  emojiWidget: SizedBox(
+                  emojiWidget: Container(
                     width: 42,
                     height: 42,
+                     color: greyscale100,
                     child: Center(
                       child: Text(
                         task.photo!.replaceAll('emoji:', ''),

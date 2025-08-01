@@ -31,7 +31,7 @@ class MentorBonusAppbarWidget extends StatelessWidget {
           ),
           Expanded(
             child: AppText(
-              text: 'tasks'.tr(),
+              text: 'bonuses'.tr(),
               size: 24,
               fw: FontWeight.bold,
               textAlign: TextAlign.center,

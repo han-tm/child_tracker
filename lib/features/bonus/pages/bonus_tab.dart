@@ -51,11 +51,7 @@ class _BonusTabScreenState extends State<BonusTabScreen> {
                 height: 56,
                 child: FloatingActionButton(
                   onPressed: () {
-                    if (me.isKid) {
-                      context.push('/kid_create_task');
-                    } else {
-                      context.push('/mentor_create_task');
-                    }
+                    context.push('/create_bonus');
                   },
                   elevation: 4,
                   backgroundColor: primary900,

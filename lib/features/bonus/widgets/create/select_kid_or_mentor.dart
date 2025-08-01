@@ -3,30 +3,30 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-
 class CreateBonusSelectKidOrMentor extends StatelessWidget {
-  const CreateBonusSelectKidOrMentor({super.key});
+  final UserModel me;
+  const CreateBonusSelectKidOrMentor({super.key, required this.me});
 
   @override
   Widget build(BuildContext context) {
+    bool isKidBonus = me.isKid;
     return BlocBuilder<CreateBonusCubit, CreateBonusState>(
       builder: (context, state) {
-        final valid = state.kid != null || state.mentor != null;
+        final valid = (isKidBonus ? state.mentor != null : state.kid != null);
         return Column(
           children: [
             Padding(
               padding: const EdgeInsets.only(left: 34, right: 24),
               child: MaskotMessage(
-                message: 'who_assign_task'.tr(),
+                message: isKidBonus ? 'who_will_get_bonus2'.tr() : 'who_will_get_bonus'.tr(),
                 maskot: '2186-min',
                 flip: true,
               ),
             ),
             const SizedBox(height: 40),
             Expanded(
-              child: BlocBuilder<UserCubit, UserModel?>(
-                builder: (context, me) {
-                  if (me == null) return const SizedBox();
+              child: Builder(
+                builder: (context) {
                   return SingleChildScrollView(
                     padding: const EdgeInsets.symmetric(horizontal: 24),
                     child: Column(
@@ -47,10 +47,14 @@ class CreateBonusSelectKidOrMentor extends StatelessWidget {
                                   }
                                   return UserSelector(
                                     onTap: () {
-                                      context.read<CreateBonusCubit>().onChangeKid(user);
+                                      if (isKidBonus) {
+                                        context.read<CreateBonusCubit>().onChangeMentor(user);
+                                      } else {
+                                        context.read<CreateBonusCubit>().onChangeKid(user);
+                                      }
                                     },
                                     image: user.photo,
-                                    isSelected: state.kid?.id == e.id,
+                                    isSelected: (isKidBonus ? state.mentor?.id : state.kid?.id) == e.id,
                                     name: user.name,
                                   );
                                 }),

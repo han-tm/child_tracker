@@ -13,12 +13,10 @@ class CreateBonusCubit extends Cubit<CreateBonusState> {
   final FirebaseFirestore _fs;
   final FirebaseMessaginService _fcm;
   final PageController pageController;
-  
 
   CreateBonusCubit({
     required UserCubit userCubit,
     required FirebaseMessaginService fcm,
-    
   })  : _userCubit = userCubit,
         _fs = FirebaseFirestore.instance,
         _fcm = fcm,
@@ -50,7 +48,7 @@ class CreateBonusCubit extends Cubit<CreateBonusState> {
   }
 
   void onChangeMentor(UserModel mentor) {
-    emit(state.copyWith(kid: mentor));
+    emit(state.copyWith(mentor: mentor));
   }
 
   void onChangeMode(bool editMode) {
@@ -80,7 +78,7 @@ class CreateBonusCubit extends Cubit<CreateBonusState> {
     }
 
     if (state.name == null ||
-        state.point == null ||
+        (state.point == null && !user.isKid) ||
         (state.photo == null && state.emoji == null) ||
         (state.kid == null && state.mentor == null)) {
       emit(state.copyWith(errorMessage: 'fillAllFields'.tr(), status: CreateBonusStatus.error));
@@ -97,7 +95,8 @@ class CreateBonusCubit extends Cubit<CreateBonusState> {
         'kid': (user.isKid) ? user.ref : state.kid!.ref,
         'mentor': (user.isKid) ? state.mentor!.ref : user.ref,
         'name': state.name,
-        'link': state.link,
+        'link': (state.link ?? '').trim().isEmpty ? null : state.link?.trim(),
+        'point': state.point,
         'created_at': DateTime.now(),
         'status': (user.isKid) ? BonusStatus.needApprove.name : BonusStatus.active.name,
       };
@@ -119,12 +118,24 @@ class CreateBonusCubit extends Cubit<CreateBonusState> {
 
       await newBonusRef.set(data);
 
-      //TODO
-      // _fcm.sendPushToKidOnCoinChanged(mentor, kid, amount)
+      if (user.isKid) {
+        _fcm.sendPushToMentorOnBonusNeedApprove(
+          state.mentor!.ref,
+          user.name,
+          state.name ?? '',
+          newBonusRef.id,
+        );
+      } else {
+        _fcm.sendPushToKidOnBonusCreated(
+          state.kid!.ref,
+          state.name ?? '',
+          newBonusRef.id,
+        );
+      }
 
       emit(state.copyWith(status: CreateBonusStatus.success));
     } catch (e) {
-      print('error {createTask}: $e');
+      print('error {createBonus}: $e');
       emit(state.copyWith(errorMessage: e.toString(), status: CreateBonusStatus.error));
     }
   }

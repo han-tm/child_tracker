@@ -1,4 +1,3 @@
-
 import 'package:child_tracker/index.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -30,14 +29,17 @@ class BonusEmptyWidget extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const SizedBox(height: 22),
-                Image.asset(
-                  'assets/images/2187-min.png',
-                  width: 160,
-                  height: 160,
-                  fit: BoxFit.contain,
+                const SizedBox(height: 32),
+                Transform.flip(
+                  flipX: true,
+                  child: Image.asset(
+                    'assets/images/2177-min.png',
+                    width: 140,
+                    height: 140,
+                    fit: BoxFit.contain,
+                  ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 16),
                 AppText(
                   text: 'lets_start'.tr(),
                   size: 24,
@@ -49,8 +51,9 @@ class BonusEmptyWidget extends StatelessWidget {
                   fw: FontWeight.normal,
                   textAlign: TextAlign.center,
                   color: greyscale700,
-                  maxLine: 2,
+                  maxLine: 10,
                 ),
+                const SizedBox(height: 32),
               ],
             ),
           ),

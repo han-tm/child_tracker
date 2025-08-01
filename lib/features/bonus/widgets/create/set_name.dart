@@ -5,7 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 
 class CreateBonusSetName extends StatefulWidget {
-  const CreateBonusSetName({super.key});
+  final bool isKidBonus;
+  const CreateBonusSetName({super.key, required this.isKidBonus});
 
   @override
   State<CreateBonusSetName> createState() => _CreateBonusSetNameState();
@@ -21,6 +22,13 @@ class _CreateBonusSetNameState extends State<CreateBonusSetName> {
       ],
     ),
   });
+
+  @override
+  void initState() {
+    super.initState();
+    final oldName = context.read<CreateBonusCubit>().state.name;
+    form.value = {'name': oldName};
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,11 +91,13 @@ class _CreateBonusSetNameState extends State<CreateBonusSetName> {
                                         onTap: () {
                                           formGroup.markAllAsTouched();
                                           if (valid) {
-                                            final name = formGroup.control('name').value;
-                                            context.read<CreateBonusCubit>().onChangeName(name);
+                                            final name = formGroup.control('name').value as String?;
+                                            if(name == null || name.isEmpty) return;
+                                            context.read<CreateBonusCubit>().onChangeName(name.trim());
+                                            FocusManager.instance.primaryFocus?.unfocus();
                                             if (state.isEditMode) {
                                               context.read<CreateBonusCubit>().onChangeMode(false);
-                                              context.read<CreateBonusCubit>().onJumpToPage(5);
+                                              context.read<CreateBonusCubit>().onJumpToPage(widget.isKidBonus ? 4 : 5);
                                             } else {
                                               context.read<CreateBonusCubit>().nextPage();
                                             }
