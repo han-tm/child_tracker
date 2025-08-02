@@ -1,11 +1,8 @@
-import 'package:child_tracker/index.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class CurrentChatCubit extends Cubit<ChatModel?> {
+class CurrentChatCubit extends Cubit<String?> {
   CurrentChatCubit() : super(null);
 
-  void setChat(ChatModel newChat) => emit(newChat);
+  void setChat(String id) => emit(id);
   void clearChat() => emit(null);
 }
-

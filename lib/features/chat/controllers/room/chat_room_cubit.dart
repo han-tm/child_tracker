@@ -12,9 +12,14 @@ class ChatCubit extends Cubit<ChatRoomState> {
   final FirebaseFirestore _fs = FirebaseFirestore.instance;
   final String chatId;
   final DocumentReference sender;
+  final FirebaseMessaginService _fcm;
 
-  ChatCubit({required this.chatId, required this.sender})
-      : assert(chatId.isNotEmpty),
+  ChatCubit({
+    required this.chatId,
+    required this.sender,
+    required FirebaseMessaginService fcm,
+  })  : assert(chatId.isNotEmpty),
+        _fcm = fcm,
         super(const ChatRoomState());
   StreamSubscription<DocumentSnapshot>? _chatSubscription;
 
@@ -70,6 +75,8 @@ class ChatCubit extends Cubit<ChatRoomState> {
         });
       });
 
+      _sendPushNotification(state.chat!, message);
+
       emit(state.copyWith(status: ChatRoomStatus.messageSent));
     } catch (e) {
       print('Error sending message: $e');
@@ -110,6 +117,21 @@ class ChatCubit extends Cubit<ChatRoomState> {
         }).toList();
       },
     );
+  }
+
+  void _sendPushNotification(ChatModel chat, String message) {
+    if (chat.type == ChatType.support) return;
+
+    final notificationSetting = chat.notification;
+
+    final members = chat.members.where((member) => member.id != sender.id).toList();
+    if (members.isEmpty) return;
+
+    for (final member in members) {
+      if (notificationSetting[member.id] == true) {
+        _fcm.sendPushToChatMember(member, message, chat.id);
+      }
+    }
   }
 
   @override

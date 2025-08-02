@@ -13,17 +13,20 @@ class FirebaseMessaginService {
   final UserCubit _userCubit;
   final cf.FirebaseFunctions _functions;
   final LocalNotificationService _localPush;
+  final CurrentChatCubit _currentChatCubit;
 
-  FirebaseMessaginService(
-      {required FirebaseMessaging fcm,
-      required FirebaseFirestore fs,
-      required UserCubit appUserCubit,
-      required cf.FirebaseFunctions functions,
-      required LocalNotificationService localNotificationService})
-      : _fs = fs,
+  FirebaseMessaginService({
+    required FirebaseMessaging fcm,
+    required FirebaseFirestore fs,
+    required UserCubit appUserCubit,
+    required cf.FirebaseFunctions functions,
+    required LocalNotificationService localNotificationService,
+    required CurrentChatCubit currentChatCubit,
+  })  : _fs = fs,
         _fcm = fcm,
         _localPush = localNotificationService,
         _userCubit = appUserCubit,
+        _currentChatCubit = currentChatCubit,
         _functions = functions;
 
   List<String> receivedNotificationIds = [];
@@ -82,9 +85,21 @@ class FirebaseMessaginService {
             }
           } else if (type == NotificationType.coinChange) {
             context.push('/kid_coins', extra: _userCubit.state);
+          } else if (type == NotificationType.chat) {
+            final String? chatId = notificationData['chat_id'];
+            if (chatId == null) return;
+            final chatRef = _fs.collection('chats').doc(chatId);
+            context.push('/chat_room', extra: chatRef);
+            return;
           } else {
             return;
           }
+        }
+
+        if (type == NotificationType.chat) {
+          final String? chatId = notificationData['chat_id'];
+          if (chatId == null) return;
+          if (_currentChatCubit.state == chatId) return;
         }
 
         SnackBarSerive.showSnackBarOnReceivePushNotification(
@@ -139,6 +154,12 @@ class FirebaseMessaginService {
             }
           } else if (type == NotificationType.coinChange) {
             context.push('/kid_coins', extra: _userCubit.state);
+          } else if (type == NotificationType.chat) {
+            final String? chatId = notificationData['chat_id'];
+            if (chatId == null) return;
+            final chatRef = _fs.collection('chats').doc(chatId);
+            context.push('/chat_room', extra: chatRef);
+            return;
           } else {
             return;
           }
@@ -188,6 +209,12 @@ class FirebaseMessaginService {
           }
         } else if (type == NotificationType.coinChange) {
           context.push('/kid_coins', extra: _userCubit.state);
+        } else if (type == NotificationType.chat) {
+          final String? chatId = notificationData['chat_id'];
+          if (chatId == null) return;
+          final chatRef = _fs.collection('chats').doc(chatId);
+          context.push('/chat_room', extra: chatRef);
+          return;
         } else {
           return;
         }
@@ -522,6 +549,22 @@ class FirebaseMessaginService {
       _callSendPushCallback(receiver.id, title, body, payload);
     } catch (e) {
       print('{sendPushToMentorOnBonusRequested} error: $e');
+    }
+  }
+
+  //Пуш для чата
+  void sendPushToChatMember(DocumentReference receiver, String message, String chatId) async {
+    const String title = 'Новое сообщение в чате';
+    final String body = message;
+    final Map<String, dynamic> payload = {
+      "type": NotificationType.chat.name,
+      "chat_id": chatId,
+    };
+
+    try {
+      _callSendPushCallback(receiver.id, title, body, payload);
+    } catch (e) {
+      print('{sendPushToChatMember} error: $e');
     }
   }
 

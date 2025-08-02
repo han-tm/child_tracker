@@ -59,6 +59,7 @@ enum NotificationType {
   bonusApproved,
   bonusRequested,
   bonusRequestApproved,
+  chat,
   other,
 }
 
@@ -95,6 +96,8 @@ NotificationType notificationTypeFromString(String? typeString) {
       return NotificationType.bonusRequested;
     case 'bonusRequestApproved':
       return NotificationType.bonusRequestApproved;
+    case 'chat':
+      return NotificationType.chat;
     default:
       return NotificationType.other;
   }

@@ -25,13 +25,14 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
   void initState() {
     senderRef = sl<UserCubit>().state?.ref;
     super.initState();
+    context.read<CurrentChatCubit>().setChat(widget.chatRef.id);
   }
 
   @override
   Widget build(BuildContext context) {
     if (senderRef == null) return const Center(child: CircularProgressIndicator());
     return BlocProvider(
-      create: (_) => ChatCubit(chatId: widget.chatRef.id, sender: senderRef!)..getCurrentChat(),
+      create: (_) => ChatCubit(fcm: sl(), chatId: widget.chatRef.id, sender: senderRef!)..getCurrentChat(),
       child: BlocConsumer<ChatCubit, ChatRoomState>(
         listener: (context, state) {
           if (state.status == ChatRoomStatus.messageSentError || state.status == ChatRoomStatus.error) {
@@ -70,7 +71,10 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
               leadingWidth: 70,
               leading: IconButton(
                 icon: const Icon(CupertinoIcons.arrow_left),
-                onPressed: () => context.pop(),
+                onPressed: () {
+                  context.read<CurrentChatCubit>().clearChat();
+                  context.pop();
+                },
               ),
               title: AppText(
                 text: chat.type == ChatType.support
@@ -84,7 +88,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
               centerTitle: true,
               actions: chat.type == ChatType.support
                   ? []
-                  :  [
+                  : [
                       Padding(
                         padding: const EdgeInsets.only(right: 12),
                         child: IconButton(

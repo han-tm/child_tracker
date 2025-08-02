@@ -30,6 +30,7 @@ Future<void> initializeDependencies() async {
         fs: fs,
         fcm: fcm,
         functions: ff,
+        currentChatCubit: sl(),
         localNotificationService: localNotificationService,
       ));
 
