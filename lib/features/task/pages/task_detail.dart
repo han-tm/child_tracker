@@ -146,7 +146,12 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
         .read<TaskCubit>()
         .state
         .tasks
-        .where((e) => e.type == TaskType.priority && task.kid?.id == e.kid?.id)
+        .where((e) =>
+            e.type == TaskType.priority &&
+            task.kid?.id == e.kid?.id &&
+            (e.status == TaskStatus.inProgress ||
+                e.status == TaskStatus.needsRework ||
+                e.status == TaskStatus.onReview))
         .toList();
 
     print(tasks.length);
