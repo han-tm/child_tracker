@@ -96,6 +96,11 @@ class BonusCubit extends Cubit<BonusState> {
         'cancel_reason': reason,
       });
 
+      if (_userCubit.state?.isKid == false) {
+        //mentor owner cancel bonus
+        _fcm.sendPushToKidOnBonusCanceled(bonus.kid!, bonus.name, bonus.id);
+      }
+
       emit(state.copyWith(status: BonusStateStatus.cancelSuccess));
     } catch (e) {
       print('error: {cancelBonus}: ${e.toString()}');
@@ -111,6 +116,117 @@ class BonusCubit extends Cubit<BonusState> {
     } catch (e) {
       print('error: {deleteBonus}: ${e.toString()}');
       return false;
+    }
+  }
+
+  void requestBonusByKid(BonusModel bonus) async {
+    emit(state.copyWith(status: BonusStateStatus.requestingReceive));
+    try {
+      await bonus.ref.update({
+        'status': BonusStatus.readyToReceive.name,
+      });
+
+      int bonusPoint = bonus.point ?? 0;
+      await _userCubit.onChangePoint(-bonusPoint);
+
+      final ref = CoinChangeModel.collection.doc();
+
+      final doc = {
+        'kid': bonus.kid,
+        'mentor': bonus.mentor,
+        'created_at': FieldValue.serverTimestamp(),
+        'coin': -bonusPoint,
+        'name': 'Покупка бонуса "${bonus.name}"',
+      };
+
+      await ref.set(doc);
+
+      emit(state.copyWith(status: BonusStateStatus.requestReceiveSuccess));
+
+      if (_userCubit.state?.isKid == true) {
+        //kid request bonus
+        _fcm.sendPushToMentorOnBonusRequested(bonus.mentor!, _userCubit.state?.name ?? '-', bonus.name, bonus.id);
+      }
+    } catch (e) {
+      print('error: {requestBonusByKid}: ${e.toString()}');
+      emit(state.copyWith(status: BonusStateStatus.requestReceiveError, errorMessage: e.toString()));
+    }
+  }
+
+  void rejectBonus(BonusModel bonus, String? reason) async {
+    emit(state.copyWith(status: BonusStateStatus.rejecting));
+    try {
+      await bonus.ref.update({
+        'status': BonusStatus.rejected.name,
+        'cancel_reason': reason,
+      });
+
+      if (_userCubit.state?.isKid == false) {
+        //mentor owner reject bonus
+        _fcm.sendPushToKidOnBonusRejected(bonus.kid!, bonus.name, bonus.id);
+      }
+
+      emit(state.copyWith(status: BonusStateStatus.rejectSuccess));
+    } catch (e) {
+      print('error: {rejectBonus}: ${e.toString()}');
+      emit(state.copyWith(status: BonusStateStatus.rejectError, errorMessage: e.toString()));
+    }
+  }
+
+  void rejectRequest(BonusModel bonus, String? reason) async {
+    emit(state.copyWith(status: BonusStateStatus.rejecting));
+    try {
+      await bonus.ref.update({
+        'status': BonusStatus.rejected.name,
+        'cancel_reason': reason,
+      });
+
+      int bonusPoint = bonus.point ?? 0;
+      await _userCubit.onChangePoint(bonusPoint);
+
+      emit(state.copyWith(status: BonusStateStatus.rejectSuccess));
+    } catch (e) {
+      print('error: {rejectRequest}: ${e.toString()}');
+      emit(state.copyWith(status: BonusStateStatus.rejectError, errorMessage: e.toString()));
+    }
+  }
+
+  void approveBonus(BonusModel bonus, int point) async {
+    emit(state.copyWith(status: BonusStateStatus.approving));
+    try {
+      await bonus.ref.update({
+        'status': BonusStatus.active.name,
+        'point': point,
+      });
+
+      if (_userCubit.state?.isKid == false) {
+        //mentor owner approve bonus
+        _fcm.sendPushToKidOnBonusApproved(bonus.kid!, bonus.name, bonus.id);
+      }
+
+      emit(state.copyWith(status: BonusStateStatus.approveSuccess));
+    } catch (e) {
+      print('error: {approveBonus}: ${e.toString()}');
+      emit(state.copyWith(status: BonusStateStatus.approveError, errorMessage: e.toString()));
+    }
+  }
+
+  void approveRequest(BonusModel bonus) async {
+    emit(state.copyWith(status: BonusStateStatus.requestApproving));
+    try {
+      await bonus.ref.update({
+        'status': BonusStatus.received.name,
+      });
+
+      if (_userCubit.state?.isKid == false) {
+        //mentor owner approve bonus request
+        _fcm.sendPushToKidOnBonusRequestApproved(bonus.kid!, bonus.name, bonus.id);
+      }
+
+      emit(state.copyWith(status: BonusStateStatus.requestApproveSuccess));
+    } catch (e) {
+      print('error: {approveRequest}: ${e.toString()}');
+      emit(state.copyWith(status: BonusStateStatus.requestApproveError, errorMessage: e.toString()));
     }
   }
 

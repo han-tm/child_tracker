@@ -66,6 +66,20 @@ class FirebaseMessaginService {
             if (context.mounted) {
               context.push('/task_detail', extra: data);
             }
+          } else if (type == NotificationType.bonusCreated ||
+              type == NotificationType.bonusNeedApprove ||
+              type == NotificationType.bonusCanceled ||
+              type == NotificationType.bonusRejected ||
+              type == NotificationType.bonusApproved ||
+              type == NotificationType.bonusRequested ||
+              type == NotificationType.bonusRequestApproved) {
+            final String? bonusId = notificationData['bonus_id'];
+            if (bonusId == null) return;
+            final bonusRef = _fs.collection('bonuses').doc(bonusId);
+            final data = {'bonus': null, 'bonusRef': bonusRef};
+            if (context.mounted) {
+              context.push('/bonus_detail', extra: data);
+            }
           } else if (type == NotificationType.coinChange) {
             context.push('/kid_coins', extra: _userCubit.state);
           } else {
@@ -109,6 +123,20 @@ class FirebaseMessaginService {
             if (context.mounted) {
               context.push('/task_detail', extra: data);
             }
+          } else if (type == NotificationType.bonusCreated ||
+              type == NotificationType.bonusNeedApprove ||
+              type == NotificationType.bonusCanceled ||
+              type == NotificationType.bonusRejected ||
+              type == NotificationType.bonusApproved ||
+              type == NotificationType.bonusRequested ||
+              type == NotificationType.bonusRequestApproved) {
+            final String? bonusId = notificationData['bonus_id'];
+            if (bonusId == null) return;
+            final bonusRef = _fs.collection('bonuses').doc(bonusId);
+            final data = {'bonus': null, 'bonusRef': bonusRef};
+            if (context.mounted) {
+              context.push('/bonus_detail', extra: data);
+            }
           } else if (type == NotificationType.coinChange) {
             context.push('/kid_coins', extra: _userCubit.state);
           } else {
@@ -143,6 +171,20 @@ class FirebaseMessaginService {
           final data = {'task': null, 'taskRef': taskRef};
           if (context.mounted) {
             context.push('/task_detail', extra: data);
+          }
+        } else if (type == NotificationType.bonusCreated ||
+            type == NotificationType.bonusNeedApprove ||
+            type == NotificationType.bonusCanceled ||
+            type == NotificationType.bonusRejected ||
+            type == NotificationType.bonusApproved ||
+            type == NotificationType.bonusRequested ||
+            type == NotificationType.bonusRequestApproved) {
+          final String? bonusId = notificationData['bonus_id'];
+          if (bonusId == null) return;
+          final bonusRef = _fs.collection('bonuses').doc(bonusId);
+          final data = {'bonus': null, 'bonusRef': bonusRef};
+          if (context.mounted) {
+            context.push('/bonus_detail', extra: data);
           }
         } else if (type == NotificationType.coinChange) {
           context.push('/kid_coins', extra: _userCubit.state);
@@ -339,12 +381,14 @@ class FirebaseMessaginService {
     }
   }
 
+  /////////////////Bonuses
+
   //Пуш ребенку, когда ментор создает бонус
   void sendPushToKidOnBonusCreated(DocumentReference kid, String bonusName, String bonusId) async {
     final DocumentReference receiver = kid;
 
     const String title = 'Новый бонус';
-    final String body = 'Наставник добавил тебе бонус: "$bonusName"';
+    final String body = 'Появился новый бонус: "$bonusName"\nУспей накопить баллы!';
     final Map<String, dynamic> payload = {
       "type": NotificationType.bonusCreated.name,
       "bonus_id": bonusId,
@@ -360,10 +404,11 @@ class FirebaseMessaginService {
   }
 
   //Пуш ментору, когда ребенок создает бонус и ждет подтверждения
-  void sendPushToMentorOnBonusNeedApprove(DocumentReference mentor, String kidName, String bonusName, String bonusId) async {
+  void sendPushToMentorOnBonusNeedApprove(
+      DocumentReference mentor, String kidName, String bonusName, String bonusId) async {
     final DocumentReference receiver = mentor;
 
-     String title = '$kidName создал новый бонус';
+    String title = '$kidName создал новый бонус';
     final String body = '$kidName ждёт подтверждения по бонусу: "$bonusName"';
     final Map<String, dynamic> payload = {
       "type": NotificationType.bonusNeedApprove.name,
@@ -376,6 +421,107 @@ class FirebaseMessaginService {
       _callSendPushCallback(receiver.id, title, body, payload);
     } catch (e) {
       print('{sendPushToMentorOnBonusNeedApprove} error: $e');
+    }
+  }
+
+  //Пуш ребенку, когда ментор отменил бонус
+  void sendPushToKidOnBonusCanceled(DocumentReference kid, String bonusName, String bonusId) async {
+    final DocumentReference receiver = kid;
+
+    const String title = 'Бонус отменён';
+    final String body = 'Бонус "$bonusName" отменён';
+    final Map<String, dynamic> payload = {
+      "type": NotificationType.bonusCanceled.name,
+      "bonus_id": bonusId,
+    };
+
+    try {
+      await _createSystemNotificationDoc(receiver, title, body, NotificationType.bonusCanceled, payload);
+
+      _callSendPushCallback(receiver.id, title, body, payload);
+    } catch (e) {
+      print('{sendPushToKidOnBonusCanceled} error: $e');
+    }
+  }
+
+  //Пуш ребенку, когда ментор отклонил бонус
+  void sendPushToKidOnBonusRejected(DocumentReference kid, String bonusName, String bonusId) async {
+    final DocumentReference receiver = kid;
+
+    const String title = 'Бонус отклонён';
+    final String body = 'Запрос на бонус "$bonusName" отклонён. Попробуй позже или выбери другой бонус';
+    final Map<String, dynamic> payload = {
+      "type": NotificationType.bonusRejected.name,
+      "bonus_id": bonusId,
+    };
+
+    try {
+      await _createSystemNotificationDoc(receiver, title, body, NotificationType.bonusRejected, payload);
+
+      _callSendPushCallback(receiver.id, title, body, payload);
+    } catch (e) {
+      print('{sendPushToKidOnBonusRejected} error: $e');
+    }
+  }
+
+  //Пуш ребенку, когда ментор принял бонус
+  void sendPushToKidOnBonusApproved(DocumentReference kid, String bonusName, String bonusId) async {
+    final DocumentReference receiver = kid;
+
+    const String title = 'Бонус подтверждён';
+    final String body = 'Ура! Твой бонус "$bonusName" одобрен!';
+    final Map<String, dynamic> payload = {
+      "type": NotificationType.bonusApproved.name,
+      "bonus_id": bonusId,
+    };
+
+    try {
+      await _createSystemNotificationDoc(receiver, title, body, NotificationType.bonusApproved, payload);
+
+      _callSendPushCallback(receiver.id, title, body, payload);
+    } catch (e) {
+      print('{sendPushToKidOnBonusApproved} error: $e');
+    }
+  }
+
+  //Пуш ребенку, когда ментор подтвердил получения
+  void sendPushToKidOnBonusRequestApproved(DocumentReference kid, String bonusName, String bonusId) async {
+    final DocumentReference receiver = kid;
+
+    const String title = 'Бонус получён!';
+    final String body = 'Ура! Ты получил бонус: "$bonusName"';
+    final Map<String, dynamic> payload = {
+      "type": NotificationType.bonusRequestApproved.name,
+      "bonus_id": bonusId,
+    };
+
+    try {
+      await _createSystemNotificationDoc(receiver, title, body, NotificationType.bonusRequestApproved, payload);
+
+      _callSendPushCallback(receiver.id, title, body, payload);
+    } catch (e) {
+      print('{sendPushToKidOnBonusRequestApproved} error: $e');
+    }
+  }
+
+  //Пуш ментору, когда ребенок попросил получить бонус
+  void sendPushToMentorOnBonusRequested(
+      DocumentReference mentor, String kidName, String bonusName, String bonusId) async {
+    final DocumentReference receiver = mentor;
+
+    const String title = 'Подтвердите получение бонуса';
+    final String body = '$kidName попросил бонус: "$bonusName"';
+    final Map<String, dynamic> payload = {
+      "type": NotificationType.bonusRequested.name,
+      "bonus_id": bonusId,
+    };
+
+    try {
+      await _createSystemNotificationDoc(receiver, title, body, NotificationType.bonusRequested, payload);
+
+      _callSendPushCallback(receiver.id, title, body, payload);
+    } catch (e) {
+      print('{sendPushToMentorOnBonusRequested} error: $e');
     }
   }
 

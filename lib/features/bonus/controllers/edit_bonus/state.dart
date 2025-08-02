@@ -5,7 +5,6 @@ enum EditBonusStatus { initial, loading, success, error }
 class EditBonusState extends Equatable {
   final String? errorMessage;
   final EditBonusStatus status;
-  final bool isEditMode;
   final String? name;
   final String? link;
   final String? emoji;
@@ -14,12 +13,10 @@ class EditBonusState extends Equatable {
   final UserModel? kid;
   final UserModel? mentor;
   final int? point;
-  final int step;
 
   const EditBonusState({
     this.errorMessage,
     this.status = EditBonusStatus.initial,
-    this.isEditMode = false,
     this.name,
     this.link,
     this.emoji,
@@ -28,13 +25,11 @@ class EditBonusState extends Equatable {
     this.kid,
     this.mentor,
     this.point,
-    this.step = 0,
   });
 
   EditBonusState copyWith({
     String? errorMessage,
     EditBonusStatus? status,
-    bool? isEditMode,
     String? name,
     String? link,
     String? emoji,
@@ -43,12 +38,10 @@ class EditBonusState extends Equatable {
     UserModel? kid,
     UserModel? mentor,
     int? point,
-    int? step,
   }) {
     return EditBonusState(
       errorMessage: errorMessage ?? this.errorMessage,
       status: status ?? this.status,
-      isEditMode: isEditMode ?? this.isEditMode,
       name: name ?? this.name,
       link: link ?? this.link,
       photo: photo == null
@@ -65,7 +58,6 @@ class EditBonusState extends Equatable {
       kid: kid ?? this.kid,
       mentor: mentor ?? this.mentor,
       point: point ?? this.point,
-      step: step ?? this.step,
     );
   }
 
@@ -73,7 +65,6 @@ class EditBonusState extends Equatable {
   List<Object?> get props => [
         errorMessage,
         status,
-        isEditMode,
         name,
         link,
         emoji,
@@ -81,7 +72,6 @@ class EditBonusState extends Equatable {
         kid,
         mentor,
         point,
-        step,
       ];
 
   EditBonusState reset() => const EditBonusState();

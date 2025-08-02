@@ -14,20 +14,16 @@ class CreateBonusSuccessScreen extends StatefulWidget {
 
 class _CreateBonusSuccessScreenState extends State<CreateBonusSuccessScreen> with AutomaticKeepAliveClientMixin {
   late ConfettiController _controllerTopCenter;
-  late final SoundPlayerService _soundPlayer;
 
   @override
   void initState() {
     super.initState();
     _controllerTopCenter = ConfettiController(duration: const Duration(seconds: 5));
     _controllerTopCenter.play();
-    _soundPlayer = sl<SoundPlayerService>();
-    _soundPlayer.playWinGame();
   }
 
   @override
   void dispose() {
-    _soundPlayer.dispose();
     _controllerTopCenter.dispose();
     super.dispose();
   }

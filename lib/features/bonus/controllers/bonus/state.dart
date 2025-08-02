@@ -8,6 +8,22 @@ enum BonusStateStatus {
   canceling,
   cancelError,
   cancelSuccess,
+
+  requestingReceive,
+  requestReceiveError,
+  requestReceiveSuccess,
+
+  rejecting,
+  rejectError,
+  rejectSuccess,
+
+  approving,
+  approveError,
+  approveSuccess,
+
+  requestApproving,
+  requestApproveError,
+  requestApproveSuccess,
 }
 
 class BonusState extends Equatable {

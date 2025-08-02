@@ -530,5 +530,16 @@
     "put": "Вставить",
     "invalid_url": "Некорректная ссылка",
     "create_bonus": "Создать бонус",
-    "create_request_for_bonus": "Создать заявку на бонус"
+    "create_request_for_bonus": "Создать заявку на бонус",
+    "failed_to_delete_bonus": "Не удалось удалить бонус",
+    "request_bonus_btn": "Запросить бонус",
+    "request_bonus_by_kid": "Запросить получение бонуса",
+    "request_bonus_by_kid_text": "Ты можешь запросить бонус. За него спишется {}",
+    "cant_request_bonus_by_kid": "Невозможно запросить бонус",
+    "cant_request_bonus_by_kid_text": "Недостаточно баллов для бонуса... Нужно накопить {}",
+    "request_bonus_by_kid_sent": "Запрос на получение бонуса отправлен!",
+    "request_bonus_by_kid_sent_text1": "Жди получения бонуса",
+    "wait_for_approve": "Ждём утверждения",
+    "yesConfirm2": "Да, утвердить",
+    "bonus_updated": "Бонус обновлен!"
 }

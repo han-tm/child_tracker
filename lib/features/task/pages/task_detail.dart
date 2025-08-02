@@ -84,7 +84,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
   void onDelete() async {
     final confrim = await showConfirmModalBottomSheet(
       context,
-      title: 'cancel'.tr(),
+      title: 'delete'.tr(),
       isDestructive: true,
       cancelText: 'cancel'.tr(),
       confirmText: 'yes_delete'.tr(),
@@ -296,11 +296,13 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                                       Row(
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
-                                          AppText(
-                                            text: task.name,
-                                            size: 24,
-                                            fw: FontWeight.bold,
-                                            textAlign: TextAlign.center,
+                                          Expanded(
+                                            child: AppText(
+                                              text: task.name,
+                                              size: 24,
+                                              fw: FontWeight.bold,
+                                              textAlign: TextAlign.center,
+                                            ),
                                           ),
                                         ],
                                       ),

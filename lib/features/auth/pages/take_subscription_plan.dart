@@ -211,7 +211,7 @@ class _TakeSubscriptionPlanScreenState extends State<TakeSubscriptionPlanScreen>
                         text: 'startUsingButton'.tr(),
                         onTap: () {
                           context.read<FillDataCubit>().reset();
-                          context.go('/mentor_bonus');
+                          context.go('/mentor_task');
                         },
                       ),
                     ),

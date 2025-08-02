@@ -54,6 +54,11 @@ enum NotificationType {
   coinChange,
   bonusCreated,
   bonusNeedApprove,
+  bonusCanceled,
+  bonusRejected,
+  bonusApproved,
+  bonusRequested,
+  bonusRequestApproved,
   other,
 }
 
@@ -76,6 +81,20 @@ NotificationType notificationTypeFromString(String? typeString) {
       return NotificationType.taskReview;
     case 'coinChange':
       return NotificationType.coinChange;
+    case 'bonusCreated':
+      return NotificationType.bonusCreated;
+    case 'bonusNeedApprove':
+      return NotificationType.bonusNeedApprove;
+    case 'bonusCanceled':
+      return NotificationType.bonusCanceled;
+    case 'bonusRejected':
+      return NotificationType.bonusRejected;
+    case 'bonusApproved':
+      return NotificationType.bonusApproved;
+    case 'bonusRequested':
+      return NotificationType.bonusRequested;
+    case 'bonusRequestApproved':
+      return NotificationType.bonusRequestApproved;
     default:
       return NotificationType.other;
   }
@@ -233,5 +252,44 @@ Color bonusCardStatusColor(BonusStatus? status) {
       return success;
     default:
       return white;
+  }
+}
+
+Color bonusCardColor(BonusStatus? status) {
+  switch (status) {
+    case BonusStatus.needApprove:
+      return cyan;
+    case BonusStatus.active:
+    case BonusStatus.readyToReceive:
+      return orange;
+    case BonusStatus.received:
+      return success;
+    case BonusStatus.canceled:
+    case BonusStatus.deleted:
+    case BonusStatus.rejected:
+      return error;
+    default:
+      return orange;
+  }
+}
+
+String bonusDetailCardStatusText(BonusStatus? status) {
+  switch (status) {
+    case BonusStatus.needApprove:
+      return 'application_from_child'.tr();
+    case BonusStatus.active:
+    case BonusStatus.readyToReceive:
+      return 'active'.tr();
+    case BonusStatus.received:
+      return 'received'.tr();
+    case BonusStatus.canceled:
+      return 'canceled_status'.tr();
+    case BonusStatus.deleted:
+      return 'delet_enum'.tr();
+    case BonusStatus.rejected:
+      return 'rejected_status'.tr();
+
+    default:
+      return '-';
   }
 }

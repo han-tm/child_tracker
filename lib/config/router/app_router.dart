@@ -186,12 +186,12 @@ final GoRouter router = GoRouter(
       builder: (context, state, child) => MentorMainScreen(state: state, child: child),
       routes: [
         GoRoute(
-          path: '/mentor_bonus',
-          builder: (context, state) => const BonusTabScreen(),
-        ),
-        GoRoute(
           path: '/mentor_task',
           builder: (context, state) => const TaskTabScreen(),
+        ),
+        GoRoute(
+          path: '/mentor_bonus',
+          builder: (context, state) => const BonusTabScreen(),
         ),
         GoRoute(
           path: '/mentor_chat',
@@ -578,9 +578,9 @@ final GoRouter router = GoRouter(
     ),
     ShellRoute(
       builder: (context, state, child) {
-        final task = state.extra as TaskModel;
+        final bonus = state.extra as BonusModel;
         return BlocProvider(
-          create: (context) => KidTaskEditCubit(userCubit: sl(), task: task)..init(),
+          create: (context) => EditBonusCubit(userCubit: sl(), bonus: bonus)..init(),
           child: child,
         );
       },
@@ -612,6 +612,51 @@ final GoRouter router = GoRouter(
           ],
         ),
       ],
+    ),
+    GoRoute(
+      path: '/bonus_cancel_reason',
+      builder: (context, state) {
+        final extra = state.extra as Map<String, dynamic>;
+        final bonus = extra['bonus'] as BonusModel;
+        final isCancel = extra['isCancel'] as bool? ?? false;
+        return BonusCancelReasonScreen(bonus: bonus, isCancel: isCancel);
+      },
+    ),
+    GoRoute(
+      path: '/approve_bonus_set_point',
+      builder: (context, state) => ApproveBonusSetPointScreen(bonus: state.extra as BonusModel),
+    ),
+    GoRoute(
+      path: '/bonus_delete_success',
+      builder: (context, state) => const DeleteBonusSuccessScreen(),
+    ),
+    GoRoute(
+      path: '/bonus_detail',
+      builder: (context, state) {
+        final extra = state.extra as Map<String, dynamic>;
+        final bonusRef = extra['bonusRef'] as DocumentReference;
+        final bonus = extra['bonus'] as BonusModel?;
+        return BonusDetailScreen(bonusRef: bonusRef, bonus: bonus);
+      },
+    ),
+    GoRoute(
+      path: '/bonus_request_success',
+      builder: (context, state) {
+        final extra = state.extra as Map<String, dynamic>;
+        final mentorRef = extra['mentorRef'] as DocumentReference;
+        final bonusName = extra['bonusName'] as String;
+        return RequestBonusSentSuccessScreen(bonusName: bonusName, mentorRef: mentorRef);
+      },
+    ),
+    GoRoute(
+      path: '/bonus_received_success',
+      builder: (context, state) {
+        final extra = state.extra as Map<String, dynamic>;
+        final mentorRef = extra['mentorRef'] as DocumentReference;
+        final kidRef = extra['kidRef'] as DocumentReference;
+        final bonusName = extra['bonusName'] as String;
+        return BonusReceivedSuccessScreen(bonusName: bonusName, mentorRef: mentorRef, kidRef: kidRef);
+      },
     ),
   ],
   errorBuilder: (context, state) => ErrorScreen(error: state.error.toString()),

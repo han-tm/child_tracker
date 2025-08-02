@@ -2,7 +2,6 @@ import 'package:child_tracker/index.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -10,20 +9,51 @@ part 'state.dart';
 
 class EditBonusCubit extends Cubit<EditBonusState> {
   final UserCubit _userCubit;
-  final FirebaseFirestore _fs;
-  final FirebaseMessaginService _fcm;
-  final PageController pageController;
-  
+
+  final BonusModel _bonus;
 
   EditBonusCubit({
     required UserCubit userCubit,
-    required FirebaseMessaginService fcm,
-    
+    required BonusModel bonus,
   })  : _userCubit = userCubit,
-        _fs = FirebaseFirestore.instance,
-        _fcm = fcm,
-        pageController = PageController(initialPage: 0),
+        _bonus = bonus,
         super(const EditBonusState());
+
+  void init() async {
+    bool isEmoji = _bonus.photo?.startsWith('emoji:') ?? false;
+    String? photoUrl = _bonus.photo == null
+        ? null
+        : isEmoji
+            ? null
+            : _bonus.photo;
+    emit(state.copyWith(
+      photoUrl: photoUrl,
+      emoji: isEmoji ? _bonus.photo : null,
+      name: _bonus.name,
+      link: _bonus.link,
+      point: _bonus.point,
+    ));
+
+    UserModel? mentor;
+    UserModel? kid;
+
+    final List<DocumentSnapshot> snapshots = await Future.wait([
+      _bonus.mentor!.get(),
+      _bonus.kid!.get(),
+    ]);
+
+    final mentorSnapshot = snapshots[0];
+    final kidSnapshot = snapshots[1];
+
+    if (mentorSnapshot.exists) {
+      mentor = UserModel.fromFirestore(mentorSnapshot);
+    }
+    if (kidSnapshot.exists) {
+      kid = UserModel.fromFirestore(kidSnapshot);
+    }
+
+    emit(state.copyWith(mentor: mentor, kid: kid));
+  }
 
   void onChangeName(String name) {
     emit(state.copyWith(name: name));
@@ -53,25 +83,6 @@ class EditBonusCubit extends Cubit<EditBonusState> {
     emit(state.copyWith(kid: mentor));
   }
 
-  void onChangeMode(bool editMode) {
-    emit(state.copyWith(isEditMode: editMode));
-  }
-
-  void onJumpToPage(int page) {
-    pageController.jumpToPage(page);
-  }
-
-  void nextPage() {
-    pageController.nextPage(duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
-    emit(state.copyWith(step: state.step + 1));
-  }
-
-  void prevPage() {
-    if (state.step == 0) return;
-    pageController.previousPage(duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
-    emit(state.copyWith(step: state.step - 1));
-  }
-
   void editBonus() async {
     final user = _userCubit.state;
     if (user == null) {
@@ -79,10 +90,7 @@ class EditBonusCubit extends Cubit<EditBonusState> {
       return;
     }
 
-    if (state.name == null ||
-        state.point == null ||
-        (state.photo == null && state.emoji == null) ||
-        (state.kid == null && state.mentor == null)) {
+    if (state.name == null || (state.point == null && !user.isKid) || (state.kid == null && state.mentor == null)) {
       emit(state.copyWith(errorMessage: 'fillAllFields'.tr(), status: EditBonusStatus.error));
       return;
     }
@@ -90,16 +98,12 @@ class EditBonusCubit extends Cubit<EditBonusState> {
     try {
       emit(state.copyWith(status: EditBonusStatus.loading));
 
-      final newBonusRef = _fs.collection('bonuses').doc();
-
       final data = {
-        'owner': user.ref,
         'kid': (user.isKid) ? user.ref : state.kid!.ref,
         'mentor': (user.isKid) ? state.mentor!.ref : user.ref,
         'name': state.name,
-        'link': state.link,
-        'created_at': DateTime.now(),
-        'status': (user.isKid) ? BonusStatus.needApprove.name : BonusStatus.active.name,
+        'link': (state.link ?? '').trim().isEmpty ? null : state.link?.trim(),
+        'point': state.point,
       };
 
       if (state.photo != null) {
@@ -113,27 +117,16 @@ class EditBonusCubit extends Cubit<EditBonusState> {
         }
       } else if (state.emoji != null) {
         data['photo'] = 'emoji:${state.emoji}';
-      } else {
-        emit(state.copyWith(status: EditBonusStatus.error, errorMessage: 'photoUploadError'.tr()));
       }
 
-      await newBonusRef.set(data);
-
-      //TODO
-      // _fcm.sendPushToKidOnCoinChanged(mentor, kid, amount)
+      await _bonus.ref.update(data);
 
       emit(state.copyWith(status: EditBonusStatus.success));
     } catch (e) {
-      print('error {createTask}: $e');
+      print('error {editBonus}: $e');
       emit(state.copyWith(errorMessage: e.toString(), status: EditBonusStatus.error));
     }
   }
 
   void reset() => emit(state.reset());
-
-  @override
-  Future<void> close() {
-    pageController.dispose();
-    return super.close();
-  }
 }

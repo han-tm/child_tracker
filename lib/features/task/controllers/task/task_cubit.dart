@@ -282,7 +282,7 @@ class TaskCubit extends Cubit<TaskState> {
         'action_date': FieldValue.serverTimestamp(),
       });
 
-      await _onAddPointToKid(task.kid!, task.coin ?? 0);
+      await _onAddPointToKid(task);
 
       _fcm.sendPushToKidOnTaskComplete(task);
 
@@ -293,11 +293,23 @@ class TaskCubit extends Cubit<TaskState> {
     }
   }
 
-  Future<void> _onAddPointToKid(DocumentReference kid, int point) async {
+  Future<void> _onAddPointToKid(TaskModel task) async {
+    final point = task.coin ?? 0;
     try {
-      await kid.update({
+      await task.kid?.update({
         'points': FieldValue.increment(point),
       });
+
+      final doc = {
+        'kid': task.kid,
+        'mentor': task.owner,
+        'created_at': FieldValue.serverTimestamp(),
+        'coin': point,
+        'name': 'Выполнение задания: ${task.name}',
+      };
+
+      final ref = CoinChangeModel.collection.doc();
+      await ref.set(doc);
     } catch (e) {
       print('error: {_onAddPointToKid}: ${e.toString()}');
       rethrow;

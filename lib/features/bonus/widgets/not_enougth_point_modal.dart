@@ -1,14 +1,9 @@
 import 'package:child_tracker/index.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
-Future<bool?> showConfirmModalBottomSheet(BuildContext context,
-    {required String title,
-    bool isDestructive = false,
-    required String confirmText,
-    required String cancelText,
-    String message = '',
-    String defaultmascot = '2179-min'}) async {
-  return showModalBottomSheet<bool?>(
+Future<void> showNotEnoughtPointForBonusModalBottomSheet(BuildContext context, String title) {
+  return showModalBottomSheet(
     context: context,
     backgroundColor: white,
     isScrollControlled: true,
@@ -16,7 +11,6 @@ Future<bool?> showConfirmModalBottomSheet(BuildContext context,
       borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
     ),
     builder: (BuildContext context) {
-      final mascot = isDestructive ? 'assets/images/2186-min.png' : 'assets/images/$defaultmascot.png';
       return Container(
         decoration: const BoxDecoration(
           color: Colors.white,
@@ -41,11 +35,11 @@ Future<bool?> showConfirmModalBottomSheet(BuildContext context,
             ),
             const SizedBox(height: 24),
             AppText(
-              text: title,
+              text: 'cant_request_bonus_by_kid'.tr(),
               size: 24,
-              color: isDestructive ? red : secondary900,
-              fw: FontWeight.w700,
+              color: red,
               maxLine: 2,
+              fw: FontWeight.w700,
               textAlign: TextAlign.center,
             ),
             const Divider(height: 48, thickness: 1, color: greyscale200),
@@ -54,25 +48,20 @@ Future<bool?> showConfirmModalBottomSheet(BuildContext context,
               children: [
                 Expanded(
                   flex: 2,
-                  child: isDestructive
-                      ? Transform.flip(
-                          flipX: true,
-                          child: Image.asset(
-                            mascot,
-                            fit: BoxFit.contain,
-                          ),
-                        )
-                      : Image.asset(
-                          mascot,
-                          fit: BoxFit.contain,
-                        ),
+                  child: Transform.flip(
+                    flipX: true,
+                    child: Image.asset(
+                      'assets/images/2182-min.png',
+                      fit: BoxFit.contain,
+                    ),
+                  ),
                 ),
                 const SizedBox(width: 6),
                 Expanded(
                   flex: 3,
                   child: LeftArrowBubleShape(
                     child: AppText(
-                      text: message,
+                      text: title,
                       size: 20,
                       maxLine: 10,
                       textAlign: TextAlign.center,
@@ -82,22 +71,9 @@ Future<bool?> showConfirmModalBottomSheet(BuildContext context,
               ],
             ),
             const Divider(height: 48, thickness: 1, color: greyscale200),
-            Row(
-              children: [
-                Expanded(
-                  child: FilledSecondaryAppButton(
-                    text: cancelText,
-                    onTap: () => Navigator.pop(context, false),
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: FilledAppButton(
-                    text: confirmText,
-                    onTap: () => Navigator.pop(context, true),
-                  ),
-                ),
-              ],
+            FilledAppButton(
+              text: 'ok'.tr(),
+              onTap: () => Navigator.pop(context),
             ),
             const SizedBox(height: 28),
           ],

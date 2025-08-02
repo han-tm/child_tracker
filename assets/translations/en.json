@@ -530,5 +530,16 @@
     "put": "Paste",
     "invalid_url": "Invalid link",
     "create_bonus": "Create bonus",
-    "create_request_for_bonus": "Create a bonus request"
+    "create_request_for_bonus": "Create a bonus request",
+    "failed_to_delete_bonus": "Failed to delete bonus",
+    "request_bonus_btn": "Request bonus",
+    "request_bonus_by_kid": "Request to receive a bonus",
+    "request_bonus_by_kid_text": "You can request a bonus. {} will be written off for it.",
+    "cant_request_bonus_by_kid": "Unable to request bonus",
+    "cant_request_bonus_by_kid_text": "Not enough points for bonus... Need to accumulate {}",
+    "request_bonus_by_kid_sent": "Bonus request sent!",
+    "request_bonus_by_kid_sent_text1": "Wait to receive the bonus",
+    "wait_for_approve": "We are waiting for approval",
+    "yesConfirm2": "Yes, approve",
+    "bonus_updated": "Bonus updated!"
 }
