@@ -176,7 +176,9 @@ class UserCubit extends Cubit<UserModel?> {
     if (state == null) return;
     try {
       final DocumentReference planRef = orderDoc['tariff'];
-      if (orderDoc['is_gift']) {
+
+      bool isGift = orderDoc['is_gift'] ?? false;
+      if (isGift) {
         final reciver = await getUserByRef(orderDoc['user']);
 
         late DateTime newPlanExpired;

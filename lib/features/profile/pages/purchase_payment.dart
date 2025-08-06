@@ -33,7 +33,8 @@ class _PurchasePaymentScreenState extends State<PurchasePaymentScreen> {
 
         if ((orderDoc['paid'] == true) && mounted) {
           await context.read<UserCubit>().onPurchasePlan(orderDoc);
-          if (orderDoc['is_gift'] && mounted) {
+          bool isGift = orderDoc['is_gift'] ?? false;
+          if (isGift && mounted) {
             final receiver = await context.read<UserCubit>().getUserByRef(orderDoc['user']);
             if (mounted) context.replace('/payment_success', extra: receiver.name);
           } else {
