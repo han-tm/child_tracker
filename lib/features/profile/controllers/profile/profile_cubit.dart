@@ -21,11 +21,13 @@ class ProfileCubit extends Cubit<ProfileState> {
     }
     emit(state.copyWith(status: ProfileStateStatus.saving));
     try {
-      final Map<Object, Object?> newData = {
-        'name': data['name'],
-        'city':  data['city'],
-        'birth_date':  (data['birth_date'] as DateTime),
-      };
+      final Map<Object, Object?> newData = user.isKid
+          ? {
+              'name': data['name'],
+              'city': data['city'],
+              'birth_date': (data['birth_date'] as DateTime),
+            }
+          : {'name': data['name']};
 
       if (file != null) {
         final service = FirebaseStorageService();
@@ -38,7 +40,7 @@ class ProfileCubit extends Cubit<ProfileState> {
       _userCubit.setUser(user.copyWith(
         name: data['name'],
         city: data['city'],
-        birthDate: (data['birth_date'] as DateTime),
+        birthDate: (data['birth_date'] as DateTime?),
         photo: newData['photo'] as String?,
       ));
 

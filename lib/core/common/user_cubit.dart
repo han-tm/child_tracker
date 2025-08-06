@@ -194,6 +194,7 @@ class UserCubit extends Cubit<UserModel?> {
         final updateData = {
           "premium_subscription_ref": planRef,
           "premium_subscription": newPlanExpired,
+          "trial_subscription": null,
         };
 
         await reciver.ref.update(updateData);
@@ -213,6 +214,7 @@ class UserCubit extends Cubit<UserModel?> {
         final updateData = {
           "premium_subscription_ref": planRef,
           "premium_subscription": newPlanExpired,
+          "trial_subscription": null,
         };
 
         await state?.ref.update(updateData);

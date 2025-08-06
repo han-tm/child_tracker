@@ -71,7 +71,7 @@ class KidSignupSuccessScreen extends StatelessWidget {
                     text: 'buttonStart'.tr(),
                     onTap: () {
                       context.read<FillDataCubit>().reset();
-                      context.go('/kid_bonus');
+                      context.go('/kid_task');
                     },
                   ),
                 ),

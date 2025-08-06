@@ -39,10 +39,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   String? birthDateError;
 
   void onSaveTap(BuildContext context) {
+    final me = context.read<UserCubit>().state;
     form.markAllAsTouched();
 
     if (form.valid) {
-      if (birthDate == null) {
+      if (birthDate == null && (me?.isKid ?? true)) {
         setState(() {
           birthDateError = 'fill_field'.tr();
         });
@@ -172,7 +173,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           const SizedBox(height: 28),
-                                        
                                           CustomDateInput(
                                             label: 'birthday'.tr(),
                                             hint: 'selectDataHint'.tr(),

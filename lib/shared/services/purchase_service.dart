@@ -18,7 +18,13 @@ class PaymentService {
   Future<bool> canAddKid() async {
     if (_userCubit.state?.hasSubscription() ?? false) {
       final currentPlanRef = _userCubit.state?.premiumSubscriptionRef;
-      if (currentPlanRef == null) return false;
+      if (currentPlanRef == null) {
+        if(_userCubit.state?.isSubscriptionTrial() ?? false){
+          return true;
+        }else{
+          return false;
+        }
+      }
       SubscriptionModel currentPlan = await getTariffByRef(_userCubit.state!.premiumSubscriptionRef!);
       final count = currentPlan.count;
       final myConnectionCount = _userCubit.state?.connections.length ?? 0;
