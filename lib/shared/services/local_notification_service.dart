@@ -183,9 +183,9 @@ class LocalNotificationService {
   //   }
   // }
 
-  // void cancelAllNotifications() async {
-  //   await _notificationsPlugin.cancelAll();
-  // }
+  Future<void> cancelAllNotifications() async {
+    await _notificationsPlugin.cancelAll();
+  }
 
   Future<void> setDailyDiaryReminder(bool dairyPushSetting, {bool force = false}) async {
     if (!dairyPushSetting) {
@@ -212,7 +212,7 @@ class LocalNotificationService {
 
     final now = tz.TZDateTime.now(tz.local);
 
-    tz.TZDateTime scheduledTime = tz.TZDateTime(tz.local, now.year, now.month, now.day, 12, 10, 0);
+    tz.TZDateTime scheduledTime = tz.TZDateTime(tz.local, now.year, now.month, now.day, 20, 0, 0);
 
     if (scheduledTime.isBefore(now)) {
       scheduledTime = scheduledTime.add(const Duration(days: 1));

@@ -10,3 +10,4 @@ export './game_model.dart';
 export './level_model.dart';
 export './quiz_model.dart';
 export './task_dialog.dart';
+export './subscription_model.dart';

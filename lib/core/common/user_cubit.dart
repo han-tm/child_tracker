@@ -27,6 +27,16 @@ class UserCubit extends Cubit<UserModel?> {
     }
   }
 
+  Future<void> refreshProfile() async {
+    try {
+      final doc = await state!.ref.get();
+      final userModel = UserModel.fromFirestore(doc);
+      setUser(userModel);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   Future<void> setNotification(bool value) async {
     await state?.ref.update({'notification': value});
     emit(state?.copyWith(notification: value));
@@ -160,6 +170,72 @@ class UserCubit extends Cubit<UserModel?> {
       gamePoints: state!.gamePoints + points,
       completedLevels: completedLevels,
     ));
+  }
+
+  Future<void> onPurchasePlan(Map<dynamic, dynamic> orderDoc) async {
+    if (state == null) return;
+    try {
+      final DocumentReference planRef = orderDoc['tariff'];
+      if (orderDoc['is_gift']) {
+        final reciver = await getUserByRef(orderDoc['user']);
+
+        late DateTime newPlanExpired;
+        final now = DateTime.now();
+        final oldPlan = reciver.premiumSubscriptionPlan;
+
+        if (oldPlan != null && oldPlan.isAfter(now)) {
+          newPlanExpired = _addOneMonth(oldPlan);
+        } else {
+          newPlanExpired = _addOneMonth(now);
+        }
+
+        final updateData = {
+          "premium_subscription_ref": planRef,
+          "premium_subscription": newPlanExpired,
+        };
+
+        await reciver.ref.update(updateData);
+
+        sl<FirebaseMessaginService>().sendPushToMentorForGift(reciver.ref, state?.name ?? '-');
+      } else {
+        late DateTime newPlanExpired;
+        final now = DateTime.now();
+        final oldPlan = state?.premiumSubscriptionPlan;
+
+        if (oldPlan != null && oldPlan.isAfter(now)) {
+          newPlanExpired = _addOneMonth(oldPlan);
+        } else {
+          newPlanExpired = _addOneMonth(now);
+        }
+
+        final updateData = {
+          "premium_subscription_ref": planRef,
+          "premium_subscription": newPlanExpired,
+        };
+
+        await state?.ref.update(updateData);
+
+        emit(state?.copyWith(premiumSubscriptionRef: planRef, premiumSubscriptionPlan: newPlanExpired));
+      }
+    } catch (e) {
+      print('error: {onPurchasePlan}: ${e.toString()}');
+    }
+  }
+
+  DateTime _addOneMonth(DateTime date) {
+    int newMonth = date.month + 1;
+    int newYear = date.year;
+
+    if (newMonth > 12) {
+      newMonth = 1;
+      newYear++;
+    }
+
+    int daysInNewMonth = DateTime(newYear, newMonth + 1, 0).day;
+
+    int newDay = date.day > daysInNewMonth ? daysInNewMonth : date.day;
+
+    return DateTime(newYear, newMonth, newDay, date.hour, date.minute, date.second);
   }
 
   Future<void> markAsDeleted() async {

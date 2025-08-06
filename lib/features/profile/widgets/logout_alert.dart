@@ -17,7 +17,9 @@ void showLogoutDialog(BuildContext context) async {
 
   if (result == true) {
     final StorageService storageService = sl();
+    final LocalNotificationService fcm = sl();
     await storageService.clearAllStorage();
+    await fcm.cancelAllNotifications();
     if (context.mounted) await context.read<UserCubit>().onDeleteFcmToken();
     await FirebaseAuth.instance.signOut();
     if (context.mounted) {

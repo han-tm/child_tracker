@@ -14,3 +14,6 @@ export './game_raiting.dart';
 export './change_kid_point.dart';
 export './point_change_success.dart';
 export './change_lang.dart';
+export './purchase_payment.dart';
+export './select_plan.dart';
+export './select_user_for_gift.dart';

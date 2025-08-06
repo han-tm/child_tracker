@@ -21,6 +21,7 @@ class UserModel {
   final List<DocumentReference> dairyMembers;
   final DateTime? trialSubscriptionPlan;
   final DateTime? premiumSubscriptionPlan;
+  final DocumentReference? premiumSubscriptionRef;
   final int points;
   final int gamePoints;
   final List<DocumentReference> completedLevels;
@@ -45,6 +46,7 @@ class UserModel {
     this.dairyMembers = const [],
     this.trialSubscriptionPlan,
     this.premiumSubscriptionPlan,
+    this.premiumSubscriptionRef,
     this.points = 0,
     this.gamePoints = 0,
     this.completedLevels = const [],
@@ -75,6 +77,7 @@ class UserModel {
           data['trial_subscription'] != null ? (data['trial_subscription'] as Timestamp).toDate() : null,
       premiumSubscriptionPlan:
           data['premium_subscription'] != null ? (data['premium_subscription'] as Timestamp).toDate() : null,
+      premiumSubscriptionRef: data['premium_subscription_ref'],
       completedLevels: (data['completed_levels'] as List<dynamic>? ?? []).map((e) => e as DocumentReference).toList(),
       points: data['points'] ?? 0,
       gamePoints: data['game_points'] ?? 0,
@@ -98,7 +101,7 @@ class UserModel {
     if (trialSubscriptionPlan != null && trialSubscriptionPlan!.isAfter(now)) {
       return true;
     }
-    if (premiumSubscriptionPlan != null && premiumSubscriptionPlan!.isAfter(now)) {
+    if (premiumSubscriptionPlan != null && premiumSubscriptionPlan!.isAfter(now) && premiumSubscriptionRef !=null) {
       return true;
     }
     return false;
@@ -112,15 +115,17 @@ class UserModel {
     return false;
   }
 
-  String currentSubscriptionValidDate(String currentLocale) {
+  String currentSubscriptionValidDate(String currentLocale, {bool short = false}) {
     if (!hasSubscription()) return '-';
     final now = DateTime.now();
 
+    String format = short ? 'dd.MM.yyyy' : 'dd MMMM yyyy';
+
     if (trialSubscriptionPlan != null && trialSubscriptionPlan!.isAfter(now)) {
-      return DateFormat('dd MMMM yyyy', currentLocale).format(trialSubscriptionPlan!);
+      return DateFormat(format, currentLocale).format(trialSubscriptionPlan!);
     }
-    if (premiumSubscriptionPlan != null && premiumSubscriptionPlan!.isAfter(now)) {
-      return DateFormat('dd MMMM yyyy', currentLocale).format(premiumSubscriptionPlan!);
+    if (premiumSubscriptionPlan != null && premiumSubscriptionPlan!.isAfter(now) && premiumSubscriptionRef !=null) {
+      return DateFormat(format, currentLocale).format(premiumSubscriptionPlan!);
     }
     return '-';
   }
@@ -153,6 +158,7 @@ class UserModel {
     List<DocumentReference>? dairyMembers,
     DateTime? trialSubscriptionPlan,
     DateTime? premiumSubscriptionPlan,
+    DocumentReference? premiumSubscriptionRef,
     int? points,
     int? gamePoints,
     List<DocumentReference>? completedLevels,
@@ -177,6 +183,7 @@ class UserModel {
       dairyMembers: dairyMembers ?? this.dairyMembers,
       trialSubscriptionPlan: trialSubscriptionPlan ?? this.trialSubscriptionPlan,
       premiumSubscriptionPlan: premiumSubscriptionPlan ?? this.premiumSubscriptionPlan,
+      premiumSubscriptionRef: premiumSubscriptionRef ?? this.premiumSubscriptionRef,
       points: points ?? this.points,
       gamePoints: gamePoints ?? this.gamePoints,
       completedLevels: completedLevels ?? this.completedLevels,

@@ -91,6 +91,9 @@ class FirebaseMessaginService {
             final chatRef = _fs.collection('chats').doc(chatId);
             context.push('/chat_room', extra: chatRef);
             return;
+          } else if (type == NotificationType.gift) {
+            context.go('/mentor_profile');
+            return;
           } else {
             return;
           }
@@ -100,6 +103,10 @@ class FirebaseMessaginService {
           final String? chatId = notificationData['chat_id'];
           if (chatId == null) return;
           if (_currentChatCubit.state == chatId) return;
+        }
+
+        if (type == NotificationType.gift) {
+          _userCubit.refreshProfile();
         }
 
         SnackBarSerive.showSnackBarOnReceivePushNotification(
@@ -160,6 +167,9 @@ class FirebaseMessaginService {
             final chatRef = _fs.collection('chats').doc(chatId);
             context.push('/chat_room', extra: chatRef);
             return;
+          } else if (type == NotificationType.gift) {
+            context.go('/mentor_profile');
+            return;
           } else {
             return;
           }
@@ -214,6 +224,9 @@ class FirebaseMessaginService {
           if (chatId == null) return;
           final chatRef = _fs.collection('chats').doc(chatId);
           context.push('/chat_room', extra: chatRef);
+          return;
+        } else if (type == NotificationType.gift) {
+          context.go('/mentor_profile');
           return;
         } else {
           return;
@@ -565,6 +578,21 @@ class FirebaseMessaginService {
       _callSendPushCallback(receiver.id, title, body, payload);
     } catch (e) {
       print('{sendPushToChatMember} error: $e');
+    }
+  }
+
+  //Пуш ментору о подарке
+  void sendPushToMentorForGift(DocumentReference receiver, String senderName) async {
+    String title = '$senderName подарил Вам подписку!';
+    const String body = 'Теперь вы можете создавать задания и бонусы в течение 1 месяца';
+    final Map<String, dynamic> payload = {"type": NotificationType.gift.name};
+
+    try {
+      await _createSystemNotificationDoc(receiver, title, body, NotificationType.gift, payload);
+
+      _callSendPushCallback(receiver.id, title, body, payload);
+    } catch (e) {
+      print('{sendPushToMentorForGift} error: $e');
     }
   }
 

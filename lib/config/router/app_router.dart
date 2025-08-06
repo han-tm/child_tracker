@@ -658,6 +658,31 @@ final GoRouter router = GoRouter(
         return BonusReceivedSuccessScreen(bonusName: bonusName, mentorRef: mentorRef, kidRef: kidRef);
       },
     ),
+    GoRoute(
+      path: '/select_plan',
+      builder: (context, state) => const SelectPlanScreen(),
+    ),
+    GoRoute(
+      path: '/select_user_for_gift',
+      builder: (context, state) => const SelectUserForGiftScreen(),
+    ),
+    GoRoute(
+      path: '/purchase_plan',
+      builder: (context, state) {
+        final data = state.extra as Map;
+        final url = data['url'];
+        final orderId = data['order_id'];
+        return PurchasePaymentScreen(url: url, orderId: orderId);
+      },
+    ),
+    GoRoute(
+      path: '/all_gifts',
+      builder: (context, state) => AllGiftsScreen(orders: state.extra as List<DocumentSnapshot>),
+    ),
+    GoRoute(
+      path: '/payment_success',
+      builder: (context, state) => PaymentSuccessScreen(receiver: state.extra as String?),
+    ),
   ],
   errorBuilder: (context, state) => ErrorScreen(error: state.error.toString()),
 );

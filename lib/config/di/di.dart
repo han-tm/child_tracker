@@ -33,6 +33,7 @@ Future<void> initializeDependencies() async {
         currentChatCubit: sl(),
         localNotificationService: localNotificationService,
       ));
+  sl.registerLazySingleton(() => PaymentService(appUserCubit: sl(), fs: fs, functions: ff));
 
   sl.registerLazySingleton(() => UserCubit(fs: fs));
   sl.registerLazySingleton(() => PhoneAuthCubit(userCubit: sl(), fs: fs, auth: fa, ff: ff));

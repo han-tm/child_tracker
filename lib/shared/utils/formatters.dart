@@ -64,6 +64,12 @@ String dateFormatDDMMYYYYHHMM(DateTime? date) {
   return DateFormat('dd.MM.yyyy, HH:mm', 'ru').format(date);
 }
 
+final currencyFormatter = NumberFormat.simpleCurrency(locale: 'ru_RU', decimalDigits: 0);
+
+String roubleFormat(int val) {
+  return currencyFormatter.format(val);
+}
+
 extension DateOnly on DateTime {
   DateTime get dateOnly {
     return DateTime(year, month, day);
