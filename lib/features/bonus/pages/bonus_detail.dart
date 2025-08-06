@@ -99,7 +99,7 @@ class _BonusDetailScreenState extends State<BonusDetailScreen> {
 
   void onRequestBonusByKid(UserModel me) async {
     int bonusPoints = bonus.point ?? 0;
-    int kidPoints = me.points +40;
+    int kidPoints = me.points;
 
     if (kidPoints >= bonusPoints) {
       final needPointCount = 'pointsCount'.plural(bonusPoints);

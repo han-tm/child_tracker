@@ -50,7 +50,7 @@ class _CreateBonusSetNameState extends State<CreateBonusSetName> {
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 24),
                             child: MaskotMessage(
-                              message: 'name_the_task_prompt'.tr(),
+                              message: 'bonus_name_message'.tr(),
                               maskot: '2186-min',
                               flip: true,
                             ),

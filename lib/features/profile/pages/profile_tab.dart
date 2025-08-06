@@ -18,32 +18,49 @@ class _ProfileTabScreenState extends State<ProfileTabScreen> {
   bool loading = false;
 
   void onScanQr(UserModel me) async {
-    final UserModel? kid = await context.push<UserModel?>(
-      '/mentor_profile/scan_qr',
-    );
+    if (!me.hasSubscription()) {
+      bool? confirm = await showPlanExpiredModalBottomSheet(context, 'get_subs_for_action2'.tr());
+      if (confirm == true && mounted) {
+        context.push('/current_subscription');
+      }
+    } else {
+      final canAdd = await sl<PaymentService>().canAddKid();
 
-    if (kid != null) {
-      debugPrint('connection kid: ${kid.id}');
-      if (me.connections.contains(kid.ref)) {
-        SnackBarSerive.showErrorSnackBar('kidAlreadyAdded'.tr());
-        return;
-      } else if (me.connectionRequests.contains(kid.ref)) {
-        SnackBarSerive.showErrorSnackBar('requestAlreadySent'.tr());
-        return;
+      if (!mounted) return;
+      if (!canAdd) {
+        bool? confirm = await showMaxConnectionModalBottomSheet(context);
+        if (confirm == true && mounted) {
+          context.push('/current_subscription');
+        }
       } else {
-        if (mounted) {
-          setState(() {
-            loading = true;
-          });
-          final bool result = await context.read<UserCubit>().addRequestToConnection(kid.ref);
-          if (mounted) {
-            setState(() {
-              loading = false;
-            });
-            if (result) {
-              SnackBarSerive.showSuccessSnackBar('requestSent'.tr());
-            } else {
-              SnackBarSerive.showErrorSnackBar('defaultErrorText'.tr());
+        final UserModel? kid = await context.push<UserModel?>(
+          '/mentor_profile/scan_qr',
+        );
+
+        if (kid != null) {
+          debugPrint('connection kid: ${kid.id}');
+          if (me.connections.contains(kid.ref)) {
+            SnackBarSerive.showErrorSnackBar('kidAlreadyAdded'.tr());
+            return;
+          } else if (me.connectionRequests.contains(kid.ref)) {
+            SnackBarSerive.showErrorSnackBar('requestAlreadySent'.tr());
+            return;
+          } else {
+            if (mounted) {
+              setState(() {
+                loading = true;
+              });
+              final bool result = await context.read<UserCubit>().addRequestToConnection(kid.ref);
+              if (mounted) {
+                setState(() {
+                  loading = false;
+                });
+                if (result) {
+                  SnackBarSerive.showSuccessSnackBar('requestSent'.tr());
+                } else {
+                  SnackBarSerive.showErrorSnackBar('defaultErrorText'.tr());
+                }
+              }
             }
           }
         }
@@ -79,7 +96,7 @@ class _ProfileTabScreenState extends State<ProfileTabScreen> {
                 fit: BoxFit.contain,
               ),
             ),
-            title:  AppText(text: context.tr('profileTitle'),  size: 24, fw: FontWeight.w700),
+            title: AppText(text: context.tr('profileTitle'), size: 24, fw: FontWeight.w700),
             centerTitle: true,
             actions: [
               Padding(

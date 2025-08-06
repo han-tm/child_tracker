@@ -1,4 +1,5 @@
 import 'package:child_tracker/index.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -42,17 +43,26 @@ class _TaskTabScreenState extends State<TaskTabScreen> {
                 automaticallyImplyLeading: false,
                 toolbarHeight: 72,
                 leadingWidth: 0,
-                title: me.isKid ? KidAppBarWidget(me: me, selectedMentor: state.selectedMentor) : MentorAppbarWidget(selectedKid: state.selectedKid),
+                title: me.isKid
+                    ? KidAppBarWidget(me: me, selectedMentor: state.selectedMentor)
+                    : MentorAppbarWidget(selectedKid: state.selectedKid),
               ),
               floatingActionButton: SizedBox(
                 width: 56,
                 height: 56,
                 child: FloatingActionButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (me.isKid) {
                       context.push('/kid_create_task');
                     } else {
-                      context.push('/mentor_create_task');
+                      if (me.hasSubscription()) {
+                        context.push('/mentor_create_task');
+                      } else {
+                        bool? confirm = await showPlanExpiredModalBottomSheet(context, 'get_subs_for_action'.tr());
+                        if (confirm == true && context.mounted) {
+                          context.push('/current_subscription');
+                        }
+                      }
                     }
                   },
                   elevation: 4,

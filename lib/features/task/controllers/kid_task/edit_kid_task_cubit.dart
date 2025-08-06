@@ -27,7 +27,7 @@ class KidTaskEditCubit extends Cubit<KidTaskEditState> {
             : _task.photo;
     emit(state.copyWith(
       photoUrl: photoUrl,
-      emoji: isEmoji ? _task.photo : null,
+      emoji: isEmoji ? _task.photo?.replaceAll('emoji:', '') : null,
       name: _task.name,
       description: _task.description,
       startData: _task.startDate,

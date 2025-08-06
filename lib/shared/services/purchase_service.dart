@@ -15,6 +15,20 @@ class PaymentService {
         _userCubit = appUserCubit,
         _functions = functions;
 
+  Future<bool> canAddKid() async {
+    if (_userCubit.state?.hasSubscription() ?? false) {
+      final currentPlanRef = _userCubit.state?.premiumSubscriptionRef;
+      if (currentPlanRef == null) return false;
+      SubscriptionModel currentPlan = await getTariffByRef(_userCubit.state!.premiumSubscriptionRef!);
+      final count = currentPlan.count;
+      final myConnectionCount = _userCubit.state?.connections.length ?? 0;
+
+      return (count > myConnectionCount);
+    } else {
+      return false;
+    }
+  }
+
   Future<List<SubscriptionModel>> getTariffs() async {
     final snapshot = await _fs.collection('tariffs').orderBy('price').get();
     return snapshot.docs.map((doc) => SubscriptionModel.fromFirestore(doc)).toList();

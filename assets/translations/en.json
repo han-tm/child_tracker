@@ -558,6 +558,7 @@
     "mentor_not_found": "User not found. Make sure the phone number is entered correctly",
     "user_gift_you_subs": "{} has gifted you a subscription",
     "get_subs_for_action": "To continue creating tasks and bonuses, renew your subscription",
+    "get_subs_for_action2": "To add a child, please renew your subscription",
     "subs_is_expired": "Subscription is inactive",
     "refresh_subs": "Update plan",
     "maximum_children_alert": "Maximum participants",

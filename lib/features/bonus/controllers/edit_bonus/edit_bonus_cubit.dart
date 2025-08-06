@@ -28,7 +28,7 @@ class EditBonusCubit extends Cubit<EditBonusState> {
             : _bonus.photo;
     emit(state.copyWith(
       photoUrl: photoUrl,
-      emoji: isEmoji ? _bonus.photo : null,
+      emoji: isEmoji ? _bonus.photo?.replaceAll('emoji:', '') : null,
       name: _bonus.name,
       link: _bonus.link,
       point: _bonus.point,

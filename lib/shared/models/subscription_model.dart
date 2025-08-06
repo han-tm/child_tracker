@@ -7,6 +7,7 @@ class SubscriptionModel {
   final String description;
   final String descriptionEn;
   final int price;
+  final int count;
   SubscriptionModel({
     required this.id,
     required this.title,
@@ -14,6 +15,7 @@ class SubscriptionModel {
     required this.price,
     required this.titleEn,
     required this.descriptionEn,
+    required this.count,
   });
 
   factory SubscriptionModel.fromFirestore(DocumentSnapshot doc) {
@@ -25,6 +27,7 @@ class SubscriptionModel {
       titleEn: data['title_en'] ?? '',
       descriptionEn: data['description_en'] ?? '',
       price: data['price'] ?? 0,
+      count: data['count'] ?? 0
     );
   }
 
