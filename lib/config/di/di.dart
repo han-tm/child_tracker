@@ -23,7 +23,7 @@ Future<void> initializeDependencies() async {
   // Cubits
   sl.registerLazySingleton(() => LocaleCubit(storageService: sl()));
   final localNotificationService = LocalNotificationService();
-  await localNotificationService.init();
+
   sl.registerLazySingleton(() => localNotificationService);
   sl.registerLazySingleton(() => FirebaseMessaginService(
         appUserCubit: sl(),

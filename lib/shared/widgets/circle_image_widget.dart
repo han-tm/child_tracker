@@ -1,11 +1,11 @@
-import 'dart:io';
+
 import 'package:child_tracker/index.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class CachedClickableImage extends StatelessWidget {
   final String? imageUrl;
-  final File? imageFile;
+  final String? imageFile;
   final String? emoji;
   final double emojiFontSize;
   final double? width;
@@ -42,7 +42,7 @@ class CachedClickableImage extends StatelessWidget {
   Widget build(BuildContext context) {
     Widget imageWidget;
     if (imageFile != null) {
-      imageWidget = Image.file(
+      imageWidget = Image.network(
         imageFile!,
         width: width,
         height: height,

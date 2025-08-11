@@ -1,4 +1,4 @@
-import 'dart:io';
+
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as p;
@@ -23,7 +23,8 @@ class FirebaseStorageService {
 
       final ref = _storage.ref(path);
 
-      final uploadTask = ref.putFile(File(file.path));
+      final bytes = await file.readAsBytes();
+      final uploadTask = ref.putData(bytes);
 
       uploadTask.snapshotEvents.listen((taskSnapshot) {
         final progress = (taskSnapshot.bytesTransferred / taskSnapshot.totalBytes) * 100;

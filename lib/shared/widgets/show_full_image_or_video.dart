@@ -1,10 +1,10 @@
-import 'dart:io';
-
 import 'package:child_tracker/index.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
+// ignore: avoid_web_libraries_in_flutter
+import 'dart:html' as html;
 
 void showFullImageOrVideoFile(BuildContext context, XFile file) {
   showDialog(
@@ -37,10 +37,10 @@ class FullscreenImageViewer extends StatelessWidget {
         ),
         body: Center(
           child: InteractiveViewer(
-            child: (CustomImagePicker.isVideo(file.path))
+            child: (CustomImagePicker.isVideoForWeb(file))
                 ? _VideoPlayer(file: file)
-                : Image.file(
-                    File(file.path),
+                : Image.network(
+                    file.path,
                     width: size.width,
                     height: double.infinity,
                     fit: BoxFit.contain,
@@ -72,15 +72,11 @@ class __VideoPlayerState extends State<_VideoPlayer> {
   }
 
   Future<void> _initializeVideoPlayer() async {
-    if (!await File(widget.file.path).exists()) {
-      if (mounted) {
-        SnackBarSerive.showErrorSnackBar('Видеофайл не найден');
-        context.pop();
-      }
-      return;
-    }
+    final bytes = await widget.file.readAsBytes();
+    final blob = html.Blob([bytes]);
+    final url = html.Url.createObjectUrlFromBlob(blob);
 
-    _controller = VideoPlayerController.file(File(widget.file.path))
+    _controller = VideoPlayerController.networkUrl(Uri.parse(url))
       ..initialize().then((_) {
         if (mounted) {
           setState(() {

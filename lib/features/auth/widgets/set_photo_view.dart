@@ -1,4 +1,4 @@
-import 'dart:io';
+
 
 import 'package:child_tracker/index.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -44,7 +44,7 @@ class SetPhotoView extends StatelessWidget {
                       height: 120,
                       circularRadius: 100,
                       onTap: () => onPick(context),
-                      imageFile: state.photo != null ? File(state.photo!.path) : null,
+                      imageFile: state.photo?.path,
                     ),
                     Align(
                       alignment: Alignment.bottomRight,

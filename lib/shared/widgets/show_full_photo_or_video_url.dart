@@ -34,14 +34,33 @@ class _FullscreenImageViewer extends StatelessWidget {
         ),
         body: Center(
           child: InteractiveViewer(
-              child: (CustomImagePicker.isVideoUrl(url))
-                  ? _VideoPlayer(url: url)
-                  : CachedClickableImage(
-                      width: double.infinity,
-                      height: double.infinity,
-                      fit: BoxFit.contain,
-                      imageUrl: url,
-                    )),
+            // child: (CustomImagePicker.isVideoUrl(url))
+            //     ? _VideoPlayer(url: url)
+            //     : CachedClickableImage(
+            //         width: double.infinity,
+            //         height: double.infinity,
+            //         fit: BoxFit.contain,
+            //         imageUrl: url,
+            //       ),
+            child: FutureBuilder<bool>(
+              future: CustomImagePicker.isVideoUrl(url),
+              builder: (context, snapshot) {
+                final result = snapshot.data;
+
+                if (result == null) return const CircularProgressIndicator();
+                if (result) {
+                  return _VideoPlayer(url: url);
+                } else {
+                  return CachedClickableImage(
+                    width: double.infinity,
+                    height: double.infinity,
+                    fit: BoxFit.contain,
+                    imageUrl: url,
+                  );
+                }
+              },
+            ),
+          ),
         ),
       ),
     );

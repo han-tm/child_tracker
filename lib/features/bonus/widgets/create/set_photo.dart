@@ -1,4 +1,4 @@
-import 'dart:io';
+
 
 import 'package:child_tracker/index.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -42,7 +42,7 @@ class CreateBonusSetPhoto extends StatelessWidget {
                     circularRadius: 300,
                     emojiFontSize: 60,
                     onTap: () => onPick(context),
-                    imageFile: state.photo != null ? File(state.photo!.path) : null,
+                    imageFile: state.photo?.path,
                     emoji: state.emoji,
                     noImageWidget: Container(
                       decoration: BoxDecoration(

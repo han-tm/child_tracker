@@ -1,6 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
-import 'dart:io';
+
 
 import 'package:child_tracker/features/profile/controllers/profile/profile_cubit.dart';
 import 'package:child_tracker/index.dart';
@@ -141,7 +141,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 circularRadius: 100,
                                 height: 120,
                                 width: 120,
-                                imageFile: selectedFile?.path != null ? File(selectedFile!.path) : null,
+                                imageFile: selectedFile?.path != null ? selectedFile!.path : null,
                                 imageUrl: context.read<UserCubit>().state?.photo,
                                 onTap: onPick,
                               ),

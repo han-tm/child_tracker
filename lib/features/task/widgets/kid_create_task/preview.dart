@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:child_tracker/index.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
@@ -30,7 +28,7 @@ class KidCreateTaskPreview extends StatelessWidget {
                   child: IntrinsicHeight(
                     child: Column(
                       children: [
-                         Padding(
+                        Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 24),
                           child: MaskotMessage(
                             message: 'check_task_details_prompt'.tr(),
@@ -62,7 +60,7 @@ class KidCreateTaskPreview extends StatelessWidget {
                                         circularRadius: 300,
                                         emojiFontSize: 60,
                                         onTap: () => onChangeMode(context, 0),
-                                        imageFile: state.photo != null ? File(state.photo!.path) : null,
+                                        imageFile: state.photo?.path,
                                         emoji: state.emoji,
                                       ),
                                       Align(

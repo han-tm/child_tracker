@@ -44,9 +44,9 @@ dependencies:
   cupertino_icons: ^1.0.8
   path: ^1.9.0
   flutter_native_splash: 2.4.4
-  video_thumbnail: ^0.5.6
+  # video_thumbnail: ^0.5.6
   qr_flutter: ^4.1.0
-  path_provider: ^2.1.5
+  # path_provider: ^2.1.5
   share_plus: ^11.0.0
   mobile_scanner: ^6.0.10
   fl_chart: 0.69.0
@@ -55,10 +55,11 @@ dependencies:
   audioplayers: ^6.4.0
   scroll_date_picker: ^3.8.0
   video_player: ^2.9.5
-  flutter_local_notifications: ^19.4.0
-  timezone: ^0.10.1
-  flutter_timezone: ^4.1.1
+  # flutter_local_notifications: ^19.4.0
+  # timezone: ^0.10.1
+  # flutter_timezone: ^4.1.1
   webview_flutter: ^4.10.0
+  get_thumbnail_video: ^0.7.3
   
 
 
@@ -100,9 +101,6 @@ flutter:
 flutter_native_splash:
   image: assets/images/android12splash.png
   color: "#5464D9"
-  android_12:
-    image: assets/images/android12splash.png
-    color: "#5464D9"
-    icon_background_color: "#5464D9"
-
-  web: false
+  android: false
+  ios: false
+  web: true

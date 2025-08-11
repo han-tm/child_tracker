@@ -12,7 +12,7 @@ class FirebaseMessaginService {
   final FirebaseFirestore _fs;
   final UserCubit _userCubit;
   final cf.FirebaseFunctions _functions;
-  final LocalNotificationService _localPush;
+
   final CurrentChatCubit _currentChatCubit;
 
   FirebaseMessaginService({
@@ -24,7 +24,6 @@ class FirebaseMessaginService {
     required CurrentChatCubit currentChatCubit,
   })  : _fs = fs,
         _fcm = fcm,
-        _localPush = localNotificationService,
         _userCubit = appUserCubit,
         _currentChatCubit = currentChatCubit,
         _functions = functions;
@@ -237,10 +236,6 @@ class FirebaseMessaginService {
         onTap();
       }
     });
-
-    if (_userCubit.state?.isKid == true) {
-      _localPush.setDailyDiaryReminder(_userCubit.state?.dairyNotification ?? true);
-    }
   }
 
   bool isNotificationReceived(String id) => receivedNotificationIds.contains(id);

@@ -1,4 +1,4 @@
-import 'dart:io';
+
 
 import 'package:child_tracker/index.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -110,7 +110,7 @@ class _EditChatPhotoScreenState extends State<EditChatPhotoScreen> {
                     emojiFontSize: 60,
                     onTap: () => onPick(context),
                     imageUrl: isEmoji ? null : widget.chat.photo,
-                    imageFile: selectedFile != null ? File(selectedFile!.path) : null,
+                    imageFile: selectedFile?.path,
                     emoji: selectedEmoji ?? (isEmoji ? widget.chat.photo!.replaceAll('emoji:', '') : null),
                     noImageWidget: Container(
                       decoration: BoxDecoration(

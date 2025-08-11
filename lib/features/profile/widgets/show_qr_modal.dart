@@ -1,13 +1,14 @@
-import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:child_tracker/index.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:path_provider/path_provider.dart';
+
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:share_plus/share_plus.dart';
+
+// ignore: avoid_web_libraries_in_flutter
+import 'dart:html' as html;
 
 void showQRModalBottomSheet(BuildContext context, String id) async {
   showModalBottomSheet(
@@ -56,20 +57,62 @@ class __ShowQRModalContentState extends State<_ShowQRModalContent> {
     }
 
     try {
-      final tempDir = await getTemporaryDirectory();
-      final file = await File('${tempDir.path}/qr_code.png').create();
-      await file.writeAsBytes(qrImageBytes);
-      final param = ShareParams(
-        title: 'myQrCodeTitle'.tr(),
-        previewThumbnail: XFile(file.path),
-        files: [XFile(file.path)],
-      );
-      await SharePlus.instance.share(param);
+      // final tempDir = await getTemporaryDirectory();
+      // final file = await File('${tempDir.path}/qr_code.png').create();
+      // await file.writeAsBytes(qrImageBytes);
+      // final param = ShareParams(
+      //   title: 'myQrCodeTitle'.tr(),
+      //   previewThumbnail: XFile(file.path),
+      //   files: [XFile(file.path)],
+      // );
+      // await SharePlus.instance.share(param);
+      _shareOnWeb(qrImageBytes);
     } catch (e) {
       print("QR share error: $e");
       SnackBarSerive.showErrorSnackBar('share_qr_code_error'.tr());
     }
   }
+
+  Future<void> _shareOnWeb(Uint8List imageBytes) async {
+    // Проверяем поддержку Web Share API
+
+    try {
+      // Создаем File object для веба
+      final blob = html.Blob([imageBytes], 'image/png');
+      final file = html.File([blob], 'qr_code.png', {'type': 'image/png'});
+
+      // Используем Web Share API
+      await html.window.navigator.share({
+        'title': 'myQrCodeTitle'.tr(),
+        'files': [file],
+      });
+      return;
+    } catch (e) {
+      print("Web Share API failed: $e");
+      // Fallback к скачиванию
+    }
+
+    // Fallback: скачивание файла
+    // _downloadFile(imageBytes, 'qr_code.png');
+  }
+
+  // void _downloadFile(Uint8List bytes, String fileName) {
+  //   // Создаем blob и ссылку для скачивания
+  //   final blob = html.Blob([bytes]);
+  //   final url = html.Url.createObjectUrlFromBlob(blob);
+
+  //   // Создаем временную ссылку и кликаем по ней
+  //   final anchor = html.AnchorElement(href: url)
+  //     ..setAttribute('download', fileName)
+  //     ..style.display = 'none';
+
+  //   html.document.body?.children.add(anchor);
+  //   anchor.click();
+
+  //   // Очищаем ресурсы
+  //   html.document.body?.children.remove(anchor);
+  //   html.Url.revokeObjectUrl(url);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -116,7 +159,6 @@ class __ShowQRModalContentState extends State<_ShowQRModalContent> {
                 padding: EdgeInsets.zero,
                 version: QrVersions.auto,
                 backgroundColor: white,
-                
                 size: qrSize,
               ),
             ),

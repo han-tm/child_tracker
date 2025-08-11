@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:child_tracker/index.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
@@ -84,7 +82,7 @@ class EditKidTaskScreen extends StatelessWidget {
                       child: IntrinsicHeight(
                         child: Column(
                           children: [
-                             Padding(
+                            Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 24),
                               child: MaskotMessage(
                                 message: 'want_to_fix_something'.tr(),
@@ -118,7 +116,7 @@ class EditKidTaskScreen extends StatelessWidget {
                                             onTap: () => onChangeMode(context, 'photo'),
                                             imageUrl:
                                                 (state.photo == null && state.emoji == null) ? state.photoUrl : null,
-                                            imageFile: state.photo != null ? File(state.photo!.path) : null,
+                                            imageFile: state.photo?.path,
                                             emoji: state.emoji,
                                           ),
                                           Align(
@@ -166,7 +164,7 @@ class EditKidTaskScreen extends StatelessWidget {
                                     onTap: () => onChangeMode(context, 'startDate'),
                                     child: Row(
                                       children: [
-                                         Expanded(
+                                        Expanded(
                                           child: AppText(
                                             text: 'start'.tr(),
                                             size: 16,
@@ -190,7 +188,7 @@ class EditKidTaskScreen extends StatelessWidget {
                                     onTap: () => onChangeMode(context, 'endDate'),
                                     child: Row(
                                       children: [
-                                         Expanded(
+                                        Expanded(
                                           child: AppText(
                                             text: 'end_optional'.tr(),
                                             size: 16,
@@ -214,7 +212,7 @@ class EditKidTaskScreen extends StatelessWidget {
                                     onTap: () => onChangeMode(context, 'reminer'),
                                     child: Row(
                                       children: [
-                                         Expanded(
+                                        Expanded(
                                           child: AppText(
                                             text: 'reminder_optional'.tr(),
                                             size: 16,

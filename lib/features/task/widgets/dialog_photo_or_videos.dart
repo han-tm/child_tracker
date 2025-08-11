@@ -1,9 +1,7 @@
-import 'dart:io';
-
-
 import 'package:child_tracker/index.dart';
 
 import 'package:flutter/material.dart';
+import 'package:get_thumbnail_video/video_thumbnail.dart';
 
 class DialogPhotoOrVideos extends StatelessWidget {
   final List<String> files;
@@ -25,11 +23,25 @@ class DialogPhotoOrVideos extends StatelessWidget {
   }
 
   Widget photoOrVideoCard(String url) {
-    if (CustomImagePicker.isVideoUrl(url)) {
-      return _VideoCard(url: url);
-    } else {
-      return _PhotoCard(url: url);
-    }
+    return FutureBuilder<bool>(
+      future: CustomImagePicker.isVideoUrl(url),
+      builder: (context, snapshot) {
+        final result = snapshot.data;
+
+        if (result == null) return const CircularProgressIndicator();
+        if (result) {
+          return _VideoCard(url: url);
+        } else {
+          return _PhotoCard(url: url);
+        }
+      },
+    );
+
+    // if (CustomImagePicker.isVideoUrl(url)) {
+    //   return _VideoCard(url: url);
+    // } else {
+    //   return _PhotoCard(url: url);
+    // }
   }
 }
 
@@ -51,9 +63,10 @@ class _VideoCard extends StatelessWidget {
         child: Stack(
           alignment: Alignment.center,
           children: [
-            FutureBuilder<String?>(
+            FutureBuilder<XFile?>(
                 future: CustomImagePicker.getFileVideoThumbnailFromUrl(url),
                 builder: (context, snapshot) {
+                  print(snapshot.error);
                   if (snapshot.data == null) {
                     return Container(
                       color: const Color(0xFFE9F0FF),
@@ -62,8 +75,8 @@ class _VideoCard extends StatelessWidget {
                     );
                   }
 
-                  return Image.file(
-                    File(snapshot.data!),
+                  return Image.network(
+                    snapshot.data!.path,
                     fit: BoxFit.cover,
                     width: 100,
                     height: 100,
@@ -123,7 +136,6 @@ class _PhotoCard extends StatelessWidget {
         height: 100,
         circularRadius: 4,
       ),
-
     );
   }
 }

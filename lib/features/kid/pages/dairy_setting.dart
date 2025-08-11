@@ -18,8 +18,6 @@ class _DairySettingScreenState extends State<DairySettingScreen> {
 
   Future<void> changeNotificationStatus(bool val) async {
     context.read<UserCubit>().setDairyNotification(val);
-    final localPush = sl<LocalNotificationService>();
-    localPush.toggleDailyDiaryReminders(val);
   }
 
   void onMembersTap() {

@@ -332,7 +332,7 @@ class __SuggestionStateWidget extends State<_SuggestionWidget> {
                             return Padding(
                               padding: const EdgeInsets.only(top: 16),
                               child: GestureDetector(
-                                behavior: HitTestBehavior.opaque,
+                                behavior: HitTestBehavior.translucent,
                                 onTap: () {
                                   widget.onTap(task);
                                 },

@@ -2,12 +2,13 @@ import 'dart:typed_data';
 
 import 'package:child_tracker/index.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:get_thumbnail_video/video_thumbnail.dart';
 
 import 'package:image_picker/image_picker.dart';
 import 'package:mime/mime.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:video_thumbnail/video_thumbnail.dart';
+
 
 class CustomImagePicker {
   static const allowedMimeTypes = [
@@ -56,19 +57,23 @@ class CustomImagePicker {
   static final _picker = ImagePicker();
 
   static Future<XFile?> pickAvatarFromGallery(BuildContext context, {ImageSource? source}) async {
-    source ??= await showImageSourceSelectModalBottomSheet(context);
+    // source ??= await showImageSourceSelectModalBottomSheet(context);
 
-    if (source == null) return null;
+    // if (source == null) return null;
 
-    final XFile? xfile = await _picker.pickImage(source: source);
+    final XFile? xfile = await _picker.pickImage(source: ImageSource.gallery);
 
     if (xfile == null) return null;
 
-    final mimeType = lookupMimeType(xfile.path);
+    if (xfile.mimeType == null) {
+      return xfile;
+    } else {
+      final mimeType = xfile.mimeType!;
 
-    if (mimeType == null || !allowedMimeTypes.contains(mimeType)) {
-      SnackBarSerive.showErrorSnackBar('onlyPhoto'.tr());
-      return null;
+      if (!allowedMimeTypes.contains(mimeType)) {
+        SnackBarSerive.showErrorSnackBar('onlyPhoto'.tr());
+        return null;
+      }
     }
 
     return xfile;
@@ -94,7 +99,9 @@ class CustomImagePicker {
 
     if (xfile == null) return null;
 
-    final mimeType = lookupMimeType(xfile.path);
+    final mimeType = xfile.mimeType;
+
+    // final mimeType = lookupMimeType(xfile.path);
 
     if (mimeType == null || !allowedPhotoOrVideoTypes.contains(mimeType)) {
       SnackBarSerive.showErrorSnackBar('onlyPhotoOrVideo'.tr());
@@ -109,44 +116,90 @@ class CustomImagePicker {
     return allowedVideoMimeTypes.contains(mimeType);
   }
 
-  static bool isVideoUrl(String url) {
-    final String path = url.split('?').first;
-    final lowerCaseUrl = path.toLowerCase();
-    return lowerCaseUrl.endsWith('.mp4') ||
-        lowerCaseUrl.endsWith('.mov') ||
-        lowerCaseUrl.endsWith('.avi') ||
-        lowerCaseUrl.endsWith('.mkv') ||
-        lowerCaseUrl.endsWith('.webm') ||
-        lowerCaseUrl.endsWith('.flv') ||
-        lowerCaseUrl.endsWith('.wmv');
+  static bool isVideoForWeb(XFile file) {
+    final mimeType = file.mimeType;
+
+    return allowedVideoMimeTypes.contains(mimeType);
+  }
+
+  static Future<bool> isVideoUrl(String url) async {
+    return await _detectFromFirebaseMetadata(url);
+
+    // final String path = url.split('?').first;
+    // final lowerCaseUrl = path.toLowerCase();
+    // return lowerCaseUrl.endsWith('.mp4') ||
+    //     lowerCaseUrl.endsWith('.mov') ||
+    //     lowerCaseUrl.endsWith('.avi') ||
+    //     lowerCaseUrl.endsWith('.mkv') ||
+    //     lowerCaseUrl.endsWith('.webm') ||
+    //     lowerCaseUrl.endsWith('.flv') ||
+    //     lowerCaseUrl.endsWith('.wmv');
   }
 
   static Future<Uint8List?> getFileVideoThumbnail(String path) async {
     final thumb = await VideoThumbnail.thumbnailData(
       video: path,
-      imageFormat: ImageFormat.JPEG,
       maxHeight: 120,
       maxWidth: 120,
       quality: 75,
-    ).onError((_, e) {
-      print(e);
-      return null;
-    });
+    );
     return thumb;
   }
 
-  static Future<String?> getFileVideoThumbnailFromUrl(String url) async {
+  static Future<bool> _detectFromFirebaseMetadata(String url) async {
+    try {
+      // Извлекаем путь из URL
+      final path = _extractPathFromUrl(url);
+      if (path == null) return false;
+
+      // Получаем ссылку на файл в Firebase Storage
+      final ref = FirebaseStorage.instance.ref(path);
+      final metadata = await ref.getMetadata();
+
+      final contentType = metadata.contentType;
+      return _getFileTypeFromMimeType(contentType);
+    } catch (e) {
+      print('Failed to get Firebase metadata: $e');
+      return false;
+    }
+  }
+
+  static String? _extractPathFromUrl(String url) {
+    try {
+      final uri = Uri.parse(url);
+      if (uri.pathSegments.contains('o')) {
+        final oIndex = uri.pathSegments.indexOf('o');
+        if (oIndex + 1 < uri.pathSegments.length) {
+          return Uri.decodeComponent(uri.pathSegments[oIndex + 1]);
+        }
+      }
+      return null;
+    } catch (e) {
+      print('Failed to extract path from URL: $e');
+      return null;
+    }
+  }
+
+  static bool _getFileTypeFromMimeType(String? mimeType) {
+    if (mimeType == null) return false;
+
+    final lowerMimeType = mimeType.toLowerCase();
+
+    if (lowerMimeType.startsWith('image/')) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  static Future<XFile?> getFileVideoThumbnailFromUrl(String url) async {
     final thumb = await VideoThumbnail.thumbnailFile(
       video: url,
-      thumbnailPath: (await getTemporaryDirectory()).path,
-      imageFormat: ImageFormat.WEBP,
+      // thumbnailPath: (await getTemporaryDirectory()).path,
       maxHeight: 100,
       maxWidth: 100,
       quality: 75,
-    ).onError((_, e) {
-      print(e);
-      return null;
-    });
+    );
     return thumb;
   }
 }

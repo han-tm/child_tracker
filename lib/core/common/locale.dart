@@ -28,10 +28,11 @@ class LocaleCubit extends Cubit<Locale> {
     }
   }
 
-  void changeAppLocale(BuildContext context, String languageCode) {
+  void changeAppLocale(BuildContext context, String languageCode) async {
     _storageService.setLocale(languageCode);
     final Locale newLocale = Locale.fromSubtags(languageCode: languageCode);
-    context.setLocale(newLocale);
+    // context.setLocale(newLocale);
+    await EasyLocalization.of(context)!.setLocale(newLocale);
     emit(newLocale);
   }
 

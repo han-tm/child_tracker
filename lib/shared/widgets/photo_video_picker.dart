@@ -1,4 +1,4 @@
-import 'dart:io';
+
 import 'dart:typed_data';
 
 import 'package:child_tracker/index.dart';
@@ -93,7 +93,7 @@ class _PhotoVideoPickerState extends State<PhotoVideoPicker> {
   }
 
   Widget photoOrVideoCard(XFile file) {
-    if (CustomImagePicker.isVideo(file.path)) {
+    if (CustomImagePicker.isVideoForWeb(file)) {
       return _VideoCard(file: file, onRemove: () => onRemove(file));
     } else {
       return _PhotoCard(file: file, onRemove: () => onRemove(file));
@@ -207,8 +207,8 @@ class _PhotoCard extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(12),
-            child: Image.file(
-              File(file.path),
+            child: Image.network(
+              file.path,
               fit: BoxFit.cover,
               width: double.infinity,
               height: double.infinity,

@@ -1,4 +1,4 @@
-import 'dart:io';
+
 import 'dart:typed_data';
 
 import 'package:child_tracker/index.dart';
@@ -8,10 +8,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class MultiFilePickerWidget extends StatefulWidget {
-  final List<File> files;
+  final List<String> files;
   final int maxLenght;
-  final void Function(File file) onFilePicked;
-  final void Function(File file) onFileRemoved;
+  final void Function(String file) onFilePicked;
+  final void Function(String file) onFileRemoved;
   final String label;
   const MultiFilePickerWidget({
     super.key,
@@ -34,7 +34,7 @@ class _MultiFilePickerWidgetState extends State<MultiFilePickerWidget> {
     }
     final pickedFile = await CustomImagePicker.pickPhotoOrVideo(context);
     if (pickedFile != null) {
-      widget.onFilePicked(File(pickedFile.path));
+      widget.onFilePicked(pickedFile.path);
     }
   }
 
@@ -123,7 +123,7 @@ class _AddMediaButton extends StatelessWidget {
 }
 
 class _SelectedMediaItem extends StatelessWidget {
-  final File mediaFile;
+  final String mediaFile;
   final VoidCallback onDelete;
 
   const _SelectedMediaItem({
@@ -133,18 +133,18 @@ class _SelectedMediaItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isVideo = CustomImagePicker.isVideo(mediaFile.path);
+    bool isVideo = CustomImagePicker.isVideo(mediaFile);
     Widget imageWidget;
     if (!isVideo) {
-      imageWidget = Image.file(
-        File(mediaFile.path),
+      imageWidget = Image.network(
+        mediaFile,
         fit: BoxFit.cover,
         width: double.infinity,
         height: double.infinity,
       );
     } else {
       imageWidget = FutureBuilder<Uint8List?>(
-        future: CustomImagePicker.getFileVideoThumbnail(mediaFile.path),
+        future: CustomImagePicker.getFileVideoThumbnail(mediaFile),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Image.memory(
