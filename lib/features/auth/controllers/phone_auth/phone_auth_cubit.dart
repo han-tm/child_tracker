@@ -26,14 +26,14 @@ class PhoneAuthCubit extends Cubit<PhoneAuthState> {
         super(PhoneAuthInitial());
 
   Future<void> sendCode(String phone, {bool isResend = false}) async {
-    print('send code phone: $phone');
+    // print('send code phone: $phone');
     emit(PhoneAuthLoading());
     try {
       final HttpsCallable callable = _ff.httpsCallable('sendCodeDev', options: HttpsCallableOptions());
       final Map<String, dynamic> dataToSend = {'phone': phone};
-      print('Data being sent to Firebase Function: $dataToSend');
+      // print('Data being sent to Firebase Function: $dataToSend');
       final HttpsCallableResult result = await callable.call(dataToSend);
-      print('Result: ${result.data}');
+      // print('Result: ${result.data}');
       final code = result.data['code'];
       if (isResend) {
         emit(PhoneAuthResendOTPSuccess(code: code));
@@ -41,7 +41,7 @@ class PhoneAuthCubit extends Cubit<PhoneAuthState> {
         emit(PhoneAuthCodeSentSuccess(code: code));
       }
     } on FirebaseFunctionsException catch (e) {
-      print('Firebase Functions Error: ${e.code} - ${e.message} - ${e.details}');
+      // print('Firebase Functions Error: ${e.code} - ${e.message} - ${e.details}');
       String message = e.message == 'Failed to send code due to an internal server error.'
           ? 'cantSendToPhone'.tr()
           : e.message == 'Wait before requesting another code.'
@@ -59,9 +59,9 @@ class PhoneAuthCubit extends Cubit<PhoneAuthState> {
     try {
       final HttpsCallable callable = _ff.httpsCallable('verifyCode', options: HttpsCallableOptions());
       final Map<String, dynamic> dataToSend = {'phone': phone, 'code': otp};
-      print('Data being sent to Firebase Function: $dataToSend');
+      // print('Data being sent to Firebase Function: $dataToSend');
       final HttpsCallableResult result = await callable.call(dataToSend);
-      print('Result: ${result.data}');
+      // print('Result: ${result.data}');
 
       final String? token = result.data['token'];
 
@@ -72,11 +72,11 @@ class PhoneAuthCubit extends Cubit<PhoneAuthState> {
 
       _signInWithCredential(token, phone);
     } on FirebaseFunctionsException catch (e) {
-      print('Firebase Functions Error: ${e.code} - ${e.message} - ${e.details}');
+      // print('Firebase Functions Error: ${e.code} - ${e.message} - ${e.details}');
       String message = e.message == 'Invalid code provided.' ? 'invalidCode'.tr() : e.message ?? e.code;
       emit(PhoneAuthFailure(errorMessage: message));
     } catch (e) {
-      print('Error {verifyOTP}: $e');
+      // print('Error {verifyOTP}: $e');
       emit(PhoneAuthFailure(errorMessage: e.toString()));
     }
   }
@@ -105,7 +105,7 @@ class PhoneAuthCubit extends Cubit<PhoneAuthState> {
             return;
           }
         } else {
-          print('Create new User');
+          // print('Create new User');
           await _createNewUser(userCredential.user!, phone);
           emit(PhoneAuthSuccessRedirect());
         }

@@ -54,6 +54,7 @@ Future<UserInitialStatus> getUserStatus(BuildContext context) async {
 final ValueNotifier<bool> isRedirectLoading = ValueNotifier(false);
 
 Future<void> redirectFunc(BuildContext context) async {
+  // debugPrint('redirectFunc Start');
   final user = FirebaseAuth.instance.currentUser;
   final isAuth = user != null;
 
@@ -61,14 +62,17 @@ Future<void> redirectFunc(BuildContext context) async {
     final userStatus = await getUserStatus(context);
     FlutterNativeSplash.remove();
     initialRoute.value = getRouteForStatus(userStatus);
+    // debugPrint('redirectFunc: User authenticated initialRoute: ${initialRoute.value}');
   } else {
     final storageService = sl<StorageService>();
     bool showed = storageService.isOnboardShowed();
     FlutterNativeSplash.remove();
     if (!showed) {
       initialRoute.value = '/onboarding';
+      // debugPrint('redirectFunc: User not authenticated initialRoute: ${initialRoute.value}');
     } else {
       initialRoute.value = null;
+      // debugPrint('redirectFunc: User not authenticated initialRoute: ${initialRoute.value}');
     }
   }
 
@@ -98,6 +102,7 @@ String? getRouteForStatus(UserInitialStatus status) {
 final ValueNotifier<bool> isCheckingAuth = ValueNotifier(true);
 final ValueNotifier<bool> isFirstRedirect = ValueNotifier(true);
 final ValueNotifier<String?> initialRoute = ValueNotifier(null);
+final ValueNotifier<Uri?> deepLinkUri = ValueNotifier(null);
 
 final GoRouter router = GoRouter(
   navigatorKey: navigatorKey,
@@ -105,8 +110,39 @@ final GoRouter router = GoRouter(
   debugLogDiagnostics: false,
   refreshListenable: isCheckingAuth,
   redirect: (context, state) async {
-    if (isCheckingAuth.value) return '/splash';
-    return isFirstRedirect.value ? initialRoute.value : null;
+    final uri = state.uri;
+    // debugPrint('****redirect uri: ${uri.toString()}\nstate.fullPath: ${state.fullPath}');
+
+    // 🔥 Запоминаем deep link, если это payment_web_redirect
+    if (uri.path == '/payment_web_redirect') {
+      final orderId = uri.queryParameters['orderId'];
+      if (orderId != null) {
+        deepLinkUri.value = uri;
+        // debugPrint('deepLinkUri.value1: ${deepLinkUri.value}');
+      }
+    }
+
+    // print(state.fullPath?.contains('payment_web_redirect'));
+    // if (state.fullPath?.contains('payment_web_redirect') ?? false) {
+    //   return null;
+    // }
+    if (isCheckingAuth.value) {
+      // debugPrint('isCheckingAuth.value: /splash');
+      return '/splash';
+    }
+    if (isFirstRedirect.value) {
+      if (deepLinkUri.value?.path == '/payment_web_redirect') {
+        final url = deepLinkUri.value.toString();
+        // debugPrint('redirect url = $url');
+        deepLinkUri.value = null;
+        return url;
+      }
+      // debugPrint('initialRoute.value2 = ${initialRoute.value}');
+      return initialRoute.value;
+    } else {
+      // debugPrint('redirect = null');
+      return null;
+    }
   },
   routes: [
     GoRoute(
@@ -666,15 +702,15 @@ final GoRouter router = GoRouter(
       path: '/select_user_for_gift',
       builder: (context, state) => const SelectUserForGiftScreen(),
     ),
-    GoRoute(
-      path: '/purchase_plan',
-      builder: (context, state) {
-        final data = state.extra as Map;
-        final url = data['url'];
-        final orderId = data['order_id'];
-        return PurchasePaymentScreen(url: url, orderId: orderId);
-      },
-    ),
+    // GoRoute(
+    //   path: '/purchase_plan',
+    //   builder: (context, state) {
+    //     final data = state.extra as Map;
+    //     final url = data['url'];
+    //     final orderId = data['order_id'];
+    //     return PurchasePaymentScreen(url: url, orderId: orderId);
+    //   },
+    // ),
     GoRoute(
       path: '/all_gifts',
       builder: (context, state) => AllGiftsScreen(orders: state.extra as List<DocumentSnapshot>),
@@ -682,6 +718,14 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: '/payment_success',
       builder: (context, state) => PaymentSuccessScreen(receiver: state.extra as String?),
+    ),
+    GoRoute(
+      path: '/payment_web_redirect',
+      builder: (context, state) {
+        final orderId = state.uri.queryParameters['orderId'];
+        
+        return PaymentWebRedirectScreen(orderId: orderId ?? 'no order');
+      },
     ),
   ],
   errorBuilder: (context, state) => ErrorScreen(error: state.error.toString()),

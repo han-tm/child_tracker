@@ -232,7 +232,7 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
                                 child: FilledAppButton(
                                   text: 'startUsingButton'.tr(),
                                   onTap: () {
-                                    context.pop();
+                                    context.replace('/mentor_task');
                                   },
                                 ),
                               ),

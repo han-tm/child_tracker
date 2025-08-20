@@ -3,6 +3,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+// ignore: avoid_web_libraries_in_flutter
+import 'dart:js' as js;
 
 class KidMainScreen extends StatefulWidget {
   final GoRouterState state;
@@ -17,8 +19,13 @@ class _KidMainScreenState extends State<KidMainScreen> {
   @override
   void initState() {
     super.initState();
-    FirebaseMessaginService service = sl<FirebaseMessaginService>();
-    service.setupFCM(context);
+    disableCollapseGesture();
+    // FirebaseMessaginService service = sl<FirebaseMessaginService>();
+    // service.setupFCM(context);
+  }
+
+  void disableCollapseGesture() {
+    js.context.callMethod('eval', ['Telegram.WebApp.disableVerticalSwipes()']);
   }
 
   void onTapTab(int index) async {

@@ -58,8 +58,9 @@ dependencies:
   # flutter_local_notifications: ^19.4.0
   # timezone: ^0.10.1
   # flutter_timezone: ^4.1.1
-  webview_flutter: ^4.10.0
+  # webview_flutter: ^4.10.0
   get_thumbnail_video: ^0.7.3
+  telegram_web_app: ^0.3.3
   
 
 

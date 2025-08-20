@@ -1,0 +1,15 @@
+{
+  "projects": {
+    "default": "kidscult-a5d7e"
+  },
+  "targets": {
+    "kidscult-a5d7e": {
+      "hosting": {
+        "telegram_app": [
+          "telegram-app-kidscult"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}

@@ -1,11 +1,13 @@
-import 'dart:developer';
+
+
+// ignore_for_file: unused_field
 
 import 'package:child_tracker/index.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:cloud_functions/cloud_functions.dart' as cf;
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+
 
 class FirebaseMessaginService {
   final FirebaseMessaging _fcm;
@@ -31,219 +33,226 @@ class FirebaseMessaginService {
   List<String> receivedNotificationIds = [];
 
   Future<void> setupFCM(BuildContext context) async {
-    await _fcm.requestPermission(
-      alert: true,
-      badge: true,
-      sound: true,
-    );
+    try{
 
-    String? token = await _fcm.getToken();
-    await _setFCMToken(token);
+    // await _fcm.requestPermission(
+    //   alert: true,
+    //   badge: true,
+    //   sound: true,
+    // );
 
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      log('Message: ${message.messageId} TITLE: ${message.notification?.title}:  BODY: ${message.notification?.body} \n DATA: ${message.data}');
-      final notification = message.notification;
-      if (notification != null) {
-        bool alreadyView = isNotificationReceived(message.messageId ?? '');
-        if (alreadyView) {
-          log('Message already viewed: ${message.messageId}');
-          return;
-        }
+    // String? token = await _fcm.getToken();
+    // await _setFCMToken(token);
 
-        final Map<String, dynamic> notificationData = message.data;
-        NotificationType type = notificationTypeFromString(notificationData['type']);
+    // FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    //   log('Message: ${message.messageId} TITLE: ${message.notification?.title}:  BODY: ${message.notification?.body} \n DATA: ${message.data}');
+    //   final notification = message.notification;
+    //   if (notification != null) {
+    //     bool alreadyView = isNotificationReceived(message.messageId ?? '');
+    //     if (alreadyView) {
+    //       log('Message already viewed: ${message.messageId}');
+    //       return;
+    //     }
 
-        onTap() {
-          if (type == NotificationType.reminder ||
-              type == NotificationType.taskComplete ||
-              type == NotificationType.taskRework ||
-              type == NotificationType.taskCanceled ||
-              type == NotificationType.taskDeleted ||
-              type == NotificationType.taskCreated ||
-              type == NotificationType.taskReview) {
-            final String? taskId = notificationData['task_id'];
-            if (taskId == null) return;
-            final taskRef = _fs.collection('tasks').doc(taskId);
-            final data = {'task': null, 'taskRef': taskRef};
-            if (context.mounted) {
-              context.push('/task_detail', extra: data);
-            }
-          } else if (type == NotificationType.bonusCreated ||
-              type == NotificationType.bonusNeedApprove ||
-              type == NotificationType.bonusCanceled ||
-              type == NotificationType.bonusRejected ||
-              type == NotificationType.bonusApproved ||
-              type == NotificationType.bonusRequested ||
-              type == NotificationType.bonusRequestApproved) {
-            final String? bonusId = notificationData['bonus_id'];
-            if (bonusId == null) return;
-            final bonusRef = _fs.collection('bonuses').doc(bonusId);
-            final data = {'bonus': null, 'bonusRef': bonusRef};
-            if (context.mounted) {
-              context.push('/bonus_detail', extra: data);
-            }
-          } else if (type == NotificationType.coinChange) {
-            context.push('/kid_coins', extra: _userCubit.state);
-          } else if (type == NotificationType.chat) {
-            final String? chatId = notificationData['chat_id'];
-            if (chatId == null) return;
-            final chatRef = _fs.collection('chats').doc(chatId);
-            context.push('/chat_room', extra: chatRef);
-            return;
-          } else if (type == NotificationType.gift) {
-            context.go('/mentor_profile');
-            return;
-          } else {
-            return;
-          }
-        }
+    //     final Map<String, dynamic> notificationData = message.data;
+    //     NotificationType type = notificationTypeFromString(notificationData['type']);
 
-        if (type == NotificationType.chat) {
-          final String? chatId = notificationData['chat_id'];
-          if (chatId == null) return;
-          if (_currentChatCubit.state == chatId) return;
-        }
+    //     onTap() {
+    //       if (type == NotificationType.reminder ||
+    //           type == NotificationType.taskComplete ||
+    //           type == NotificationType.taskRework ||
+    //           type == NotificationType.taskCanceled ||
+    //           type == NotificationType.taskDeleted ||
+    //           type == NotificationType.taskCreated ||
+    //           type == NotificationType.taskReview) {
+    //         final String? taskId = notificationData['task_id'];
+    //         if (taskId == null) return;
+    //         final taskRef = _fs.collection('tasks').doc(taskId);
+    //         final data = {'task': null, 'taskRef': taskRef};
+    //         if (context.mounted) {
+    //           context.push('/task_detail', extra: data);
+    //         }
+    //       } else if (type == NotificationType.bonusCreated ||
+    //           type == NotificationType.bonusNeedApprove ||
+    //           type == NotificationType.bonusCanceled ||
+    //           type == NotificationType.bonusRejected ||
+    //           type == NotificationType.bonusApproved ||
+    //           type == NotificationType.bonusRequested ||
+    //           type == NotificationType.bonusRequestApproved) {
+    //         final String? bonusId = notificationData['bonus_id'];
+    //         if (bonusId == null) return;
+    //         final bonusRef = _fs.collection('bonuses').doc(bonusId);
+    //         final data = {'bonus': null, 'bonusRef': bonusRef};
+    //         if (context.mounted) {
+    //           context.push('/bonus_detail', extra: data);
+    //         }
+    //       } else if (type == NotificationType.coinChange) {
+    //         context.push('/kid_coins', extra: _userCubit.state);
+    //       } else if (type == NotificationType.chat) {
+    //         final String? chatId = notificationData['chat_id'];
+    //         if (chatId == null) return;
+    //         final chatRef = _fs.collection('chats').doc(chatId);
+    //         context.push('/chat_room', extra: chatRef);
+    //         return;
+    //       } else if (type == NotificationType.gift) {
+    //         context.go('/mentor_profile');
+    //         return;
+    //       } else {
+    //         return;
+    //       }
+    //     }
 
-        if (type == NotificationType.gift) {
-          _userCubit.refreshProfile();
-        }
+    //     if (type == NotificationType.chat) {
+    //       final String? chatId = notificationData['chat_id'];
+    //       if (chatId == null) return;
+    //       if (_currentChatCubit.state == chatId) return;
+    //     }
 
-        SnackBarSerive.showSnackBarOnReceivePushNotification(
-          notification.title ?? 'Notification',
-          notification.body,
-          onTap,
-        );
-      }
-    });
+    //     if (type == NotificationType.gift) {
+    //       _userCubit.refreshProfile();
+    //     }
 
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      log('Message: ${message.messageId} TITLE: ${message.notification?.title}:  BODY: ${message.notification?.body} \n DATA: ${message.data}');
-      final notification = message.notification;
-      if (notification != null) {
-        bool alreadyView = isNotificationReceived(message.messageId ?? '');
-        if (alreadyView) {
-          log('Message already viewed: ${message.messageId}');
-          return;
-        }
+    //     SnackBarSerive.showSnackBarOnReceivePushNotification(
+    //       notification.title ?? 'Notification',
+    //       notification.body,
+    //       onTap,
+    //     );
+    //   }
+    // });
 
-        final Map<String, dynamic> notificationData = message.data;
-        NotificationType type = notificationTypeFromString(notificationData['type']);
+    // FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+    //   log('Message: ${message.messageId} TITLE: ${message.notification?.title}:  BODY: ${message.notification?.body} \n DATA: ${message.data}');
+    //   final notification = message.notification;
+    //   if (notification != null) {
+    //     bool alreadyView = isNotificationReceived(message.messageId ?? '');
+    //     if (alreadyView) {
+    //       log('Message already viewed: ${message.messageId}');
+    //       return;
+    //     }
 
-        onTap() {
-          if (type == NotificationType.reminder ||
-              type == NotificationType.taskComplete ||
-              type == NotificationType.taskRework ||
-              type == NotificationType.taskCanceled ||
-              type == NotificationType.taskDeleted ||
-              type == NotificationType.taskCreated ||
-              type == NotificationType.taskReview) {
-            final String? taskId = notificationData['task_id'];
-            if (taskId == null) return;
-            final taskRef = _fs.collection('tasks').doc(taskId);
-            final data = {'task': null, 'taskRef': taskRef};
-            if (context.mounted) {
-              context.push('/task_detail', extra: data);
-            }
-          } else if (type == NotificationType.bonusCreated ||
-              type == NotificationType.bonusNeedApprove ||
-              type == NotificationType.bonusCanceled ||
-              type == NotificationType.bonusRejected ||
-              type == NotificationType.bonusApproved ||
-              type == NotificationType.bonusRequested ||
-              type == NotificationType.bonusRequestApproved) {
-            final String? bonusId = notificationData['bonus_id'];
-            if (bonusId == null) return;
-            final bonusRef = _fs.collection('bonuses').doc(bonusId);
-            final data = {'bonus': null, 'bonusRef': bonusRef};
-            if (context.mounted) {
-              context.push('/bonus_detail', extra: data);
-            }
-          } else if (type == NotificationType.coinChange) {
-            context.push('/kid_coins', extra: _userCubit.state);
-          } else if (type == NotificationType.chat) {
-            final String? chatId = notificationData['chat_id'];
-            if (chatId == null) return;
-            final chatRef = _fs.collection('chats').doc(chatId);
-            context.push('/chat_room', extra: chatRef);
-            return;
-          } else if (type == NotificationType.gift) {
-            context.go('/mentor_profile');
-            return;
-          } else {
-            return;
-          }
-        }
+    //     final Map<String, dynamic> notificationData = message.data;
+    //     NotificationType type = notificationTypeFromString(notificationData['type']);
 
-        if (context.mounted) {
-          onTap();
-        }
-      }
-    });
+    //     onTap() {
+    //       if (type == NotificationType.reminder ||
+    //           type == NotificationType.taskComplete ||
+    //           type == NotificationType.taskRework ||
+    //           type == NotificationType.taskCanceled ||
+    //           type == NotificationType.taskDeleted ||
+    //           type == NotificationType.taskCreated ||
+    //           type == NotificationType.taskReview) {
+    //         final String? taskId = notificationData['task_id'];
+    //         if (taskId == null) return;
+    //         final taskRef = _fs.collection('tasks').doc(taskId);
+    //         final data = {'task': null, 'taskRef': taskRef};
+    //         if (context.mounted) {
+    //           context.push('/task_detail', extra: data);
+    //         }
+    //       } else if (type == NotificationType.bonusCreated ||
+    //           type == NotificationType.bonusNeedApprove ||
+    //           type == NotificationType.bonusCanceled ||
+    //           type == NotificationType.bonusRejected ||
+    //           type == NotificationType.bonusApproved ||
+    //           type == NotificationType.bonusRequested ||
+    //           type == NotificationType.bonusRequestApproved) {
+    //         final String? bonusId = notificationData['bonus_id'];
+    //         if (bonusId == null) return;
+    //         final bonusRef = _fs.collection('bonuses').doc(bonusId);
+    //         final data = {'bonus': null, 'bonusRef': bonusRef};
+    //         if (context.mounted) {
+    //           context.push('/bonus_detail', extra: data);
+    //         }
+    //       } else if (type == NotificationType.coinChange) {
+    //         context.push('/kid_coins', extra: _userCubit.state);
+    //       } else if (type == NotificationType.chat) {
+    //         final String? chatId = notificationData['chat_id'];
+    //         if (chatId == null) return;
+    //         final chatRef = _fs.collection('chats').doc(chatId);
+    //         context.push('/chat_room', extra: chatRef);
+    //         return;
+    //       } else if (type == NotificationType.gift) {
+    //         context.go('/mentor_profile');
+    //         return;
+    //       } else {
+    //         return;
+    //       }
+    //     }
 
-    FirebaseMessaging.instance.getInitialMessage().then((message) async {
-      if (!context.mounted) return;
-      if (message == null) return;
+    //     if (context.mounted) {
+    //       onTap();
+    //     }
+    //   }
+    // });
 
-      final Map<String, dynamic> notificationData = message.data;
-      NotificationType type = notificationTypeFromString(notificationData['type']);
+    // FirebaseMessaging.instance.getInitialMessage().then((message) async {
+    //   if (!context.mounted) return;
+    //   if (message == null) return;
 
-      onTap() {
-        if (type == NotificationType.reminder ||
-            type == NotificationType.taskComplete ||
-            type == NotificationType.taskRework ||
-            type == NotificationType.taskCanceled ||
-            type == NotificationType.taskDeleted ||
-            type == NotificationType.taskCreated ||
-            type == NotificationType.taskReview) {
-          final String? taskId = notificationData['task_id'];
-          if (taskId == null) return;
-          final taskRef = _fs.collection('tasks').doc(taskId);
-          final data = {'task': null, 'taskRef': taskRef};
-          if (context.mounted) {
-            context.push('/task_detail', extra: data);
-          }
-        } else if (type == NotificationType.bonusCreated ||
-            type == NotificationType.bonusNeedApprove ||
-            type == NotificationType.bonusCanceled ||
-            type == NotificationType.bonusRejected ||
-            type == NotificationType.bonusApproved ||
-            type == NotificationType.bonusRequested ||
-            type == NotificationType.bonusRequestApproved) {
-          final String? bonusId = notificationData['bonus_id'];
-          if (bonusId == null) return;
-          final bonusRef = _fs.collection('bonuses').doc(bonusId);
-          final data = {'bonus': null, 'bonusRef': bonusRef};
-          if (context.mounted) {
-            context.push('/bonus_detail', extra: data);
-          }
-        } else if (type == NotificationType.coinChange) {
-          context.push('/kid_coins', extra: _userCubit.state);
-        } else if (type == NotificationType.chat) {
-          final String? chatId = notificationData['chat_id'];
-          if (chatId == null) return;
-          final chatRef = _fs.collection('chats').doc(chatId);
-          context.push('/chat_room', extra: chatRef);
-          return;
-        } else if (type == NotificationType.gift) {
-          context.go('/mentor_profile');
-          return;
-        } else {
-          return;
-        }
-      }
+    //   final Map<String, dynamic> notificationData = message.data;
+    //   NotificationType type = notificationTypeFromString(notificationData['type']);
 
-      if (context.mounted) {
-        onTap();
-      }
-    });
+    //   onTap() {
+    //     if (type == NotificationType.reminder ||
+    //         type == NotificationType.taskComplete ||
+    //         type == NotificationType.taskRework ||
+    //         type == NotificationType.taskCanceled ||
+    //         type == NotificationType.taskDeleted ||
+    //         type == NotificationType.taskCreated ||
+    //         type == NotificationType.taskReview) {
+    //       final String? taskId = notificationData['task_id'];
+    //       if (taskId == null) return;
+    //       final taskRef = _fs.collection('tasks').doc(taskId);
+    //       final data = {'task': null, 'taskRef': taskRef};
+    //       if (context.mounted) {
+    //         context.push('/task_detail', extra: data);
+    //       }
+    //     } else if (type == NotificationType.bonusCreated ||
+    //         type == NotificationType.bonusNeedApprove ||
+    //         type == NotificationType.bonusCanceled ||
+    //         type == NotificationType.bonusRejected ||
+    //         type == NotificationType.bonusApproved ||
+    //         type == NotificationType.bonusRequested ||
+    //         type == NotificationType.bonusRequestApproved) {
+    //       final String? bonusId = notificationData['bonus_id'];
+    //       if (bonusId == null) return;
+    //       final bonusRef = _fs.collection('bonuses').doc(bonusId);
+    //       final data = {'bonus': null, 'bonusRef': bonusRef};
+    //       if (context.mounted) {
+    //         context.push('/bonus_detail', extra: data);
+    //       }
+    //     } else if (type == NotificationType.coinChange) {
+    //       context.push('/kid_coins', extra: _userCubit.state);
+    //     } else if (type == NotificationType.chat) {
+    //       final String? chatId = notificationData['chat_id'];
+    //       if (chatId == null) return;
+    //       final chatRef = _fs.collection('chats').doc(chatId);
+    //       context.push('/chat_room', extra: chatRef);
+    //       return;
+    //     } else if (type == NotificationType.gift) {
+    //       context.go('/mentor_profile');
+    //       return;
+    //     } else {
+    //       return;
+    //     }
+    //   }
+
+    //   if (context.mounted) {
+    //     onTap();
+    //   }
+    // });
+
+    }catch(e){
+      // SnackBarSerive.showErrorSnackBar(e.toString());
+      print(e);
+    }
   }
 
   bool isNotificationReceived(String id) => receivedNotificationIds.contains(id);
 
-  Future<void> _setFCMToken(String? token) async {
-    if (token == null) return;
-    await _userCubit.state?.ref.update({'fcm_token': token});
-  }
+  // Future<void> _setFCMToken(String? token) async {
+  //   if (token == null) return;
+  //   await _userCubit.state?.ref.update({'fcm_token': token});
+  // }
 
   //Пуш ребенку, когда ментор подтверждает выполнение
   void sendPushToKidOnTaskComplete(TaskModel task) async {

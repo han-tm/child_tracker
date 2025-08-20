@@ -17,3 +17,4 @@ export './change_lang.dart';
 export './purchase_payment.dart';
 export './select_plan.dart';
 export './select_user_for_gift.dart';
+export './payment_web_redirect.dart';

@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CurrentSubscriptionScreen extends StatefulWidget {
   const CurrentSubscriptionScreen({super.key});
@@ -38,7 +39,8 @@ class _CurrentSubscriptionScreenState extends State<CurrentSubscriptionScreen> {
             loading = false;
           });
 
-          context.replace('/purchase_plan', extra: data);
+          // context.replace('/purchase_plan', extra: data);
+          openUrl(data['url']);
         }
       } catch (e) {
         SnackBarSerive.showErrorSnackBar(e.toString());
@@ -71,7 +73,8 @@ class _CurrentSubscriptionScreenState extends State<CurrentSubscriptionScreen> {
             loading = false;
           });
 
-          context.replace('/purchase_plan', extra: data);
+          openUrl(data['url']);
+          // context.replace('/purchase_plan', extra: data);
         }
       } catch (e) {
         SnackBarSerive.showErrorSnackBar(e.toString());
@@ -106,7 +109,8 @@ class _CurrentSubscriptionScreenState extends State<CurrentSubscriptionScreen> {
           loading = false;
         });
 
-        context.replace('/purchase_plan', extra: data);
+        openUrl(data['url']);
+        // context.replace('/purchase_plan', extra: data);
       }
     } catch (e) {
       SnackBarSerive.showErrorSnackBar(e.toString());
@@ -120,8 +124,19 @@ class _CurrentSubscriptionScreenState extends State<CurrentSubscriptionScreen> {
 
   void onTapAllGifts(orders) async {
     DocumentSnapshot? order = await context.push('/all_gifts', extra: orders);
-    if(order !=null){
+    if (order != null) {
       onReplayGift(order);
+    }
+  }
+
+  void openUrl(String url) async {
+    try {
+      await launchUrl(
+        Uri.parse(url),
+        webOnlyWindowName: '_self',
+      );
+    } catch (e) {
+      if (mounted) SnackBarSerive.showErrorSnackBar(e.toString());
     }
   }
 
