@@ -29,7 +29,7 @@ android {
     defaultConfig {
         applicationId = "com.kidscult.app"
         minSdk = 23
-        targetSdk = flutter.targetSdkVersion
+        targetSdk = 35
         versionCode = flutter.versionCode
         versionName = flutter.versionName
         multiDexEnabled = true
