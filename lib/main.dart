@@ -21,7 +21,7 @@ void main() async {
   await EasyLocalization.ensureInitialized();
   await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  initializeDependencies();
+  await initializeDependencies();
 
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((_) async {
     final localeCubit = sl<LocaleCubit>();

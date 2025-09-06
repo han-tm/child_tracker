@@ -25,6 +25,7 @@ Future<void> initializeDependencies() async {
   final localNotificationService = LocalNotificationService();
   await localNotificationService.init();
   sl.registerLazySingleton(() => localNotificationService);
+  sl.registerLazySingleton(() => UserCubit(fs: fs));
   sl.registerLazySingleton(() => FirebaseMessaginService(
         appUserCubit: sl(),
         fs: fs,
@@ -35,7 +36,6 @@ Future<void> initializeDependencies() async {
       ));
   sl.registerLazySingleton(() => PaymentService(appUserCubit: sl(), fs: fs, functions: ff));
 
-  sl.registerLazySingleton(() => UserCubit(fs: fs));
   sl.registerLazySingleton(() => PhoneAuthCubit(userCubit: sl(), fs: fs, auth: fa, ff: ff));
   sl.registerLazySingleton(() => FillDataCubit(userCubit: sl(), fs: fs, auth: fa));
   sl.registerLazySingleton(() => NewChatCubit(fs: fs, userCubit: sl()));
