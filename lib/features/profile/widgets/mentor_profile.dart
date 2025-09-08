@@ -44,32 +44,32 @@ class MentorProfileWidget extends StatelessWidget {
             ),
           ),
           const Divider(height: 48, thickness: 1, color: greyscale200),
-          Builder(
-            builder: (context) {
-              bool hasSubscription = user.hasSubscription();
-              bool isTrial = user.isSubscriptionTrial();
-              return StreamBuilder<SubscriptionModel?>(
-                stream: (hasSubscription && !isTrial)
-                    ? sl<PaymentService>().getTariffStreamByRef(user.premiumSubscriptionRef!)
-                    : null,
-                builder: (context, snapshot) {
-                  final plan = snapshot.data;
-                  return ProfileMenuCard(
-                    onTap: () => context.push('/current_subscription'),
-                    icon: 'crown',
-                    iconColor: primary900,
-                    title: (hasSubscription && !isTrial)
-                        ? getTextByLocale(context, plan?.title ?? '...', plan?.titleEn ?? '...')
-                        : 'buy_premium'.tr(),
-                    description: !hasSubscription
-                        ? 'no_subscription'.tr()
-                        : '${isTrial ? "fremium_period".tr() : "premium_period".tr()} ${user.currentSubscriptionValidDate(context.locale.languageCode)}',
-                  );
-                },
-              );
-            },
-          ),
-          const SizedBox(height: 24),
+          // Builder(
+          //   builder: (context) {
+          //     bool hasSubscription = user.hasSubscription();
+          //     bool isTrial = user.isSubscriptionTrial();
+          //     return StreamBuilder<SubscriptionModel?>(
+          //       stream: (hasSubscription && !isTrial)
+          //           ? sl<PaymentService>().getTariffStreamByRef(user.premiumSubscriptionRef!)
+          //           : null,
+          //       builder: (context, snapshot) {
+          //         final plan = snapshot.data;
+          //         return ProfileMenuCard(
+          //           onTap: () => context.push('/current_subscription'),
+          //           icon: 'crown',
+          //           iconColor: primary900,
+          //           title: (hasSubscription && !isTrial)
+          //               ? getTextByLocale(context, plan?.title ?? '...', plan?.titleEn ?? '...')
+          //               : 'buy_premium'.tr(),
+          //           description: !hasSubscription
+          //               ? 'no_subscription'.tr()
+          //               : '${isTrial ? "fremium_period".tr() : "premium_period".tr()} ${user.currentSubscriptionValidDate(context.locale.languageCode)}',
+          //         );
+          //       },
+          //     );
+          //   },
+          // ),
+          // const SizedBox(height: 24),
           ProfileMenuCard(
             onTap: () {
               final Map<String, dynamic> extra = {
