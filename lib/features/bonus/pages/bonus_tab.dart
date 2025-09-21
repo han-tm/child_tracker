@@ -43,9 +43,7 @@ class _BonusTabScreenState extends State<BonusTabScreen> {
                 automaticallyImplyLeading: false,
                 toolbarHeight: 72,
                 leadingWidth: 0,
-                title: me.isKid
-                    ? KidBonusAppBarWidget(me: me, selectedMentor: state.selectedMentor)
-                    : MentorBonusAppbarWidget(selectedKid: state.selectedKid),
+                title: me.isKid ? KidBonusAppBarWidget(me: me, selectedMentor: state.selectedMentor) : MentorBonusAppbarWidget(selectedKid: state.selectedKid),
               ),
               floatingActionButton: SizedBox(
                 width: 56,
@@ -55,14 +53,15 @@ class _BonusTabScreenState extends State<BonusTabScreen> {
                     if (me.isKid) {
                       context.push('/create_bonus');
                     } else {
-                      if (me.hasSubscription()) {
-                        context.push('/create_bonus');
-                      } else {
-                        bool? confirm = await showPlanExpiredModalBottomSheet(context, 'get_subs_for_action'.tr());
-                        if (confirm == true && context.mounted) {
-                          context.push('/current_subscription');
-                        }
-                      }
+                      context.push('/create_bonus');
+                      // if (me.hasSubscription()) {
+                      //   context.push('/create_bonus');
+                      // } else {
+                      //   bool? confirm = await showPlanExpiredModalBottomSheet(context, 'get_subs_for_action'.tr());
+                      //   if (confirm == true && context.mounted) {
+                      //     context.push('/current_subscription');
+                      //   }
+                      // }
                     }
                   },
                   elevation: 4,

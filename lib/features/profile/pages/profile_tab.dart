@@ -18,54 +18,85 @@ class _ProfileTabScreenState extends State<ProfileTabScreen> {
   bool loading = false;
 
   void onScanQr(UserModel me) async {
-    if (!me.hasSubscription()) {
-      bool? confirm = await showPlanExpiredModalBottomSheet(context, 'get_subs_for_action2'.tr());
-      if (confirm == true && mounted) {
-        context.push('/current_subscription');
-      }
-    } else {
-      final canAdd = await sl<PaymentService>().canAddKid();
+    final UserModel? kid = await context.push<UserModel?>(
+      '/mentor_profile/scan_qr',
+    );
 
-      if (!mounted) return;
-      if (!canAdd) {
-        bool? confirm = await showMaxConnectionModalBottomSheet(context);
-        if (confirm == true && mounted) {
-          context.push('/current_subscription');
-        }
+    if (kid != null) {
+      debugPrint('connection kid: ${kid.id}');
+      if (me.connections.contains(kid.ref)) {
+        SnackBarSerive.showErrorSnackBar('kidAlreadyAdded'.tr());
+        return;
+      } else if (me.connectionRequests.contains(kid.ref)) {
+        SnackBarSerive.showErrorSnackBar('requestAlreadySent'.tr());
+        return;
       } else {
-        final UserModel? kid = await context.push<UserModel?>(
-          '/mentor_profile/scan_qr',
-        );
-
-        if (kid != null) {
-          debugPrint('connection kid: ${kid.id}');
-          if (me.connections.contains(kid.ref)) {
-            SnackBarSerive.showErrorSnackBar('kidAlreadyAdded'.tr());
-            return;
-          } else if (me.connectionRequests.contains(kid.ref)) {
-            SnackBarSerive.showErrorSnackBar('requestAlreadySent'.tr());
-            return;
-          } else {
-            if (mounted) {
-              setState(() {
-                loading = true;
-              });
-              final bool result = await context.read<UserCubit>().addRequestToConnection(kid.ref);
-              if (mounted) {
-                setState(() {
-                  loading = false;
-                });
-                if (result) {
-                  SnackBarSerive.showSuccessSnackBar('requestSent'.tr());
-                } else {
-                  SnackBarSerive.showErrorSnackBar('defaultErrorText'.tr());
-                }
-              }
+        if (mounted) {
+          setState(() {
+            loading = true;
+          });
+          final bool result = await context.read<UserCubit>().addRequestToConnection(kid.ref);
+          if (mounted) {
+            setState(() {
+              loading = false;
+            });
+            if (result) {
+              SnackBarSerive.showSuccessSnackBar('requestSent'.tr());
+            } else {
+              SnackBarSerive.showErrorSnackBar('defaultErrorText'.tr());
             }
           }
         }
       }
     }
+    // if (!me.hasSubscription()) {
+    //   bool? confirm = await showPlanExpiredModalBottomSheet(context, 'get_subs_for_action2'.tr());
+    //   if (confirm == true && mounted) {
+    //     context.push('/current_subscription');
+    //   }
+    // } else {
+    //   final canAdd = await sl<PaymentService>().canAddKid();
+
+    //   if (!mounted) return;
+    //   if (!canAdd) {
+    //     bool? confirm = await showMaxConnectionModalBottomSheet(context);
+    //     if (confirm == true && mounted) {
+    //       context.push('/current_subscription');
+    //     }
+    //   } else {
+    //     final UserModel? kid = await context.push<UserModel?>(
+    //       '/mentor_profile/scan_qr',
+    //     );
+
+    //     if (kid != null) {
+    //       debugPrint('connection kid: ${kid.id}');
+    //       if (me.connections.contains(kid.ref)) {
+    //         SnackBarSerive.showErrorSnackBar('kidAlreadyAdded'.tr());
+    //         return;
+    //       } else if (me.connectionRequests.contains(kid.ref)) {
+    //         SnackBarSerive.showErrorSnackBar('requestAlreadySent'.tr());
+    //         return;
+    //       } else {
+    //         if (mounted) {
+    //           setState(() {
+    //             loading = true;
+    //           });
+    //           final bool result = await context.read<UserCubit>().addRequestToConnection(kid.ref);
+    //           if (mounted) {
+    //             setState(() {
+    //               loading = false;
+    //             });
+    //             if (result) {
+    //               SnackBarSerive.showSuccessSnackBar('requestSent'.tr());
+    //             } else {
+    //               SnackBarSerive.showErrorSnackBar('defaultErrorText'.tr());
+    //             }
+    //           }
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
   }
 
   void onShowQr(String id) {

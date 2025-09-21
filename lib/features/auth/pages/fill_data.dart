@@ -26,11 +26,13 @@ class FillDataScreen extends StatelessWidget {
       listener: (context, state) {
         if (state.status == FillDataStatus.error) {
           SnackBarSerive.showErrorSnackBar(state.errorMessage ?? defaultErrorText);
-        }else if(state.status == FillDataStatus.success) {
+        } else if (state.status == FillDataStatus.success) {
           if (state.userType == UserType.kid) {
             context.go('/auth/kid_signup_success');
           } else if (state.userType == UserType.mentor) {
-            context.go('/auth/take_subscription_plan');
+            context.read<FillDataCubit>().reset();
+            context.go('/mentor_task');
+            // context.go('/auth/take_subscription_plan');
           }
         }
       },
