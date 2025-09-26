@@ -1,7 +1,10 @@
+import 'dart:ui';
+
 import 'package:child_tracker/app.dart';
 import 'package:child_tracker/index.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'package:flutter/material.dart';
@@ -21,6 +24,14 @@ void main() async {
   await EasyLocalization.ensureInitialized();
   await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+
+  PlatformDispatcher.instance.onError = (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    return true;
+  };
+
   await initializeDependencies();
 
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((_) async {

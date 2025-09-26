@@ -59,9 +59,7 @@ class _PhoneInputWidgetState extends State<PhoneInputWidget> {
                   ),
                   child: Padding(
                     padding: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).viewInsets.bottom > 0
-                          ? MediaQuery.of(context).viewInsets.bottom + 16.0
-                          : 16.0,
+                      bottom: MediaQuery.of(context).viewInsets.bottom > 0 ? MediaQuery.of(context).viewInsets.bottom + 16.0 : 16.0,
                     ),
                     child: IntrinsicHeight(
                       child: Column(
